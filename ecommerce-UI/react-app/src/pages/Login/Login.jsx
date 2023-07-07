@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { connect } from "react-redux";
 import { getUserByUserName } from "../../redux/actions/userAction";
-import { setError } from "../../redux/actions/commonAction";
+import { setError,setMessage } from "../../redux/actions/commonAction";
 
 class Login extends Component {
   constructor() {
@@ -22,6 +22,9 @@ class Login extends Component {
         // type: "",
       },
     };
+  }
+  componentDidMount=()=>{
+    
   }
   signUp = (event) => {
     event.preventDefault();
@@ -42,10 +45,18 @@ class Login extends Component {
   };
   turnOffError=()=>{
     this.props.setError("")
+    this.props.setMessage("")
+  }
+  renderMessage=()=>{
+    const {message} = this.props
+    if (message) {
+      return { display: "block", color: "green" };
+    }
+    return { display: "none" };
   }
   render() {
-    const { error } = this.props;
-
+    const {message} = this.props
+    const { navigate } = this.props.router;
     return (
       <div style={{ width: "100vw" }}>
         <Form className="px-3" onSubmit={this.signUp}>
@@ -80,13 +91,21 @@ class Login extends Component {
             </Col>
           </Form.Group>
           <Form.Group as={Row} className="mb-3">
-            <Col sm={{ span: 10, offset: 2 }}>
-              <Button type="submit">Sign in</Button>
+            <Col sm={{ span: 10, offset: 2 }} >
+              <Button type="submit" style={{marginRight:"20px"}}>Sign in</Button>
+              <Button onClick={()=>{
+                navigate("/register")
+              }}>Sign Up</Button>
             </Col>
           </Form.Group>
           <Form.Group as={Row} className="mb-3">
             <Col sm={{ span: 3, offset: 2 }}>
               <div style={this.renderErrorMessage()}>Wrong username or passowrd !</div>
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Col sm={{ span: 3, offset: 2 }}>
+              <div style={this.renderMessage()}>{message}</div>
             </Col>
           </Form.Group>
         </Form>
@@ -98,11 +117,13 @@ class Login extends Component {
 const mapStateToProps = (state) => ({
   user: state.userReducer.user,
   error: state.commonReducer.error,
+  message: state.commonReducer.message,
 });
 
 const mapDispatchToProps = {
   getUserByUserName,
   setError,
+  setMessage
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));

@@ -24,12 +24,12 @@ public class User {
     @Column(name = "userName", nullable = false, length = 18,
     unique = true)
     private String userName;
-    @Column(name = "password", nullable = false, length = 18,unique = true)
+    @Column(name = "password", nullable = false, length = 18)
     private String password;
-    @Column(name = "email", nullable = false, length = 100)
+    @Column(name = "email", length = 100)
     private String email;
-    @Column(name = "phone_number", nullable = false, unique = true)
-    private Integer phoneNumber;
+    @Column(name = "phoneNumber", nullable = false, length = 10)
+    private String phoneNumber;
     @Enumerated
     @Column(name="type",nullable = false)
     private UseType type;

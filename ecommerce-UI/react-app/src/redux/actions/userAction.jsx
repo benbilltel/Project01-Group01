@@ -4,16 +4,32 @@ import {
   USER_INSERT,
   COMMON_ERROR_SET,
   COMMON_MESSAGE_SET,
+  USER_CLEAR_STATE,
 } from "./actionType";
 export const insertUser = (user, navigate) => async (dispatch) => {
-  const userService = new userService();
+  const userService = new UserService();
   try {
     const response = await userService.insertUser(user);
-    dispatch({
-      type: USER_INSERT,
-    });
+    if (response.status === 201) {
+      dispatch({
+        type: USER_INSERT,
+      });
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: "",
+      });
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: "Register successfully!",
+      });
+      navigate("/login");
+    }
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: "User was existed!",
+    });
+    navigate("/register");
   }
 };
 export const getUserByUserName = (user, navigate) => async (dispatch) => {
@@ -31,7 +47,7 @@ export const getUserByUserName = (user, navigate) => async (dispatch) => {
           navigate("/");
         }
         if (response.data.type == "Admin") {
-          navigate("/");
+          navigate("/admin");
         }
       } else {
         dispatch({
@@ -46,4 +62,9 @@ export const getUserByUserName = (user, navigate) => async (dispatch) => {
       payload: error.response.data.message,
     });
   }
+};
+export const clearStateUser = () => async (dispatch) => {
+  dispatch({
+    type: USER_CLEAR_STATE,
+  });
 };

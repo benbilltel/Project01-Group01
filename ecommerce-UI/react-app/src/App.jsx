@@ -7,7 +7,7 @@ import About from "./components/About/About";
 import Contact from "./components/Contact/Contact";
 import store from "./redux/store";
 import { Provider } from "react-redux";
-import withRouter from "./helpers/withRouter";
+import Register from "./pages/register/Register";
 class App extends Component {
   render() {
     return (
@@ -21,6 +21,7 @@ class App extends Component {
           </Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/admin" element={<Admin />}></Route>
+          <Route path="/register" element={<Register />}></Route>
         </Routes>
       </Provider>
       </BrowserRouter>

@@ -6,26 +6,18 @@ import Navbar from "react-bootstrap/Navbar";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import { Outlet } from "react-router-dom";
 import { connect } from "react-redux";
-// import { } from "../../redux/actions/userAction";
+import {clearStateUser } from "../../redux/actions/userAction";
 class Home extends Component {
   constructor() {
     super();
     this.state = {
       count: 7,
-      // user: {
-      //   id: "",
-      //   name: "",
-      //   userName: "",
-      //   password: "",
-      //   email: "",
-      //   phoneNumber: "",
-      //   type: "",
-      // },
     };
   }
   render() {
     let { navigate } = this.props.router;
     let { count } = this.state;
+    let { user } = this.props;
     return (
       <div style={{ width: "100vw" }}>
         <Navbar expand="lg" className="bg-body-tertiary px-5">
@@ -76,6 +68,15 @@ class Home extends Component {
             </Nav.Link>
             <Nav.Link
               onClick={() => {
+                this.props.clearStateUser();
+                navigate("/login");
+              }}
+              className="col-6"
+            >
+              LogOut
+            </Nav.Link>
+            <Nav.Link
+              onClick={() => {
                 navigate("/");
               }}
               className="col-6"
@@ -98,7 +99,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
- 
+  clearStateUser,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
