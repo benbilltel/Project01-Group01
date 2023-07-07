@@ -12,9 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/users")
 public class UserController {
     @Autowired
@@ -68,5 +70,14 @@ public class UserController {
         }
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/userName={userName}")
+    public ResponseEntity<UserDto> getUserByUserName(@PathVariable("userName") String userName) {
+        User foundUser = userService.getUserByUserName(userName);
+        if(foundUser == null){
+            throw new ResourceNotFoundException("User", "userName", userName);
+        }
+        UserDto foundUserDto = modelMapper.map(foundUser,UserDto.class);
+        return ResponseEntity.ok(foundUserDto);
     }
 }
