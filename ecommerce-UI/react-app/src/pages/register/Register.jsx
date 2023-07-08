@@ -7,6 +7,7 @@ import Row from "react-bootstrap/Row";
 import { connect } from "react-redux";
 import { setError, setMessage } from "../../redux/actions/commonAction";
 import { insertUser } from "../../redux/actions/userAction";
+import ModalShowError from "../../helpers/ModalShowError";
 class Register extends Component {
   constructor() {
     super();
@@ -32,21 +33,27 @@ class Register extends Component {
     //validate
     if (name === "") {
       this.props.setError("Name is required!");
+      return;
     }
     if (userName === "") {
       this.props.setError("Username is required!");
+      return;
     }
     if (password === "") {
       this.props.setError("Password is required!");
+      return;
     }
     if (passwordAgain === "") {
       this.props.setError("Confirm password is required!");
+      return;
     }
     if (phoneNumber === "") {
       this.props.setError("Phone number is required!");
+      return;
     }
     if (password !== passwordAgain) {
       this.props.setError("Password does not match!");
+      return;
     }
     const { error } = this.props;
 
@@ -65,19 +72,25 @@ class Register extends Component {
   renderErrorMessage = () => {
     const { error } = this.props;
     if (error) {
-      return { display: "block", color: "red" };
+      return (
+        <ModalShowError
+          content={error}
+          heading="Something is wrong!"
+        ></ModalShowError>
+      );
     }
-    return { display: "none" };
+    return <></>;
   };
   turnOffError = () => {
     this.props.setError("");
   };
   render() {
     let { navigate } = this.props.router;
-    const { error } = this.props;
     return (
       <div style={{ width: "100vw" }}>
+         
         <Form onSubmit={this.registNewUser} className="px-3">
+        {this.renderErrorMessage()}
           <Form.Group className="mb-3">
             <Form.Label>Name</Form.Label>
             <Form.Control
@@ -144,11 +157,6 @@ class Register extends Component {
               >
                 Sign in
               </Button>
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="mb-3">
-            <Col sm={{ span: 3, offset: 2 }}>
-              <div style={this.renderErrorMessage()}>{error}</div>
             </Col>
           </Form.Group>
         </Form>

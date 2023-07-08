@@ -7,6 +7,8 @@ import Row from "react-bootstrap/Row";
 import { connect } from "react-redux";
 import { getUserByUserName } from "../../redux/actions/userAction";
 import { setError, setMessage } from "../../redux/actions/commonAction";
+import ModalShowError from "../../helpers/ModalShowError";
+import ModalShowMessage from "../../helpers/ModalShowMessage";
 
 class Login extends Component {
   constructor() {
@@ -24,11 +26,11 @@ class Login extends Component {
     const userName = event.target.elements.userName.value;
     const password = event.target.elements.password.value;
     if (userName === "") {
-      alert("Username is required!");
+      this.props.setError("Username is required!");
       return;
     }
     if (password === "") {
-      alert("Password is required!");
+      this.props.setError("Password is required!");
       return;
     }
     let { user } = this.state;
@@ -40,26 +42,34 @@ class Login extends Component {
   renderErrorMessage = () => {
     const { error } = this.props;
     if (error) {
-      return { display: "block", color: "red" };
+      return (
+        <ModalShowError
+          content={error}
+          heading="Something is wrong!"
+        ></ModalShowError>
+      );
     }
-    return { display: "none" };
-  };
-  turnOffError = () => {
-    this.props.setError("");
-    this.props.setMessage("");
+    return <></>;
   };
   renderMessage = () => {
     const { message } = this.props;
     if (message) {
-      return { display: "block", color: "green" };
+      return (
+        <ModalShowMessage
+          content={message}
+          heading="Successfull!"
+        ></ModalShowMessage>
+      );
     }
-    return { display: "none" };
+    return <></>;
   };
   render() {
     const { message } = this.props;
     const { navigate } = this.props.router;
     return (
       <div style={{ width: "100vw" }}>
+        {this.renderErrorMessage()}
+        {this.renderMessage()}
         <Form className="px-3" onSubmit={this.signUp}>
           <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
             <Form.Label column sm={2}>
@@ -70,7 +80,6 @@ class Login extends Component {
                 type="text"
                 placeholder="Username"
                 name="userName"
-                onFocus={this.turnOffError}
               />
             </Col>
           </Form.Group>
@@ -87,7 +96,6 @@ class Login extends Component {
                 type="password"
                 placeholder="Password"
                 name="password"
-                onFocus={this.turnOffError}
               />
             </Col>
           </Form.Group>
@@ -111,18 +119,6 @@ class Login extends Component {
               >
                 Home
               </Button>
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="mb-3">
-            <Col sm={{ span: 3, offset: 2 }}>
-              <div style={this.renderErrorMessage()}>
-                Wrong username or message!
-              </div>
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="mb-3">
-            <Col sm={{ span: 3, offset: 2 }}>
-              <div style={this.renderMessage()}>{message}</div>
             </Col>
           </Form.Group>
         </Form>

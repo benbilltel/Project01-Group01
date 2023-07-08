@@ -59,7 +59,8 @@ export const getUserByUserName = (user, navigate) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: COMMON_ERROR_SET,
-      payload: error.response.data.message,
+      // payload: error.response.data.message,
+      payload:"Wrong username!"
     });
   }
 };
