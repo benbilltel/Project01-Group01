@@ -6,7 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import { Outlet } from "react-router-dom";
 import { connect } from "react-redux";
-import {clearStateUser } from "../../redux/actions/userAction";
+import { clearStateUser } from "../../redux/actions/userAction";
 class Home extends Component {
   constructor() {
     super();
@@ -14,6 +14,54 @@ class Home extends Component {
       count: 7,
     };
   }
+  componentDidMount = () => {};
+  renderProfile = () => {
+    const { navigate } = this.props.router;
+    const { user } = this.props;
+    if(Object.keys(user).length === 0){
+      return(<></>);
+    }
+    if (user) {
+      return (
+        <Nav.Link
+          onClick={() => {
+            navigate("/");
+          }}
+          className="col-6"
+        >
+          {user.name}
+        </Nav.Link>
+      );
+    }
+  };
+  renderLoginPage = () => {
+    const { user } = this.props;
+    const { navigate } = this.props.router;
+    if (Object.keys(user).length === 0) {
+      return (
+        <Nav.Link
+          onClick={() => {
+            this.props.clearStateUser();
+            navigate("/login");
+          }}
+          className="col-6"
+        >
+          Login
+        </Nav.Link>
+      );
+    }
+    return (
+      <Nav.Link
+        onClick={() => {
+          this.props.clearStateUser();
+          navigate("/login");
+        }}
+        className="col-6"
+      >
+        Logout
+      </Nav.Link>
+    );
+  };
   render() {
     let { navigate } = this.props.router;
     let { count } = this.state;
@@ -28,7 +76,7 @@ class Home extends Component {
               }}
               style={{ cursor: "pointer" }}
             >
-              React-Bootstrap
+              Logo
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -39,6 +87,13 @@ class Home extends Component {
                   }}
                 >
                   Home
+                </Nav.Link>
+                <Nav.Link
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                >
+                  Product
                 </Nav.Link>
                 <Nav.Link
                   onClick={() => {
@@ -54,30 +109,16 @@ class Home extends Component {
                 >
                   Contact
                 </Nav.Link>
+                
               </Nav>
             </Navbar.Collapse>
           </Container>
           <Container className="col-6">
+            {this.renderProfile()}
+            {this.renderLoginPage()}
             <Nav.Link
               onClick={() => {
-                navigate("/login");
-              }}
-              className="col-6"
-            >
-              Login
-            </Nav.Link>
-            <Nav.Link
-              onClick={() => {
-                this.props.clearStateUser();
-                navigate("/login");
-              }}
-              className="col-6"
-            >
-              LogOut
-            </Nav.Link>
-            <Nav.Link
-              onClick={() => {
-                navigate("/");
+                navigate("/admin");
               }}
               className="col-6"
             >

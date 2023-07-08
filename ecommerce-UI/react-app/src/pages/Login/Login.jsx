@@ -6,30 +6,31 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { connect } from "react-redux";
 import { getUserByUserName } from "../../redux/actions/userAction";
-import { setError,setMessage } from "../../redux/actions/commonAction";
+import { setError, setMessage } from "../../redux/actions/commonAction";
 
 class Login extends Component {
   constructor() {
     super();
     this.state = {
       user: {
-        // id: "",
-        // name: "",
         userName: "",
         password: "",
-        // email: "",
-        // phoneNumber: "",
-        // type: "",
       },
     };
   }
-  componentDidMount=()=>{
-    
-  }
+
   signUp = (event) => {
     event.preventDefault();
     const userName = event.target.elements.userName.value;
     const password = event.target.elements.password.value;
+    if (userName === "") {
+      alert("Username is required!");
+      return;
+    }
+    if (password === "") {
+      alert("Password is required!");
+      return;
+    }
     let { user } = this.state;
     let { navigate } = this.props.router;
     user.userName = userName;
@@ -43,19 +44,19 @@ class Login extends Component {
     }
     return { display: "none" };
   };
-  turnOffError=()=>{
-    this.props.setError("")
-    this.props.setMessage("")
-  }
-  renderMessage=()=>{
-    const {message} = this.props
+  turnOffError = () => {
+    this.props.setError("");
+    this.props.setMessage("");
+  };
+  renderMessage = () => {
+    const { message } = this.props;
     if (message) {
       return { display: "block", color: "green" };
     }
     return { display: "none" };
-  }
+  };
   render() {
-    const {message} = this.props
+    const { message } = this.props;
     const { navigate } = this.props.router;
     return (
       <div style={{ width: "100vw" }}>
@@ -91,16 +92,32 @@ class Login extends Component {
             </Col>
           </Form.Group>
           <Form.Group as={Row} className="mb-3">
-            <Col sm={{ span: 10, offset: 2 }} >
-              <Button type="submit" style={{marginRight:"20px"}}>Sign in</Button>
-              <Button onClick={()=>{
-                navigate("/register")
-              }}>Sign Up</Button>
+            <Col sm={{ span: 10, offset: 2 }}>
+              <Button type="submit" style={{ marginRight: "20px" }}>
+                Sign in
+              </Button>
+              <Button
+                onClick={() => {
+                  navigate("/register");
+                }}
+                style={{ marginRight: "20px" }}
+              >
+                Sign Up
+              </Button>
+              <Button
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                Home
+              </Button>
             </Col>
           </Form.Group>
           <Form.Group as={Row} className="mb-3">
             <Col sm={{ span: 3, offset: 2 }}>
-              <div style={this.renderErrorMessage()}>Wrong username or passowrd !</div>
+              <div style={this.renderErrorMessage()}>
+                Wrong username or message!
+              </div>
             </Col>
           </Form.Group>
           <Form.Group as={Row} className="mb-3">
@@ -123,7 +140,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   getUserByUserName,
   setError,
-  setMessage
+  setMessage,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));

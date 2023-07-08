@@ -1,5 +1,5 @@
 package com.myApp.ecommerce.models.user;
 
-public enum UseType {
+public enum UserType {
     Admin,User
 }

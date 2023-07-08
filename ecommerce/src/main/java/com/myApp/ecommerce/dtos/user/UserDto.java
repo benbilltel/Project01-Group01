@@ -1,6 +1,6 @@
 package com.myApp.ecommerce.dtos.user;
 
-import com.myApp.ecommerce.models.user.UseType;
+import com.myApp.ecommerce.models.user.UserType;
 import com.myApp.ecommerce.models.user.User;
 import lombok.Data;
 
@@ -17,5 +17,5 @@ public class UserDto implements Serializable {
     private String password;
     private String email;
     private String phoneNumber;
-    private UseType type;
+    private UserType type;
 }

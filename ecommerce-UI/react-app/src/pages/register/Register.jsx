@@ -5,22 +5,22 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { connect } from "react-redux";
-import { setError,setMessage } from "../../redux/actions/commonAction";
+import { setError, setMessage } from "../../redux/actions/commonAction";
 import { insertUser } from "../../redux/actions/userAction";
 class Register extends Component {
-    constructor() {
-        super();
-        this.state = {
-          user: {
-            name: "",
-            userName: "",
-            password: "",
-            email: "",
-            phoneNumber: "",
-            type: "",
-          },
-        };
-      }
+  constructor() {
+    super();
+    this.state = {
+      user: {
+        name: "",
+        userName: "",
+        password: "",
+        email: "",
+        phoneNumber: "",
+        type: "",
+      },
+    };
+  }
   registNewUser = (event) => {
     event.preventDefault();
     const userName = event.target.elements.userName.value;
@@ -30,36 +30,36 @@ class Register extends Component {
     const email = event.target.elements.email.value;
     const phoneNumber = event.target.elements.phoneNumber.value;
     //validate
-    if(name === ""){
-        this.props.setError("Name is required!");
+    if (name === "") {
+      this.props.setError("Name is required!");
     }
-    if(userName=== ""){
-        this.props.setError("Username is required!");
+    if (userName === "") {
+      this.props.setError("Username is required!");
     }
-    if(password=== ""){
-        this.props.setError("Password is required!");
+    if (password === "") {
+      this.props.setError("Password is required!");
     }
-    if(passwordAgain=== ""){
-        this.props.setError("Confirm password is required!");
+    if (passwordAgain === "") {
+      this.props.setError("Confirm password is required!");
     }
-    if(phoneNumber=== ""){
-        this.props.setError("Phone number is required!");
+    if (phoneNumber === "") {
+      this.props.setError("Phone number is required!");
     }
     if (password !== passwordAgain) {
       this.props.setError("Password does not match!");
     }
-    const { error} = this.props;
-    
-    if(error === ""){
-        const { navigate} = this.props.router;
-        const { user} = this.state;
-        user.name = name
-        user.userName = userName
-        user.password = password
-        user.email = email
-        user.phoneNumber = phoneNumber
-        user.type = "User"
-        this.props.insertUser(user,navigate)
+    const { error } = this.props;
+
+    if (error === "") {
+      const { navigate } = this.props.router;
+      const { user } = this.state;
+      user.name = name;
+      user.userName = userName;
+      user.password = password;
+      user.email = email;
+      user.phoneNumber = phoneNumber;
+      user.type = "User";
+      this.props.insertUser(user, navigate);
     }
   };
   renderErrorMessage = () => {
@@ -69,9 +69,6 @@ class Register extends Component {
     }
     return { display: "none" };
   };
-//   componentWillUnmount=()=>{
-//     this.props.setMessage("")
-//   }
   turnOffError = () => {
     this.props.setError("");
   };
@@ -83,7 +80,12 @@ class Register extends Component {
         <Form onSubmit={this.registNewUser} className="px-3">
           <Form.Group className="mb-3">
             <Form.Label>Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter name" name="name" onFocus={this.turnOffError}/>
+            <Form.Control
+              type="text"
+              placeholder="Enter name"
+              name="name"
+              onFocus={this.turnOffError}
+            />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Username</Form.Label>
@@ -96,7 +98,12 @@ class Register extends Component {
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" name="email" onFocus={this.turnOffError}/>
+            <Form.Control
+              type="email"
+              placeholder="Enter email"
+              name="email"
+              onFocus={this.turnOffError}
+            />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Password</Form.Label>
@@ -141,9 +148,7 @@ class Register extends Component {
           </Form.Group>
           <Form.Group as={Row} className="mb-3">
             <Col sm={{ span: 3, offset: 2 }}>
-              <div style={this.renderErrorMessage()}>
-              { error }
-              </div>
+              <div style={this.renderErrorMessage()}>{error}</div>
             </Col>
           </Form.Group>
         </Form>
@@ -158,7 +163,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   setError,
   insertUser,
-  setMessage
+  setMessage,
 };
 
 export default withRouter(

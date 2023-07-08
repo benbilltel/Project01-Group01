@@ -32,7 +32,7 @@ public class User {
     private String phoneNumber;
     @Enumerated
     @Column(name="type",nullable = false)
-    private UseType type;
+    private UserType type;
 
 
 
