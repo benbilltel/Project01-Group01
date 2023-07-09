@@ -1,8 +1,7 @@
 package com.myApp.ecommerce.dtos.category;
 
-import com.myApp.ecommerce.models.category.CategoryType;
+import com.myApp.ecommerce.models.category.CategoryStatus;
 import lombok.Data;
-import lombok.Value;
 
 import java.io.Serializable;
 
@@ -11,7 +10,10 @@ import java.io.Serializable;
  */
 @Data
 public class CategoryDto implements Serializable {
-    Long id;
-    String name;
-    CategoryType type;
+    private Long id;
+    private String name;
+    private CategoryStatus status;
+public CategoryDto (Long id){
+    this.id = id;
+}
 }

@@ -26,14 +26,8 @@ public class User {
     private String userName;
     @Column(name = "password", nullable = false, length = 18)
     private String password;
-    @Column(name = "email", length = 100)
+    @Column(name = "email", length = 100,nullable = false)
     private String email;
     @Column(name = "phoneNumber", nullable = false, length = 10)
     private String phoneNumber;
-    @Enumerated
-    @Column(name="type",nullable = false)
-    private UserType type;
-
-
-
 }

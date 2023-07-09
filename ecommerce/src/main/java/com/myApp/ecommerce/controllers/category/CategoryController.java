@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/categories")
 public class CategoryController {
     @Autowired
@@ -49,7 +50,7 @@ public class CategoryController {
             throw new ResourceNotFoundException("Category","id",id);
         }
         category.setName(categoryDto.getName());
-        category.setType(categoryDto.getType());
+        category.setStatus(categoryDto.getStatus());
         Category updatedCategory = categoryService.saveCategory(category);
         CategoryDto updatedCategoryDto = modelMapper.map(updatedCategory, CategoryDto.class);
         return ResponseEntity.ok(updatedCategoryDto);

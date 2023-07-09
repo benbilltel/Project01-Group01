@@ -1,5 +1,5 @@
 package com.myApp.ecommerce.models.category;
 
-public enum CategoryType {
+public enum CategoryStatus {
     Visible,Invisible
 }

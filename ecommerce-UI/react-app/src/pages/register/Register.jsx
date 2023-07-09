@@ -18,7 +18,6 @@ class Register extends Component {
         password: "",
         email: "",
         phoneNumber: "",
-        type: "",
       },
     };
   }
@@ -65,7 +64,6 @@ class Register extends Component {
       user.password = password;
       user.email = email;
       user.phoneNumber = phoneNumber;
-      user.type = "User";
       this.props.insertUser(user, navigate);
     }
   };
@@ -81,24 +79,16 @@ class Register extends Component {
     }
     return <></>;
   };
-  turnOffError = () => {
-    this.props.setError("");
-  };
+
   render() {
     let { navigate } = this.props.router;
     return (
       <div style={{ width: "100vw" }}>
-         
         <Form onSubmit={this.registNewUser} className="px-3">
-        {this.renderErrorMessage()}
+          {this.renderErrorMessage()}
           <Form.Group className="mb-3">
             <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter name"
-              name="name"
-              onFocus={this.turnOffError}
-            />
+            <Form.Control type="text" placeholder="Enter name" name="name" />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Username</Form.Label>
@@ -106,17 +96,11 @@ class Register extends Component {
               type="text"
               placeholder="Enter username"
               name="userName"
-              onFocus={this.turnOffError}
             />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              name="email"
-              onFocus={this.turnOffError}
-            />
+            <Form.Control type="email" placeholder="Enter email" name="email" />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Password</Form.Label>
@@ -124,7 +108,6 @@ class Register extends Component {
               type="password"
               placeholder="Password"
               name="password"
-              onFocus={this.turnOffError}
             />
           </Form.Group>
           <Form.Group className="mb-3">
@@ -133,7 +116,6 @@ class Register extends Component {
               type="password"
               placeholder="Password again"
               name="passwordAgain"
-              onFocus={this.turnOffError}
             />
           </Form.Group>
           <Form.Group className="mb-3">
@@ -142,7 +124,6 @@ class Register extends Component {
               type="number"
               placeholder="Phone contact"
               name="phoneNumber"
-              onFocus={this.turnOffError}
             />
           </Form.Group>
           <Form.Group as={Row} className="mb-3">

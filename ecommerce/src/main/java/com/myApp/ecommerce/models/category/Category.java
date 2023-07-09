@@ -18,7 +18,7 @@ public class Category {
     private String name;
 
     @Enumerated
-    @Column(name="type",nullable = false)
-    private CategoryType type;
+    @Column(name="status",nullable = false)
+    private CategoryStatus status;
 
 }

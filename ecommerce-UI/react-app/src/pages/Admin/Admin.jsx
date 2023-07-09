@@ -27,11 +27,11 @@ class Admin extends Component {
     }
   };
   componentDidMount=()=>{
-    const { navigate } = this.props.router;
-    const {user} = this.props
-    if(Object.keys(user).length === 0|| (user&& user.type === "User")){
-      navigate("/")
-    }
+    // const { navigate } = this.props.router;
+    // const {user} = this.props
+    // if(Object.keys(user).length === 0|| (user&& user.type === "User")){
+    //   navigate("/")
+    // }
   }
   renderLoginPage = () => {
     const { user } = this.props;
@@ -80,7 +80,7 @@ class Admin extends Component {
               <Nav className="me-auto">
                 <Nav.Link
                   onClick={() => {
-                    navigate("/admin/categoryAdmin");
+                    navigate("/admin/categoryAdmin/add");
                   }}
                 >
                   Category
