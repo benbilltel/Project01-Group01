@@ -28,7 +28,7 @@ class CategoryAdmin extends Component {
             <Nav.Item>
               <Nav.Link onClick={()=>{
                 navigate("/admin/categoryAdmin/list")
-              }}>List category</Nav.Link>
+              }}>List categories</Nav.Link>
             </Nav.Item>
           </Nav>
           

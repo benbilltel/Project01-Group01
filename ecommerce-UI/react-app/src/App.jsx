@@ -12,6 +12,8 @@ import ProductAdmin from "./components/product/ProductAdmin";
 import Product from "./components/product/Product";
 import Invoice from "./components/invoice/Invoice";
 import store from "./redux/store";
+import AddOrEditProduct from "./components/product/AddOrEditProduct"
+import ListProductAdmin from "./components/product/ListProductAdmin"
 import { Provider } from "react-redux";
 import Register from "./pages/register/Register";
 class App extends Component {
@@ -24,7 +26,7 @@ class App extends Component {
             <Route path="/" element={<Home />}>
               <Route path="/about" element={<About />}></Route>
               <Route path="/contact" element={<Contact />}></Route>
-              <Route path="/productAdmin" element={<Product />}></Route>
+              <Route path="/product" element={<Product />}></Route>
             </Route>
             <Route path="/login" element={<Login />}></Route>
             <Route path="/admin" element={<Admin />}>
@@ -46,7 +48,20 @@ class App extends Component {
               <Route
                 path="/admin/productAdmin"
                 element={<ProductAdmin />}
-              ></Route>
+              >
+                <Route
+                  path="/admin/productAdmin/add"
+                  element={<AddOrEditProduct />}
+                ></Route>
+                <Route
+                  path="/admin/productAdmin/update/:id"
+                  element={<AddOrEditProduct />}
+                ></Route>
+                <Route
+                  path="/admin/productAdmin/list"
+                  element={<ListProductAdmin />}
+                ></Route>
+              </Route>
               <Route path="/admin/invoice" element={<Invoice />}></Route>
             </Route>
             <Route path="/register" element={<Register />}></Route>

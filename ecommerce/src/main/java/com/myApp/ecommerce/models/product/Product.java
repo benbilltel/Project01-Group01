@@ -4,6 +4,7 @@ import com.myApp.ecommerce.models.category.Category;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
@@ -28,6 +29,9 @@ public class Product {
     @Enumerated
     @Column(name = "status", nullable = false)
     private ProductStatus status;
+    @Lob
+    @Column(name = "image",columnDefinition = "LONGTEXT")
+    private String image;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)

@@ -87,7 +87,7 @@ class Admin extends Component {
                 </Nav.Link>
                 <Nav.Link
                   onClick={() => {
-                    navigate("/admin/productAdmin");
+                    navigate("/admin/productAdmin/add");
                   }}
                 >
                   Product

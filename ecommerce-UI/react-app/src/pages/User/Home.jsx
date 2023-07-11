@@ -90,7 +90,7 @@ class Home extends Component {
                 </Nav.Link>
                 <Nav.Link
                   onClick={() => {
-                    navigate("/");
+                    navigate("/product");
                   }}
                 >
                   Product
