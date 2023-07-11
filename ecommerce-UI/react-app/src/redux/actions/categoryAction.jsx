@@ -1,6 +1,7 @@
 import {
   CATEGORIES_GET_ALL,
   CATEGORY_CLEAR_STATE,
+  CATEGORY_DELETE,
   CATEGORY_INSERT,
   CATEGORY_SET,
   CATEGORY_UPDATE,
@@ -102,6 +103,28 @@ export const updateCategory = (category, navigate) => async (dispatch) => {
   }
   navigate("/admin/categoryAdmin/list");
 };
+export const deleteCategoryById = (id)=>async (dispatch)=>{
+  const categoryService = new CategoryService();
+  try {
+    const response = await categoryService.deleteCategoryById(id
+    );
+    if(response.status === 204 ){
+      dispatch({
+        type:CATEGORY_DELETE,
+        payload:id
+      })
+      dispatch({
+        type:COMMON_MESSAGE_SET,
+        payload:"Category was deleted!"
+      })
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: "Category were not existed!",
+    });
+  }
+}
 export const clearStateCategory = () => async (dispatch) => {
   dispatch({
     type: CATEGORY_CLEAR_STATE,

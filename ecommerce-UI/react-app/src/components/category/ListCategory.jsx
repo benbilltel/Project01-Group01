@@ -7,8 +7,9 @@ import {
   getAllCategories,
   clearStateCategory,
   setCategoryState,
+  deleteCategoryById,
 } from "../../redux/actions/categoryAction";
-import { setError } from "../../redux/actions/commonAction";
+import { setError, setMessage } from "../../redux/actions/commonAction";
 import ModalShowError from "../../helpers/ModalShowError";
 import ModalShowMessage from "../../helpers/ModalShowMessage";
 class ListCategory extends Component {
@@ -23,7 +24,11 @@ class ListCategory extends Component {
   };
 
   handleDeleteClick = (id) => {
-    console.log(`Delete button clicked for item`, id);
+    if (id) {
+      this.props.deleteCategoryById(id);
+      return;
+    }
+    return this.props.setError("Something is wrong!");
   };
   componentDidMount = () => {
     this.props.getAllCategories();
@@ -136,6 +141,8 @@ const mapDispatchToProps = {
   getAllCategories,
   clearStateCategory,
   setCategoryState,
+  setMessage,
+  deleteCategoryById,
 };
 
 export default withRouter(

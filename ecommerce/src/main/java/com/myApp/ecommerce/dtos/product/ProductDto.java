@@ -3,7 +3,7 @@ package com.myApp.ecommerce.dtos.product;
 import com.myApp.ecommerce.dtos.category.CategoryDto;
 import com.myApp.ecommerce.models.product.ProductStatus;
 import lombok.Data;
-import lombok.Value;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,5 +19,4 @@ public class ProductDto implements Serializable {
     private String description;
     private ProductStatus status;
     private CategoryDto category;
-    private byte[] image;
 }

@@ -49,5 +49,17 @@ export default class CategoryService {
       throw error;
     }
   }
+  deleteCategoryById = async (id)=>{
+    try {
+      return await axios.delete(API_CATEGORY+id);
+    } catch (error) {
+      if (error.response && error.response.status === 500) {
+        // console.log("category not found");
+      } else {
+        // console.log("Error while fetching category:", error);
+      }
+      throw error;
+    }
+  }
   
 }

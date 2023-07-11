@@ -13,7 +13,5 @@ public class CategoryDto implements Serializable {
     private Long id;
     private String name;
     private CategoryStatus status;
-public CategoryDto (Long id){
-    this.id = id;
-}
+
 }

@@ -1,6 +1,7 @@
 import {
   CATEGORIES_GET_ALL,
   CATEGORY_CLEAR_STATE,
+  CATEGORY_DELETE,
   CATEGORY_INSERT,
   CATEGORY_SET,
   CATEGORY_UPDATE,
@@ -23,6 +24,11 @@ const categoryReducer = (state = initialState, { type, payload }) => {
       return { ...state, category: payload };
     case CATEGORY_UPDATE:
       return { ...state,category: {}, categories: []  };
+    case CATEGORY_DELETE:
+      return {
+        ...state,
+        categories: state.categories.filter((item) => item.id !== payload),
+      };
     default:
       return state;
   }

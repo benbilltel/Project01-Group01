@@ -16,7 +16,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "name", nullable = false, length = 100,unique = true)
     private String name;
 
     @Column(name = "price", nullable = false)
@@ -25,16 +25,12 @@ public class Product {
     @Column(name = "description", nullable = false,columnDefinition = "TEXT")
     private String description;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated
     @Column(name = "status", nullable = false)
     private ProductStatus status;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
-    @Lob
-    @Column(name = "image", nullable = false)
-    private byte[] image;
 
 }
