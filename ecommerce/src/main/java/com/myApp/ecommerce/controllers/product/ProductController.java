@@ -78,7 +78,6 @@ public class ProductController {
         if (product == null) {
             throw new ResourceNotFoundException("Product", "id", id);
         }
-        ProductDto productDto = new ProductDto();
         product.setName(name);
         product.setStatus(status);
         product.setDescription(description);
@@ -91,7 +90,15 @@ public class ProductController {
         ProductDto savedProductDto = modelMapper.map(savedProduct, ProductDto.class);
         return ResponseEntity.ok(savedProductDto);
     }
-
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id){
+        Product product = productService.getProductById(id);
+        if(product == null){
+            throw new ResourceNotFoundException("Product","id",id);
+        }
+        ProductDto productDto = modelMapper.map(product,ProductDto.class);
+        return ResponseEntity.ok(productDto);
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProductById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
