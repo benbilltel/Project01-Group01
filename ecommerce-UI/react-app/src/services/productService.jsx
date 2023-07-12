@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_PRODUCT, API_USER } from "./constant";
+import { API_PRODUCT } from "./constant";
 export default class ProductService {
   insertProduct = async (formData) => {
     try {
@@ -15,7 +15,7 @@ export default class ProductService {
   };
   getAllProducts = async () => {
     try {
-      return await axios.get(API_USER);
+      return await axios.get(API_PRODUCT);
     } catch (error) {
       if (error.response && error.response.status === 500) {
         // console.log("product not found");

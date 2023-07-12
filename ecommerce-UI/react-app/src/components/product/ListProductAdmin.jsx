@@ -53,7 +53,7 @@ class ListProductAdmin extends Component {
             <tr>
               <th>#</th>
               <th>Name</th>
-              <th>Price</th>
+              <th>Price($)</th>
               <th>Description</th>
               <th>Category</th>
               <th>Status</th>

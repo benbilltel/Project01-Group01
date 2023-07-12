@@ -44,7 +44,6 @@ class AddOrEditProduct extends Component {
     const formData = new FormData(event.target);
 
     const {navigate} = this.props.router
-    console.log(formData.get("categoryId"))
     this.props.insertProduct(formData,navigate)
     
   };
