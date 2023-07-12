@@ -6,9 +6,9 @@ export default class CategoryService {
       return await axios.post(API_CATEGORY, category);
     } catch (error) {
       if (error.response && error.response.status === 500) {
-        // console.log("category not found");
+        console.log("category not found");
       } else {
-        // console.log("Error while fetching category:", error);
+        console.log("Error while fetching category:", error);
       }
       throw error;
     }
@@ -18,9 +18,9 @@ export default class CategoryService {
       return await axios.put(API_CATEGORY+id, category);
     } catch (error) {
       if (error.response && error.response.status === 500) {
-        // console.log("category not found");
+        console.log("category not found");
       } else {
-        // console.log("Error while fetching category:", error);
+        console.log("Error while fetching category:", error);
       }
       throw error;
     }
@@ -30,9 +30,9 @@ export default class CategoryService {
       return await axios.get(API_CATEGORY);
     } catch (error) {
       if (error.response && error.response.status === 500) {
-        // console.log("category not found");
+        console.log("category not found");
       } else {
-        // console.log("Error while fetching category:", error);
+        console.log("Error while fetching category:", error);
       }
       throw error;
     }
@@ -42,9 +42,9 @@ export default class CategoryService {
       return await axios.get(API_CATEGORY+id);
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        // console.log("category not found");
+        console.log("category not found");
       } else {
-        // console.log("Error while fetching category:", error);
+        console.log("Error while fetching category:", error);
       }
       throw error;
     }
@@ -54,9 +54,9 @@ export default class CategoryService {
       return await axios.delete(API_CATEGORY+id);
     } catch (error) {
       if (error.response && error.response.status === 500) {
-        // console.log("category not found");
+        console.log("category not found");
       } else {
-        // console.log("Error while fetching category:", error);
+        console.log("Error while fetching category:", error);
       }
       throw error;
     }

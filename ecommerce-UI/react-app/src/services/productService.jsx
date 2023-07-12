@@ -6,9 +6,9 @@ export default class ProductService {
       return await axios.post(API_PRODUCT, formData);
     } catch (error) {
       if (error.response && error.response.status === 500) {
-        // console.log("formData not found");
+        console.log("formData not found");
       } else {
-        // console.log("Error while fetching formData:", error);
+        console.log("Error while fetching formData:", error);
       }
       throw error;
     }
@@ -18,12 +18,47 @@ export default class ProductService {
       return await axios.get(API_PRODUCT);
     } catch (error) {
       if (error.response && error.response.status === 500) {
-        // console.log("product not found");
+        console.log("product not found");
       } else {
-        // console.log("Error while fetching product:", error);
+        console.log("Error while fetching product:", error);
       }
       throw error;
     }
   };
-
+  updateProduct = async (id,formData) => {
+    try {
+      return await axios.put(API_PRODUCT+id, formData);
+    } catch (error) {
+      if (error.response && error.response.status === 500) {
+        console.log("product not found");
+      } else {
+        console.log("Error while fetching product:", error);
+      }
+      throw error;
+    }
+  };
+  getProductById = async (id)=>{
+    try {
+      return await axios.get(API_PRODUCT+id);
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        console.log("product not found");
+      } else {
+        console.log("Error while fetching product:", error);
+      }
+      throw error;
+    }
+  }
+  deleteProductById = async (id)=>{
+    try {
+      return await axios.delete(API_PRODUCT+id);
+    } catch (error) {
+      if (error.response && error.response.status === 500) {
+        console.log("Product not found");
+      } else {
+        console.log("Error while fetching Product:", error);
+      }
+      throw error;
+    }
+  }
 }
