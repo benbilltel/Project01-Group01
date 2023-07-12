@@ -2,6 +2,7 @@ package com.myApp.ecommerce.controllers.product;
 
 import com.myApp.ecommerce.dtos.category.CategoryDto;
 import com.myApp.ecommerce.dtos.product.ProductDto;
+import com.myApp.ecommerce.exception.ResourceNotFoundException;
 import com.myApp.ecommerce.models.category.Category;
 import com.myApp.ecommerce.models.product.Product;
 import com.myApp.ecommerce.models.product.ProductStatus;
@@ -31,37 +32,73 @@ public class ProductController {
     private CategoryService categoryService;
     @Autowired
     private ModelMapper modelMapper;
-@GetMapping("/")
-public ResponseEntity<List<ProductDto>> getAllProducts (){
-    List<Product> products = productService.getAllProduct();
-    List<ProductDto> productDtos = new ArrayList<>();
-    for (Product product : products) {
-        ProductDto productDto = modelMapper.map(product, ProductDto.class);
-        productDtos.add(productDto);
-    }
-    return ResponseEntity.ok(productDtos);
-}
 
-    @PostMapping(value = "/",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ProductDto> insertProduct (@RequestParam("name")String name,
-                                                     @RequestParam("price")BigDecimal price,
-                                                     @RequestParam("description")String description,
-                                                     @RequestParam("categoryId")Long idCategory,
-                                                     @RequestParam("status")ProductStatus status,
-                                                     @RequestPart("image")MultipartFile image)throws IOException {
-    ProductDto productDto = new ProductDto();
-    productDto.setName(name);
-    productDto.setStatus(status);
-    productDto.setDescription(description);
-    productDto.setPrice(price);
-    Category category = categoryService.getCategoryById(idCategory);
-    CategoryDto categoryDto = modelMapper.map(category,CategoryDto.class);
-    productDto.setCategory(categoryDto);
-    String base64Ima = Base64.getEncoder().encodeToString(image.getBytes());
-    productDto.setImage(base64Ima);
-    Product product = modelMapper.map(productDto, Product.class);
-    Product savedProduct = productService.saveProduct(product);
-    ProductDto savedProductDto = modelMapper.map(savedProduct, ProductDto.class);
+    @GetMapping("/")
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
+        List<Product> products = productService.getAllProduct();
+        List<ProductDto> productDtos = new ArrayList<>();
+        for (Product product : products) {
+            ProductDto productDto = modelMapper.map(product, ProductDto.class);
+            productDtos.add(productDto);
+        }
+        return ResponseEntity.ok(productDtos);
+    }
+
+    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProductDto> insertProduct(@RequestParam("name") String name,
+                                                    @RequestParam("price") BigDecimal price,
+                                                    @RequestParam("description") String description,
+                                                    @RequestParam("categoryId") Long idCategory,
+                                                    @RequestParam("status") ProductStatus status,
+                                                    @RequestPart("image") MultipartFile image) throws IOException {
+        ProductDto productDto = new ProductDto();
+        productDto.setName(name);
+        productDto.setStatus(status);
+        productDto.setDescription(description);
+        productDto.setPrice(price);
+        Category category = categoryService.getCategoryById(idCategory);
+        CategoryDto categoryDto = modelMapper.map(category, CategoryDto.class);
+        productDto.setCategory(categoryDto);
+        String base64Ima = Base64.getEncoder().encodeToString(image.getBytes());
+        productDto.setImage(base64Ima);
+        Product product = modelMapper.map(productDto, Product.class);
+        Product savedProduct = productService.saveProduct(product);
+        ProductDto savedProductDto = modelMapper.map(savedProduct, ProductDto.class);
         return ResponseEntity.ok(savedProductDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDto> updateProduct(@RequestParam("name") String name,
+                                                    @RequestParam("price") BigDecimal price,
+                                                    @RequestParam("description") String description,
+                                                    @RequestParam("categoryId") Long idCategory,
+                                                    @RequestParam("status") ProductStatus status,
+                                                    @RequestPart("image") MultipartFile image, @PathVariable Long id) throws IOException {
+        Product product = productService.getProductById(id);
+        if (product == null) {
+            throw new ResourceNotFoundException("Product", "id", id);
+        }
+        ProductDto productDto = new ProductDto();
+        product.setName(name);
+        product.setStatus(status);
+        product.setDescription(description);
+        product.setPrice(price);
+        Category category = categoryService.getCategoryById(idCategory);
+        product.setCategory(category);
+        String base64Ima = Base64.getEncoder().encodeToString(image.getBytes());
+        product.setImage(base64Ima);
+        Product savedProduct = productService.saveProduct(product);
+        ProductDto savedProductDto = modelMapper.map(savedProduct, ProductDto.class);
+        return ResponseEntity.ok(savedProductDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProductById(@PathVariable Long id) {
+        Product product = productService.getProductById(id);
+        if (product == null) {
+            throw new ResourceNotFoundException("Product", "id", id);
+        }
+        productService.deleteProductById(id);
+        return ResponseEntity.noContent().build();
     }
 }
