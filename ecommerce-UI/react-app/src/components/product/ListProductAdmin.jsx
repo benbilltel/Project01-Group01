@@ -7,11 +7,27 @@ import { setError } from "../../redux/actions/commonAction";
 import {
   getAllProducts,
   clearStateProduct,
+  setProductState,
+  deleteProductById
 } from "../../redux/actions/productAction";
 import { connect } from "react-redux";
 class ListProductAdmin extends Component {
-  handleEditClick = (id) => {};
-  handleDeleteClick = (id) => {};
+  handleEditClick = (id) => {
+    if(id){
+      const {navigate} = this.props.router
+    this.props.setProductState(id);
+    navigate("/admin/productAdmin/update/"+id);
+    return;
+    }
+    return  this.props.setError("Something was wrong!");
+  };
+  handleDeleteClick = (id) => {
+    if (id) {
+      this.props.deleteProductById(id);
+      return;
+    }
+    return this.props.setError("Something was wrong!");
+  };
   renderErrorMessage = () => {
     const { error } = this.props;
     if (error) {
@@ -43,7 +59,7 @@ class ListProductAdmin extends Component {
     return <></>;
   };
   render() {
-    const {products} = this.props
+    const { products } = this.props;
     return (
       <div>
         {this.renderErrorMessage()}
@@ -134,7 +150,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   setError,
   getAllProducts,
-  clearStateProduct
+  clearStateProduct,
+  setProductState,
+  deleteProductById
 };
 
 export default withRouter(

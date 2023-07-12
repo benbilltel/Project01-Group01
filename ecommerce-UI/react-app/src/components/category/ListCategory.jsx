@@ -20,7 +20,7 @@ class ListCategory extends Component {
       navigate("/admin/categoryAdmin/update/" + id);
       return;
     }
-    return this.props.setError("Something is wrong!");
+    return this.props.setError("Something was wrong!");
   };
 
   handleDeleteClick = (id) => {
@@ -28,7 +28,7 @@ class ListCategory extends Component {
       this.props.deleteCategoryById(id);
       return;
     }
-    return this.props.setError("Something is wrong!");
+    return this.props.setError("Something was wrong!");
   };
   componentDidMount = () => {
     this.props.getAllCategories();
