@@ -3,6 +3,10 @@ import withRouter from '../../helpers/withRouter'
 import {setError} from "../../redux/actions/commonAction"
 import { Button, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import {getAllCategories,clearStateCategory} from '../../redux/actions/categoryAction'
+import {insertProduct} from "../../redux/actions/productAction"
+import ModalShowMessage from '../../helpers/ModalShowMessage';
+import ModalShowError from '../../helpers/ModalShowError';
 class AddOrEditProduct extends Component {
   renderErrorMessage = () => {
     const { error } = this.props;
@@ -28,21 +32,34 @@ class AddOrEditProduct extends Component {
     }
     return <></>;
   };
+  componentDidMount=()=>{
+    this.props.getAllCategories();
+  }
+  componentWillUnmount=()=>{
+    this.props.clearStateCategory();
+  }
   handleSubmit = (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
 
-    // get form field values
-    const name = formData.get("name");
-    const price = formData.get("price");
-    const description = formData.get("description");
-    const categoryId = formData.get("categoryId");
-    const status = formData.get("status");
-    const image = formData.get("image");
-    console.log(name, price, description, categoryId, status, image);
+    const {navigate} = this.props.router
+    console.log(formData.get("categoryId"))
+    this.props.insertProduct(formData,navigate)
     
   };
+  renderCategories=()=>{
+    let { categories } = this.props;
+  if (!categories || categories.length === 0) {
+    return ;
+  }
+  let selectOptions = categories.map((category) => (
+    <option key={category.id} value={category.id}>
+      {category.name}
+    </option>
+  ));
+  return selectOptions;
+  }
   render() {
     return (
       <div>{this.renderErrorMessage()}
@@ -79,13 +96,13 @@ class AddOrEditProduct extends Component {
       </Form.Group>
 
       <Form.Group controlId="formCategoryId">
-        <Form.Label>Category ID</Form.Label>
+        <Form.Label>Category</Form.Label>
         <Form.Control
-          type="number"
-          placeholder="Enter product category ID"
-          name='categoryId'
-          
-        />
+          as="select"
+          name='categoryId'  
+        >
+          {this.renderCategories()}
+        </Form.Control>
       </Form.Group>
 
       <Form.Group controlId="formStatus">
@@ -106,6 +123,7 @@ class AddOrEditProduct extends Component {
           type="file"
           accept="image/jpeg"
           name="image"
+          multiple={false}
         />
       </Form.Group>
 
@@ -118,13 +136,16 @@ class AddOrEditProduct extends Component {
   }
 }
 const mapStateToProps = (state) => ({
+  categories: state.categoryReducer.categories,
   error: state.commonReducer.error,
   message: state.commonReducer.message,
 });
 
 const mapDispatchToProps = {
   setError,
-  
+  getAllCategories,
+  clearStateCategory,
+  insertProduct
 };
 
 export default withRouter(
