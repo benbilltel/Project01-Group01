@@ -7,6 +7,7 @@ import { BsFillCartCheckFill } from "react-icons/bs";
 import { Outlet } from "react-router-dom";
 import { connect } from "react-redux";
 import { clearStateUser } from "../../redux/actions/userAction";
+import { NavDropdown } from "react-bootstrap";
 class Home extends Component {
   constructor() {
     super();
@@ -18,19 +19,26 @@ class Home extends Component {
   renderProfile = () => {
     const { navigate } = this.props.router;
     const { user } = this.props;
-    if(Object.keys(user).length === 0){
-      return(<></>);
+    if (Object.keys(user).length === 0) {
+      return <></>;
     }
     if (user) {
       return (
-        <Nav.Link
-          onClick={() => {
-            navigate("/");
-          }}
-          className="col-6"
-        >
-          {user.name}
-        </Nav.Link>
+        <NavDropdown title={user.name} id="basic-nav-dropdown">
+          <NavDropdown.Item>Profile</NavDropdown.Item>
+          <NavDropdown.Item>Shopping history</NavDropdown.Item>
+          <NavDropdown.Item>Your payment</NavDropdown.Item>
+          <NavDropdown.Item>Setting</NavDropdown.Item>
+          <NavDropdown.Divider />
+          <NavDropdown.Item
+            onClick={() => {
+              this.props.clearStateUser();
+              navigate("/login");
+            }}
+          >
+            Logout
+          </NavDropdown.Item>
+        </NavDropdown>
       );
     }
   };
@@ -44,23 +52,12 @@ class Home extends Component {
             this.props.clearStateUser();
             navigate("/login");
           }}
-          className="col-6"
         >
           Login
         </Nav.Link>
       );
     }
-    return (
-      <Nav.Link
-        onClick={() => {
-          this.props.clearStateUser();
-          navigate("/login");
-        }}
-        className="col-6"
-      >
-        Logout
-      </Nav.Link>
-    );
+    return;
   };
   render() {
     let { navigate } = this.props.router;
@@ -69,7 +66,7 @@ class Home extends Component {
     return (
       <div style={{ width: "100vw" }}>
         <Navbar expand="lg" className="bg-body-tertiary px-5">
-          <Container className="col-6">
+          <Container>
             <Navbar.Brand
               onClick={() => {
                 navigate("/");
@@ -109,22 +106,20 @@ class Home extends Component {
                 >
                   Contact
                 </Nav.Link>
-                
+              </Nav>
+              <Nav>
+                {this.renderProfile()}
+                <Nav.Link
+                  onClick={() => {
+                    navigate("/admin");
+                  }}
+                >
+                  Cart <BsFillCartCheckFill></BsFillCartCheckFill>
+                  <span>{count}</span>
+                </Nav.Link>
+                {this.renderLoginPage()}
               </Nav>
             </Navbar.Collapse>
-          </Container>
-          <Container className="col-6">
-            {this.renderProfile()}
-            {this.renderLoginPage()}
-            <Nav.Link
-              onClick={() => {
-                navigate("/admin");
-              }}
-              className="col-6"
-            >
-              Cart <BsFillCartCheckFill></BsFillCartCheckFill>
-              <span>{count}</span>
-            </Nav.Link>
           </Container>
         </Navbar>
         <div className="content-outlet">

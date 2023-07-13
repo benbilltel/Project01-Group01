@@ -6,33 +6,33 @@ import Navbar from "react-bootstrap/Navbar";
 import { connect } from "react-redux";
 import { clearStateUser } from "../../redux/actions/userAction";
 import { Outlet } from "react-router-dom";
+import { NavDropdown } from "react-bootstrap";
 class Admin extends Component {
   renderProfile = () => {
     const { navigate } = this.props.router;
     const { user } = this.props;
-    if(Object.keys(user).length === 0){
-      return(<></>);
+    if (Object.keys(user).length === 0) {
+      return <></>;
     }
     if (user) {
       return (
-        <Nav.Link
-          onClick={() => {
-            navigate("/admin");
-          }}
-          className="col-6"
-        >
-          {user.name}
-        </Nav.Link>
+        <NavDropdown title={user.name} id="basic-nav-dropdown">
+          <NavDropdown.Item>Profile</NavDropdown.Item>
+          <NavDropdown.Item>Setting</NavDropdown.Item>
+          <NavDropdown.Divider />
+          <NavDropdown.Item
+            onClick={() => {
+              this.props.clearStateUser();
+              navigate("/login");
+            }}
+          >
+            Logout
+          </NavDropdown.Item>
+        </NavDropdown>
       );
     }
   };
-  componentDidMount=()=>{
-    // const { navigate } = this.props.router;
-    // const {user} = this.props
-    // if(Object.keys(user).length === 0|| (user&& user.type === "User")){
-    //   navigate("/")
-    // }
-  }
+  componentDidMount = () => {};
   renderLoginPage = () => {
     const { user } = this.props;
     const { navigate } = this.props.router;
@@ -43,30 +43,19 @@ class Admin extends Component {
             this.props.clearStateUser();
             navigate("/login");
           }}
-          className="col-6"
         >
           Login
         </Nav.Link>
       );
     }
-    return (
-      <Nav.Link
-        onClick={() => {
-          this.props.clearStateUser();
-          navigate("/login");
-        }}
-        className="col-6"
-      >
-        LogOut
-      </Nav.Link>
-    );
+    return;
   };
   render() {
     const { navigate } = this.props.router;
     return (
       <div style={{ width: "100vw" }}>
         <Navbar expand="lg" className="bg-body-tertiary px-5">
-          <Container className="col-6">
+          <Container >
             <Navbar.Brand
               onClick={() => {
                 navigate("/");
@@ -107,11 +96,11 @@ class Admin extends Component {
                   Account
                 </Nav.Link>
               </Nav>
+              <Nav>
+                {this.renderProfile()}
+                {this.renderLoginPage()}
+              </Nav>
             </Navbar.Collapse>
-          </Container>
-          <Container className="col-6">
-            {this.renderProfile()}
-            {this.renderLoginPage()}
           </Container>
         </Navbar>
         <div className="content-outlet">
