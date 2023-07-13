@@ -20,5 +20,6 @@ public class ProductDto implements Serializable {
     private ProductStatus status;
     private CategoryDto category;
     private String image;
+    private Long quantity;
 
 }

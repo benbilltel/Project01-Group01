@@ -72,6 +72,7 @@ class ListProductAdmin extends Component {
               <th>Price($)</th>
               <th>Description</th>
               <th>Category</th>
+              <th>Quantity</th>
               <th>Status</th>
               <th>Image</th>
               <th>Action</th>
@@ -85,6 +86,7 @@ class ListProductAdmin extends Component {
                 <td>{product.price}</td>
                 <td>{product.description}</td>
                 <td>{product.category.name}</td>
+                <td>{product.quantity}</td>
                 <td>
                   {product.status === "Active" ? (
                     <div

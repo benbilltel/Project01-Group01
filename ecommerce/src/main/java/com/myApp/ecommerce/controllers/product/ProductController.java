@@ -50,12 +50,14 @@ public class ProductController {
                                                     @RequestParam("description") String description,
                                                     @RequestParam("categoryId") Long idCategory,
                                                     @RequestParam("status") ProductStatus status,
+                                                    @RequestParam("quantity") Long quantity,
                                                     @RequestPart("image") MultipartFile image) throws IOException {
         ProductDto productDto = new ProductDto();
         productDto.setName(name);
         productDto.setStatus(status);
         productDto.setDescription(description);
         productDto.setPrice(price);
+        productDto.setQuantity(quantity);
         Category category = categoryService.getCategoryById(idCategory);
         CategoryDto categoryDto = modelMapper.map(category, CategoryDto.class);
         productDto.setCategory(categoryDto);
@@ -73,6 +75,7 @@ public class ProductController {
                                                     @RequestParam("description") String description,
                                                     @RequestParam("categoryId") Long idCategory,
                                                     @RequestParam("status") ProductStatus status,
+                                                    @RequestParam("quantity") Long quantity,
                                                     @RequestPart("image") MultipartFile image, @PathVariable Long id) throws IOException {
         Product product = productService.getProductById(id);
         if (product == null) {
@@ -82,6 +85,7 @@ public class ProductController {
         product.setStatus(status);
         product.setDescription(description);
         product.setPrice(price);
+        product.setQuantity(quantity);
         Category category = categoryService.getCategoryById(idCategory);
         product.setCategory(category);
         String base64Ima = Base64.getEncoder().encodeToString(image.getBytes());

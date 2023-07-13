@@ -136,6 +136,17 @@ class AddOrEditProduct extends Component {
               min="0"
             />
           </Form.Group>
+          <Form.Group controlId="formQuantity">
+            <Form.Label>Quantity</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Enter quantity are available"
+              name="quantity"
+              defaultValue={product? product.quantity : ""}
+              max={false}
+              min="0"
+            />
+          </Form.Group>
 
           <Form.Group controlId="formDescription">
             <Form.Label>Description</Form.Label>
