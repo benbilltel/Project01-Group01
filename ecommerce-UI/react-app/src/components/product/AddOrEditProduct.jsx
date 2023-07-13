@@ -132,6 +132,8 @@ class AddOrEditProduct extends Component {
               placeholder="Enter product price"
               name="price"
               defaultValue={product? product.price : ""}
+              max={false}
+              min="0"
             />
           </Form.Group>
 
@@ -150,8 +152,6 @@ class AddOrEditProduct extends Component {
             <Form.Control
               as="select"
               name="categoryId"
-              // defaultValue={defaultCategoryIdValue}
-              // defaultValue={product? product.category.name : ""}
             >
               {this.renderCategories()}
             </Form.Control>

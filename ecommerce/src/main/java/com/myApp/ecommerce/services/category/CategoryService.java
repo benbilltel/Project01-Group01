@@ -2,7 +2,9 @@ package com.myApp.ecommerce.services.category;
 
 import com.myApp.ecommerce.exception.ResourceNotFoundException;
 import com.myApp.ecommerce.models.category.Category;
+import com.myApp.ecommerce.models.product.Product;
 import com.myApp.ecommerce.repositorys.CategoryRepository;
+import com.myApp.ecommerce.repositorys.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import java.util.List;
 public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ProductRepository productRepository;
     public List<Category> getAllCategory (){
         return categoryRepository.findAll();
     }
