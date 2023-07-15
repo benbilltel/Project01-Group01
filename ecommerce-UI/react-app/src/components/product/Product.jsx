@@ -7,6 +7,7 @@ import {
   getAllCategories,
   clearStateCategory,
 } from "../../redux/actions/categoryAction";
+import {insertCart,getCartsByIdUser} from "../../redux/actions/cartAction"
 import {
   getAllProducts,
   clearStateProduct,
@@ -82,8 +83,25 @@ class Product extends Component {
     this.props.clearStateCategory();
     this.props.clearStateProduct();
   };
-  addToCart = (idProduct) => {
-    console.log(idProduct);
+  addToCart = async (idProduct) => {
+    const {navigate} = this.props.router
+    const {user} = this.props
+    if(Object.keys(user).length === 0){
+      navigate("/login")
+      return;
+    }
+    let cart = {
+      "userId":user.id,
+      "productId":idProduct,
+      "quantity":1
+    }
+    try {
+      await this.props.insertCart(cart);
+      await this.props.getCartsByIdUser(user.id);
+    } catch (error) {
+      console.log(error);
+      // display error message to user
+    }
   };
   showProductsByIdCategory = (id) => {
     const { products } = this.props;
@@ -198,12 +216,14 @@ const mapStateToProps = (state) => ({
   error: state.commonReducer.error,
   message: state.commonReducer.message,
   products: state.productReducer.products,
+  user:state.userReducer.user,
 });
 const mapDispatchToProps = {
   getAllCategories,
   clearStateCategory,
   getAllProducts,
   clearStateProduct,
+  insertCart,getCartsByIdUser
 };
 
 export default withRouter(

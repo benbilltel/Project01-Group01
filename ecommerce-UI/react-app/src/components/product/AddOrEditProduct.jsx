@@ -132,7 +132,7 @@ class AddOrEditProduct extends Component {
               placeholder="Enter product price"
               name="price"
               defaultValue={product? product.price : ""}
-              max={false}
+              max="false"
               min="0"
             />
           </Form.Group>
@@ -143,7 +143,7 @@ class AddOrEditProduct extends Component {
               placeholder="Enter quantity are available"
               name="quantity"
               defaultValue={product? product.quantity : ""}
-              max={false}
+              max="false"
               min="0"
             />
           </Form.Group>

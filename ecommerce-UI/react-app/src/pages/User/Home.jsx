@@ -8,14 +8,28 @@ import { Outlet } from "react-router-dom";
 import { connect } from "react-redux";
 import { clearStateUser } from "../../redux/actions/userAction";
 import { NavDropdown } from "react-bootstrap";
+import {
+  getCartsByIdUser,
+  clearStateCart,
+} from "../../redux/actions/cartAction";
 class Home extends Component {
   constructor() {
     super();
-    this.state = {
-      count: 7,
-    };
   }
-  componentDidMount = () => {};
+  async componentDidMount() {
+    const { carts } = this.props;
+    const { user } = this.props;
+    if (Object.keys(user).length === 0) {
+      return;
+    } else {
+      try {
+        await Promise.all([this.props.getCartsByIdUser(user.id)]);
+       
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
   renderProfile = () => {
     const { navigate } = this.props.router;
     const { user } = this.props;
@@ -33,6 +47,7 @@ class Home extends Component {
           <NavDropdown.Item
             onClick={() => {
               this.props.clearStateUser();
+              this.props.clearStateCart();
               navigate("/login");
             }}
           >
@@ -50,6 +65,7 @@ class Home extends Component {
         <Nav.Link
           onClick={() => {
             this.props.clearStateUser();
+            this.props.clearStateCart();
             navigate("/login");
           }}
         >
@@ -61,7 +77,6 @@ class Home extends Component {
   };
   render() {
     let { navigate } = this.props.router;
-    let { count } = this.state;
     let { user } = this.props;
     return (
       <div style={{ width: "100vw" }}>
@@ -111,11 +126,15 @@ class Home extends Component {
                 {this.renderProfile()}
                 <Nav.Link
                   onClick={() => {
-                    navigate("/admin");
+                    if (Object.keys(user).length === 0) {
+                      navigate("/login");
+                    } else {
+                      navigate("/cart");
+                    }
                   }}
                 >
                   Cart <BsFillCartCheckFill></BsFillCartCheckFill>
-                  <span>{count}</span>
+                  <span>{this.props.count}</span>
                 </Nav.Link>
                 {this.renderLoginPage()}
               </Nav>
@@ -132,10 +151,14 @@ class Home extends Component {
 
 const mapStateToProps = (state) => ({
   user: state.userReducer.user,
+  carts: state.cartReducer.carts,
+  count: state.cartReducer.count,
 });
 
 const mapDispatchToProps = {
   clearStateUser,
+  getCartsByIdUser,
+  clearStateCart,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));

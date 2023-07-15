@@ -24,3 +24,9 @@ export const PRODUCT_CLEAR_STATE = "PRODUCT_CLEAR_STATE"
 export const PRODUCT_SET = "PRODUCT_SET"
 export const PRODUCT_UPDATE = "PRODUCT_UPDATE"
 export const PRODUCT_DELETE = "PRODUCT_DELETE"
+
+
+export const CART_SET = "CART_SET"
+export const CART_INSERT = "CART_INSERT"
+export const CART_GET_ALL = "CART_GET_ALL"
+export const CART_CLEAR_STATE = "CART_CLEAR_STATE"
