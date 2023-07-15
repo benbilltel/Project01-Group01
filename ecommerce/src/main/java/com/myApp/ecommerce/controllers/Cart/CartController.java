@@ -25,4 +25,14 @@ public class CartController {
         CartDto cartDto = cartService.insertProduct(cart);
         return ResponseEntity.ok(cartDto);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteByIdProduct (@PathVariable Long id){
+        cartService.deleteCart(id);
+        return ResponseEntity.noContent().build();
+    }
+    @DeleteMapping("/userId={userId}")
+    public ResponseEntity<Void> deleteByIdUser (@PathVariable Long userId){
+        cartService.deleteByUserId(userId);
+        return ResponseEntity.noContent().build();
+    }
 }

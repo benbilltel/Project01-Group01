@@ -1,5 +1,6 @@
 import {
     CART_CLEAR_STATE,
+  CART_DELETE_PRODUCT,
   CART_GET_ALL,
   CART_INSERT,
   COMMON_ERROR_SET,
@@ -58,4 +59,47 @@ export const clearStateCart = ()=>async (dispatch)=>{
     dispatch({
         type:CART_CLEAR_STATE
     })
+}
+export const deleteByProductId = (id)=>async (dispatch)=>{
+  const cartService = new CartService();
+  try {
+    const response = await cartService.deleteProductId(id
+    );
+    if(response.status === 204 ){
+      dispatch({
+        type:CART_DELETE_PRODUCT,
+        payload:id
+      })
+      dispatch({
+        type:COMMON_MESSAGE_SET,
+        payload:"Product have removed!"
+      })
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: "Product were not existed!",
+    });
+  }
+}
+export const deleteByUserId = (idUser)=>async (dispatch)=>{
+  const cartService = new CartService();
+  try {
+    const response = await cartService.deleteUserId(idUser
+    );
+    if(response.status === 204 ){
+      dispatch({
+        type:CART_CLEAR_STATE,
+      })
+      dispatch({
+        type:COMMON_MESSAGE_SET,
+        payload:"Products have removed!"
+      })
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: "Product were not existed!",
+    });
+  }
 }

@@ -11,6 +11,7 @@ import com.myApp.ecommerce.repositorys.CartRepository;
 import com.myApp.ecommerce.repositorys.ProductRepository;
 import com.myApp.ecommerce.repositorys.UserRepository;
 import com.myApp.ecommerce.services.product.ProductService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,7 +58,13 @@ public class CartService {
         }
         return cartDtos;
     }
-
+    public void deleteCart(Long idCart){
+        cartRepository.deleteById(idCart);
+    }
+    @Transactional
+    public void deleteByUserId(Long idUser){
+        cartRepository.deleteByUserId(idUser);
+    }
     public CartDto insertProduct(Cart cart) {
         Optional<Cart> existedCart = cartRepository.findByProductId(cart.getProductId());
         Optional<User> user = userRepository.findById(cart.getUserId());

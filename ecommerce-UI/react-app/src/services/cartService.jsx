@@ -49,17 +49,29 @@ export default class CartService {
       throw error;
     }
   }
-//   deleteCategoryById = async (id)=>{
-//     try {
-//       return await axios.delete(API_CATEGORY+id);
-//     } catch (error) {
-//       if (error.response && error.response.status === 500) {
-//         console.log("category not found");
-//       } else {
-//         console.log("Error while fetching category:", error);
-//       }
-//       throw error;
-//     }
-//   }
+  deleteProductId = async (id)=>{
+    try {
+      return await axios.delete(API_CART+id);
+    } catch (error) {
+      if (error.response && error.response.status === 500) {
+        console.log("product not found");
+      } else {
+        console.log("Error while fetching product:", error);
+      }
+      throw error;
+    }
+  }
+  deleteUserId = async (idUser)=>{
+    try {
+      return await axios.delete(API_CART+"userId="+idUser);
+    } catch (error) {
+      if (error.response && error.response.status === 500) {
+        console.log("User not found");
+      } else {
+        console.log("Error while fetching user:", error);
+      }
+      throw error;
+    }
+  }
   
 }
