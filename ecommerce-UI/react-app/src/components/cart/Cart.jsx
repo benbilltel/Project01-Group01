@@ -96,9 +96,10 @@ class Cart extends Component {
                 <th hidden>#</th>
                 <th hidden>id product</th>
                 <th>Name</th>
-                <th>Price</th>
+                <th>Price($)</th>
                 <th>Image</th>
                 <th>Quantity</th>
+                <th>Total($)</th>
               </tr>
             </thead>
             <tbody>
@@ -144,6 +145,7 @@ class Cart extends Component {
                       +
                     </Button>
                   </td>
+                  <td>{cart.productDto.price*cart.quantity}</td>
                 </tr>
               ))}
             </tbody>
