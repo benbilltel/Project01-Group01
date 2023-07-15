@@ -2,7 +2,9 @@ package com.myApp.ecommerce.models.product;
 
 import com.myApp.ecommerce.models.category.Category;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +14,8 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @Table(name = "product")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
