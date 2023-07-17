@@ -31,7 +31,32 @@ public class CartService {
     private ProductRepository productRepository;
     @Autowired
     private ModelMapper modelMapper;
+    public CartDto getCartById (Long id){
+        Optional<Cart> cart = cartRepository.findByProductId(id);
+        if(cart.isEmpty()){
+            throw new ResourceNotFoundException("Cart","id",id);
+        }
+        Cart foundCart = cart.get();
+        Optional<User> user = userRepository.findById(foundCart.getUserId());
+        if(user.isEmpty()){
+            throw new ResourceNotFoundException("User","id",foundCart.getUserId());
 
+        }
+        User foundUser = user.get();
+        UserDto userDto = modelMapper.map(foundUser, UserDto.class);
+        Optional<Product> product = productRepository.findById(foundCart.getProductId());
+        if (product.isEmpty()) {
+            return null;
+        }
+        CartDto cartDto = new CartDto();
+        Product foundProduct = product.get();
+        ProductDto productDto = modelMapper.map(foundProduct, ProductDto.class);
+        cartDto.setProductDto(productDto);
+        cartDto.setUserDto(userDto);
+        cartDto.setId(id);
+        cartDto.setQuantity(foundCart.getQuantity());
+        return cartDto;
+    }
     public List<CartDto> getCartDtoByIdUser(Long id) {
         List<Cart> carts = cartRepository.findByUserId(id);
         Optional<User> user = userRepository.findById(id);
