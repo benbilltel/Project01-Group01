@@ -150,7 +150,10 @@ class Cart extends Component {
               ))}
             </tbody>
           </Table>
-          <Button variant="primary">Add To Pay</Button>
+          <Button variant="primary" onClick={()=>{
+            const {navigate} = this.props.router
+            navigate("/orderInfo")
+          }}>Add To Pay</Button>
           <Button
             variant="danger"
             onClick={() => {

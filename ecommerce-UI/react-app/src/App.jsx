@@ -12,6 +12,7 @@ import ProductAdmin from "./components/product/ProductAdmin";
 import Product from "./components/product/Product";
 import Cart from "./components/cart/Cart"
 import Invoice from "./components/invoice/Invoice";
+import OrderInfo from "./components/Order/OrderInfo";
 import store from "./redux/store";
 import AddOrEditProduct from "./components/product/AddOrEditProduct"
 import ListProductAdmin from "./components/product/ListProductAdmin"
@@ -29,6 +30,7 @@ class App extends Component {
               <Route path="/contact" element={<Contact />}></Route>
               <Route path="/product" element={<Product />}></Route>
               <Route path="/cart" element={<Cart />}></Route>
+              <Route path="/orderInfo" element={<OrderInfo/>}></Route>
             </Route>
             <Route path="/login" element={<Login />}></Route>
             
