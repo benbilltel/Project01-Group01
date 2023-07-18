@@ -19,7 +19,9 @@ public class MyOrder {
     private Long id;
     @Column(name="oderInfoId",nullable = false)
     private Long orderInfoId;
-    @Column(name="cartId",nullable = false)
-    private Long cartId;
+    @Column(name="productId",nullable = false)
+    private Long productId;
+    @Column (name ="quantity",nullable = false)
+    private Long quantity;
 
 }

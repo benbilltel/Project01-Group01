@@ -3,12 +3,15 @@ package com.myApp.ecommerce.services.PaymentService;
 import com.myApp.ecommerce.dtos.Cart.CartDto;
 import com.myApp.ecommerce.dtos.Payment.MyOrderDto;
 import com.myApp.ecommerce.dtos.Payment.OrderInfoDto;
+import com.myApp.ecommerce.dtos.product.ProductDto;
 import com.myApp.ecommerce.dtos.user.UserDto;
 import com.myApp.ecommerce.models.payment.MyOrder;
+import com.myApp.ecommerce.models.product.Product;
 import com.myApp.ecommerce.models.user.User;
 import com.myApp.ecommerce.repositorys.OrderInfoRepository;
 import com.myApp.ecommerce.repositorys.OrderRepository;
 import com.myApp.ecommerce.services.Cart.CartService;
+import com.myApp.ecommerce.services.product.ProductService;
 import com.myApp.ecommerce.services.user.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,8 @@ public class PaymentService {
     private UserService userService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private ProductService productService;
 
     public OrderInfoDto insertOrderInfo(OrderInfo orderInfo) {
         OrderInfo savedOrderInfo = orderInfoRepository.save(orderInfo);
@@ -81,12 +86,16 @@ public class PaymentService {
              ) {
             MyOrder order = new MyOrder();
             order.setOrderInfoId(idOrderInfo);
-            order.setCartId(cartDto.getId());
+            order.setProductId(cartDto.getProductDto().getId());
+            order.setQuantity(cartDto.getQuantity());
             MyOrder savedOrder = orderRepository.save(order);
             MyOrderDto myOrderDto = new MyOrderDto();
             myOrderDto.setId(savedOrder.getId());
             myOrderDto.setOrderInfoId(idOrderInfo);
-            myOrderDto.setCartDto(cartDto);
+            myOrderDto.setQuantity(savedOrder.getQuantity());
+            Product product = productService.getProductById(savedOrder.getProductId());
+            ProductDto productDto = modelMapper.map(product, ProductDto.class);
+            myOrderDto.setProductDto(productDto);
             myOrderDtos.add(myOrderDto);
         }
         return myOrderDtos;
@@ -96,14 +105,13 @@ public class PaymentService {
         List<MyOrderDto> myOrderDtos = new ArrayList<MyOrderDto>();
         for (MyOrder order : orders
              ) {
-            CartDto cartDto = cartService.getCartById(order.getCartId());
-            if(cartDto == null){
-                continue;
-            }
+            Product product = productService.getProductById(order.getProductId());
+            ProductDto productDto = modelMapper.map(product, ProductDto.class);
             MyOrderDto myOrderDto = new MyOrderDto();
             myOrderDto.setId(order.getId());
-            myOrderDto.setCartDto(cartDto);
+            myOrderDto.setProductDto(productDto);
             myOrderDto.setOrderInfoId(order.getOrderInfoId());
+            myOrderDto.setQuantity(order.getQuantity());
             myOrderDtos.add(myOrderDto);
         }
         return myOrderDtos;
