@@ -1,0 +1,56 @@
+import {
+  COMMON_ERROR_SET,
+  COMMON_MESSAGE_SET,
+  PAYMENT_INSERT_ORDER_INFO,
+  PAYMENT_SET_CARTS,
+} from "./actionType";
+import PaymentService from "../../services/paymentService";
+let idOderInfo;
+export const insertOrderInfo = (orderInfo) => async (dispatch) => {
+  const paymentService = new PaymentService();
+  
+  try {
+    const response = await paymentService.insertOrderInfo(orderInfo);
+    if (response.status === 200) {
+        idOderInfo = response.data.id;
+      dispatch({
+        type: PAYMENT_INSERT_ORDER_INFO,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.data.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: "Something was wrong!",
+    });
+  }
+};
+export const insertOrder = (idsCart) => async (dispatch) => {
+    const paymentService = new PaymentService();
+    console.log(idOderInfo)
+    try {
+      const response = await paymentService.insertOrder(idOderInfo,idsCart);
+  
+      if (response.status === 200) {
+        dispatch({
+          type: PAYMENT_SET_CARTS,
+          payload: response.data,
+        });
+      } else {
+        dispatch({
+          type: COMMON_ERROR_SET,
+          payload: response.data.message,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: "Something was wrong!",
+      });
+    }
+  };

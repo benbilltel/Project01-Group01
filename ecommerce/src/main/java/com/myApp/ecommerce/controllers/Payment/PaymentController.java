@@ -26,7 +26,7 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.getAllOrderInfo());
     }
     @PostMapping("/{idOrderInfo}")
-    public ResponseEntity<List<MyOrderDto>> insertOrder (@PathVariable Long idOrderInfo, @RequestBody Long[] idsCart){
+    public ResponseEntity<List<MyOrderDto>> insertOrder (@PathVariable("idOrderInfo") Long idOrderInfo, @RequestBody Long[] idsCart){
         return ResponseEntity.ok(paymentService.insertOrder(idOrderInfo,idsCart));
     }
     @GetMapping("/{idOrderInfo}")

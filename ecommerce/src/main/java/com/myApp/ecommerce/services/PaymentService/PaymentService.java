@@ -38,7 +38,7 @@ public class PaymentService {
 
     public OrderInfoDto insertOrderInfo(OrderInfo orderInfo) {
         OrderInfo savedOrderInfo = orderInfoRepository.save(orderInfo);
-        User user = userService.getUserById(savedOrderInfo.getId());
+        User user = userService.getUserById(savedOrderInfo.getUserId());
         UserDto userDto = modelMapper.map(user, UserDto.class);
         OrderInfoDto orderInfoDto = new OrderInfoDto();
         orderInfoDto.setId(savedOrderInfo.getId());
@@ -56,7 +56,7 @@ public class PaymentService {
         List<OrderInfoDto> orderInfoDtos = new ArrayList<OrderInfoDto>();
         for (OrderInfo orderInfo : orderInfos
         ) {
-            User user = userService.getUserById(orderInfo.getId());
+            User user = userService.getUserById(orderInfo.getUserId());
             UserDto userDto = modelMapper.map(user, UserDto.class);
             OrderInfoDto orderInfoDto = new OrderInfoDto();
             orderInfoDto.setId(orderInfo.getId());
@@ -121,7 +121,7 @@ public class PaymentService {
         List<OrderInfoDto> orderInfoDtos = new ArrayList<OrderInfoDto>();
         for (OrderInfo orderInfo : orderInfos
         ) {
-            User user = userService.getUserById(orderInfo.getId());
+            User user = userService.getUserById(orderInfo.getUserId());
             UserDto userDto = modelMapper.map(user, UserDto.class);
             OrderInfoDto orderInfoDto = new OrderInfoDto();
             orderInfoDto.setId(orderInfo.getId());

@@ -153,7 +153,7 @@ class Cart extends Component {
           <Button variant="primary" onClick={()=>{
             const {navigate} = this.props.router
             navigate("/orderInfo")
-          }}>Add To Pay</Button>
+          }}>Check out</Button>
           <Button
             variant="danger"
             onClick={() => {

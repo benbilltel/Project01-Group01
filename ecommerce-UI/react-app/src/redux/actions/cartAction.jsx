@@ -70,10 +70,7 @@ export const deleteByProductId = (id)=>async (dispatch)=>{
         type:CART_DELETE_PRODUCT,
         payload:id
       })
-      dispatch({
-        type:COMMON_MESSAGE_SET,
-        payload:"Product have removed!"
-      })
+      
     }
   } catch (error) {
     dispatch({
@@ -91,10 +88,7 @@ export const deleteByUserId = (idUser)=>async (dispatch)=>{
       dispatch({
         type:CART_CLEAR_STATE,
       })
-      dispatch({
-        type:COMMON_MESSAGE_SET,
-        payload:"Products have removed!"
-      })
+      
     }
   } catch (error) {
     dispatch({

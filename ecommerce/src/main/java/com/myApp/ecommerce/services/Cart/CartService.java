@@ -32,7 +32,7 @@ public class CartService {
     @Autowired
     private ModelMapper modelMapper;
     public CartDto getCartById (Long id){
-        Optional<Cart> cart = cartRepository.findByProductId(id);
+        Optional<Cart> cart = cartRepository.findById(id);
         if(cart.isEmpty()){
             throw new ResourceNotFoundException("Cart","id",id);
         }
