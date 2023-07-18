@@ -13,9 +13,9 @@ export default class PaymentService {
       throw error;
     }
   };
-  insertOrder = async (idOrderInfo,idsCart) => {
+  insertOrder = async (idOrderInfo, idsCart) => {
     try {
-      return await axios.post(API_PAYMENT+idOrderInfo, idsCart);
+      return await axios.post(API_PAYMENT + idOrderInfo, idsCart);
     } catch (error) {
       if (error.response && error.response.status === 500) {
         console.log("orderinfo not found");
@@ -25,18 +25,18 @@ export default class PaymentService {
       throw error;
     }
   };
-//   updateCategory = async (id,category) => {
-//     try {
-//       return await axios.put(API_CATEGORY+id, category);
-//     } catch (error) {
-//       if (error.response && error.response.status === 500) {
-//         console.log("category not found");
-//       } else {
-//         console.log("Error while fetching category:", error);
-//       }
-//       throw error;
-//     }
-//   };
+  //   updateCategory = async (id,category) => {
+  //     try {
+  //       return await axios.put(API_CATEGORY+id, category);
+  //     } catch (error) {
+  //       if (error.response && error.response.status === 500) {
+  //         console.log("category not found");
+  //       } else {
+  //         console.log("Error while fetching category:", error);
+  //       }
+  //       throw error;
+  //     }
+  //   };
   getAllOrderInfo = async () => {
     try {
       return await axios.get(API_PAYMENT);
@@ -49,10 +49,10 @@ export default class PaymentService {
       throw error;
     }
   };
-  
-  getCartsByIdOrderInfo = async (idOrderInfo)=>{
+
+  getCartsByIdOrderInfo = async (idOrderInfo) => {
     try {
-      return await axios.get(API_PAYMENT+idOrderInfo);
+      return await axios.get(API_PAYMENT + idOrderInfo);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         console.log("idOrderInfo not found");
@@ -61,10 +61,10 @@ export default class PaymentService {
       }
       throw error;
     }
-  }
-  getOrderInfosByUserId = async (idUser)=>{
+  };
+  getOrderInfosByUserId = async (idUser) => {
     try {
-      return await axios.get(API_PAYMENT+"idUser="+idUser);
+      return await axios.get(API_PAYMENT + "idUser=" + idUser);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         console.log("idUser not found");
@@ -73,18 +73,29 @@ export default class PaymentService {
       }
       throw error;
     }
-  }
-//   deleteCategoryById = async (id)=>{
-//     try {
-//       return await axios.delete(API_CATEGORY+id);
-//     } catch (error) {
-//       if (error.response && error.response.status === 500) {
-//         console.log("category not found");
-//       } else {
-//         console.log("Error while fetching category:", error);
-//       }
-//       throw error;
-//     }
-//   }
-  
+  };
+  setStatus = async (orderInfo) => {
+    try {
+      return await axios.put(API_PAYMENT,orderInfo);
+    } catch (error) {
+      if (error.response && error.response.status === 500) {
+        console.log("orderInfo not found");
+      } else {
+        console.log("Error while fetching orderInfo:", error);
+      }
+      throw error;
+    }
+  };
+  //   deleteCategoryById = async (id)=>{
+  //     try {
+  //       return await axios.delete(API_CATEGORY+id);
+  //     } catch (error) {
+  //       if (error.response && error.response.status === 500) {
+  //         console.log("category not found");
+  //       } else {
+  //         console.log("Error while fetching category:", error);
+  //       }
+  //       throw error;
+  //     }
+  //   }
 }

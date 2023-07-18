@@ -3,6 +3,7 @@ package com.myApp.ecommerce.controllers.Payment;
 import com.myApp.ecommerce.dtos.Payment.MyOrderDto;
 import com.myApp.ecommerce.dtos.Payment.OrderInfoDto;
 import com.myApp.ecommerce.models.payment.OrderInfo;
+import com.myApp.ecommerce.models.payment.OrderStatus;
 import com.myApp.ecommerce.services.PaymentService.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +37,9 @@ public class PaymentController {
     @GetMapping("/idUser={idUser}")
     public ResponseEntity<List<OrderInfoDto>> getOrderInfosByUserId(@PathVariable("idUser") Long idUser){
         return ResponseEntity.ok(paymentService.getOrderInfosByUserId(idUser));
+    }
+    @PutMapping("/")
+    public ResponseEntity<OrderInfoDto> setStatus (@RequestBody OrderInfo orderInfo){
+        return ResponseEntity.ok(paymentService.insertOrderInfo(orderInfo));
     }
 }

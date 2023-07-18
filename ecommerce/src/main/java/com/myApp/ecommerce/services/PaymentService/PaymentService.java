@@ -5,7 +5,9 @@ import com.myApp.ecommerce.dtos.Payment.MyOrderDto;
 import com.myApp.ecommerce.dtos.Payment.OrderInfoDto;
 import com.myApp.ecommerce.dtos.product.ProductDto;
 import com.myApp.ecommerce.dtos.user.UserDto;
+import com.myApp.ecommerce.exception.ResourceNotFoundException;
 import com.myApp.ecommerce.models.payment.MyOrder;
+import com.myApp.ecommerce.models.payment.OrderStatus;
 import com.myApp.ecommerce.models.product.Product;
 import com.myApp.ecommerce.models.user.User;
 import com.myApp.ecommerce.repositorys.OrderInfoRepository;
@@ -20,6 +22,7 @@ import com.myApp.ecommerce.models.payment.OrderInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PaymentService {
@@ -50,7 +53,6 @@ public class PaymentService {
         orderInfoDto.setPhoneContact(savedOrderInfo.getPhoneContact());
         return orderInfoDto;
     }
-
     public List<OrderInfoDto> getAllOrderInfo() {
         List<OrderInfo> orderInfos = orderInfoRepository.findAll();
         List<OrderInfoDto> orderInfoDtos = new ArrayList<OrderInfoDto>();

@@ -7,6 +7,7 @@ import {
   getAllCartsByOrderInfo,
   getAllOrderInfoByIdUser,
   clearPaymentState,
+  setStatus,
 } from "../../redux/actions/paymentAction";
 import { Button, Table } from "react-bootstrap";
 import ModalShowProduct from "../../helpers/ModalShowProduct";
@@ -46,7 +47,7 @@ class ShoppingHistory extends Component {
     try {
       await this.props.getAllCartsByOrderInfo(id);
       const { cartsPay } = this.props;
-      this.setState({ cartsPay: cartsPay ,showProductModal: true });
+      this.setState({ cartsPay: cartsPay, showProductModal: true });
     } catch (error) {}
   };
   componentDidMount = async () => {
@@ -60,9 +61,25 @@ class ShoppingHistory extends Component {
   componentWillUnmount = async () => {
     await this.props.clearPaymentState();
   };
+  setStatus = async (orderInfo) => {
+    try {
+      let orderInfoPass = {
+        id: orderInfo.id,
+        userId: orderInfo.userDto.id,
+        phoneContact: orderInfo.phoneContact,
+        status: "Completed",
+        total: orderInfo.total,
+        date: orderInfo.date,
+        address:orderInfo.address,
+      };
+      await this.props.setStatus(orderInfoPass);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   render() {
     const { orderInfos } = this.props;
-    const {cartsPay,showProductModal} = this.state
+    const { cartsPay, showProductModal } = this.state;
     return (
       <div>
         {this.renderErrorMessage()}
@@ -90,12 +107,20 @@ class ShoppingHistory extends Component {
                   <td>{orderInfo.total}</td>
                   <td>{orderInfo.status}</td>
                   <td>
-                    <Button onClick={()=>{
-                        this.viewDetail(orderInfo.id)
-                    }}>
+                    <Button
+                      onClick={() => {
+                        this.viewDetail(orderInfo.id);
+                      }}
+                    >
                       View detail
                     </Button>
-                    <Button>Completed</Button>
+                    <Button
+                      onClick={() => {
+                        this.setStatus(orderInfo);
+                      }}
+                    >
+                      Completed
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -125,6 +150,7 @@ const mapDispatchToProps = {
   getAllCartsByOrderInfo,
   getAllOrderInfoByIdUser,
   clearPaymentState,
+  setStatus,
 };
 
 export default withRouter(

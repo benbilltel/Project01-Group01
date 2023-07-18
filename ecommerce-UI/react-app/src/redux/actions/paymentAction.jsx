@@ -6,6 +6,7 @@ import {
   PAYMENT_GET_ORDER_INFO_USER,
   PAYMENT_INSERT_ORDER_INFO,
   PAYMENT_SET_CARTS,
+  PAYMENT_SET_STATUS,
 } from "./actionType";
 import PaymentService from "../../services/paymentService";
 let idOderInfo;
@@ -87,6 +88,29 @@ export const insertOrder = (idsCart) => async (dispatch) => {
       if (response.status === 200) {
         dispatch({
           type: PAYMENT_SET_CARTS,
+          payload: response.data,
+        });
+      } else {
+        dispatch({
+          type: COMMON_ERROR_SET,
+          payload: response.data.message,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: "Something was wrong!",
+      });
+    }
+  };
+  export const setStatus = (orderInfo) => async (dispatch) => {
+    const paymentService = new PaymentService();
+    try {
+      const response = await paymentService.setStatus(orderInfo);
+
+      if (response.status === 200) {
+        dispatch({
+          type: PAYMENT_SET_STATUS,
           payload: response.data,
         });
       } else {
