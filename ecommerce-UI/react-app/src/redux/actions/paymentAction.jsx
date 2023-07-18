@@ -1,6 +1,9 @@
 import {
   COMMON_ERROR_SET,
   COMMON_MESSAGE_SET,
+  PAYMENT_CLEAR_CARTS,
+  PAYMENT_CLEAR_STATE,
+  PAYMENT_GET_ORDER_INFO_USER,
   PAYMENT_INSERT_ORDER_INFO,
   PAYMENT_SET_CARTS,
 } from "./actionType";
@@ -32,7 +35,6 @@ export const insertOrderInfo = (orderInfo) => async (dispatch) => {
 };
 export const insertOrder = (idsCart) => async (dispatch) => {
     const paymentService = new PaymentService();
-    console.log(idOderInfo)
     try {
       const response = await paymentService.insertOrder(idOderInfo,idsCart);
   
@@ -54,3 +56,59 @@ export const insertOrder = (idsCart) => async (dispatch) => {
       });
     }
   };
+  export const getAllOrderInfoByIdUser = (idUser) => async (dispatch) => {
+    const paymentService = new PaymentService();
+    try {
+      const response = await paymentService.getOrderInfosByUserId(idUser);
+  
+      if (response.status === 200) {
+        dispatch({
+          type: PAYMENT_GET_ORDER_INFO_USER,
+          payload: response.data,
+        });
+      } else {
+        dispatch({
+          type: COMMON_ERROR_SET,
+          payload: response.data.message,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: "Something was wrong!",
+      });
+    }
+  };
+  export const getAllCartsByOrderInfo = (id) => async (dispatch) => {
+    const paymentService = new PaymentService();
+    try {
+      const response = await paymentService.getCartsByIdOrderInfo(id);
+  
+      if (response.status === 200) {
+        dispatch({
+          type: PAYMENT_SET_CARTS,
+          payload: response.data,
+        });
+      } else {
+        dispatch({
+          type: COMMON_ERROR_SET,
+          payload: response.data.message,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: "Something was wrong!",
+      });
+    }
+  };
+  export const clearPaymentState =  ()=>async(dispatch)=>{
+    dispatch({
+        type:PAYMENT_CLEAR_STATE,
+    })
+  }
+  export const clearCartsPay =  ()=>async(dispatch)=>{
+    dispatch({
+        type:PAYMENT_CLEAR_CARTS,
+    })
+  }

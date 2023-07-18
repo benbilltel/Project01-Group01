@@ -40,7 +40,9 @@ class Home extends Component {
       return (
         <NavDropdown title={user.name} id="basic-nav-dropdown">
           <NavDropdown.Item>Profile</NavDropdown.Item>
-          <NavDropdown.Item>Shopping history</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=>{
+            navigate("/history")
+          }}>Shopping history</NavDropdown.Item>
           <NavDropdown.Item>Your payment</NavDropdown.Item>
           <NavDropdown.Item>Setting</NavDropdown.Item>
           <NavDropdown.Divider />

@@ -52,7 +52,7 @@ export default class PaymentService {
   
   getCartsByIdOrderInfo = async (idOrderInfo)=>{
     try {
-      return await axios.get(API_CATEGORY+idOrderInfo);
+      return await axios.get(API_PAYMENT+idOrderInfo);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         console.log("idOrderInfo not found");
@@ -64,7 +64,7 @@ export default class PaymentService {
   }
   getOrderInfosByUserId = async (idUser)=>{
     try {
-      return await axios.get(API_CATEGORY+"idUser="+idUser);
+      return await axios.get(API_PAYMENT+"idUser="+idUser);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         console.log("idUser not found");

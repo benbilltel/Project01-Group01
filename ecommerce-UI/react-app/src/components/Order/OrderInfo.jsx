@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import withRouter from "../../helpers/withRouter";
 import ModalShowError from "../../helpers/ModalShowError";
 import ModalShowMessage from "../../helpers/ModalShowMessage";
-import { setError } from "../../redux/actions/commonAction";
+import { setError ,setMessage} from "../../redux/actions/commonAction";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
 import {
   insertOrder,
@@ -64,6 +64,10 @@ class OrderInfo extends Component {
       // await new Promise((resolve) => setTimeout(resolve, 100)); 
       await this.props.insertOrder(idsCart);
       await this.props.deleteByUserId(user.id);
+      this.props.setMessage("Purchase completed!");
+      const {navigate} = this.props.router
+      navigate("/history")
+      
     } catch (error) {}
   };
   render() {
@@ -172,6 +176,7 @@ const mapDispatchToProps = {
   insertOrder,
   insertOrderInfo,
   deleteByUserId,
+  setMessage
 };
 
 export default withRouter(

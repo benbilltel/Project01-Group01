@@ -16,6 +16,7 @@ import OrderInfo from "./components/Order/OrderInfo";
 import store from "./redux/store";
 import AddOrEditProduct from "./components/product/AddOrEditProduct"
 import ListProductAdmin from "./components/product/ListProductAdmin"
+import ShoppingHistory from "./components/history/ShoppingHistory"
 import { Provider } from "react-redux";
 import Register from "./pages/register/Register";
 class App extends Component {
@@ -31,6 +32,7 @@ class App extends Component {
               <Route path="/product" element={<Product />}></Route>
               <Route path="/cart" element={<Cart />}></Route>
               <Route path="/orderInfo" element={<OrderInfo/>}></Route>
+              <Route path="/history" element={<ShoppingHistory/>}></Route>
             </Route>
             <Route path="/login" element={<Login />}></Route>
             
