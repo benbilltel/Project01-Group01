@@ -9,7 +9,7 @@ import {
   clearPaymentState,
   setStatus,
 } from "../../redux/actions/paymentAction";
-import { Button, Table } from "react-bootstrap";
+import { Button, Dropdown, Table } from "react-bootstrap";
 import ModalShowProduct from "../../helpers/ModalShowProduct";
 class ShoppingHistory extends Component {
   constructor(props) {
@@ -61,16 +61,16 @@ class ShoppingHistory extends Component {
   componentWillUnmount = async () => {
     await this.props.clearPaymentState();
   };
-  setStatus = async (orderInfo) => {
+  setStatus = async (orderInfo,status) => {
     try {
       let orderInfoPass = {
         id: orderInfo.id,
         userId: orderInfo.userDto.id,
         phoneContact: orderInfo.phoneContact,
-        status: "Completed",
+        status: status,
         total: orderInfo.total,
         date: orderInfo.date,
-        address:orderInfo.address,
+        address: orderInfo.address,
       };
       await this.props.setStatus(orderInfoPass);
     } catch (error) {
@@ -84,7 +84,7 @@ class ShoppingHistory extends Component {
       <div>
         {this.renderErrorMessage()}
         {this.renderMessage()}
-        <div style={{ height: "200px", overflow: "auto" }}>
+        <div>
           <Table striped bordered>
             <thead>
               <tr>
@@ -107,20 +107,49 @@ class ShoppingHistory extends Component {
                   <td>{orderInfo.total}</td>
                   <td>{orderInfo.status}</td>
                   <td>
-                    <Button
-                      onClick={() => {
-                        this.viewDetail(orderInfo.id);
-                      }}
-                    >
-                      View detail
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        this.setStatus(orderInfo);
-                      }}
-                    >
-                      Completed
-                    </Button>
+                    <Dropdown>
+                      <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        Action
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                        <Dropdown.Item
+                          onClick={() => {
+                            this.viewDetail(orderInfo.id);
+                          }}
+                        >
+                          View detail
+                        </Dropdown.Item>
+                        {orderInfo.status === "InProgress" ? (<Dropdown.Item
+                          onClick={() => {
+                            this.setStatus(orderInfo,"Reject");
+                          }}
+                        >
+                          Reject
+                        </Dropdown.Item>):(<></>)}
+                        {orderInfo.status === "InProgress" ? (<Dropdown.Item
+                          onClick={() => {
+                            this.setStatus(orderInfo,"Completed");
+                          }}
+                        >
+                          Completed
+                        </Dropdown.Item>):(<></>)}
+                        {orderInfo.status === "Delivering" ? (<Dropdown.Item
+                          onClick={() => {
+                            this.setStatus(orderInfo,"Completed");
+                          }}
+                        >
+                          Completed
+                        </Dropdown.Item>):(<></>)}
+                        {orderInfo.status === "Completed" ? (<Dropdown.Item
+                          onClick={() => {
+                            this.setStatus(orderInfo,"Refund");
+                          }}
+                        >
+                          Refund
+                        </Dropdown.Item>):(<></>)}
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </td>
                 </tr>
               ))}

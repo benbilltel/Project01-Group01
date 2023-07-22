@@ -12,9 +12,15 @@ import {
   getCartsByIdUser,
   clearStateCart,
 } from "../../redux/actions/cartAction";
+import "./Home.css";
+import HomeBody from "./HomeBody";
+import Footer from "./Footer";
 class Home extends Component {
   constructor() {
     super();
+    this.state = {
+      showBody: true,
+    };
   }
   async componentDidMount() {
     const { carts } = this.props;
@@ -24,7 +30,6 @@ class Home extends Component {
     } else {
       try {
         await Promise.all([this.props.getCartsByIdUser(user.id)]);
-       
       } catch (error) {
         console.log(error);
       }
@@ -38,13 +43,25 @@ class Home extends Component {
     }
     if (user) {
       return (
-        <NavDropdown title={user.name} id="basic-nav-dropdown">
-          <NavDropdown.Item>Profile</NavDropdown.Item>
-          <NavDropdown.Item onClick={()=>{
-            navigate("/history")
-          }}>Shopping history</NavDropdown.Item>
-          <NavDropdown.Item>Your payment</NavDropdown.Item>
-          <NavDropdown.Item>Setting</NavDropdown.Item>
+        <NavDropdown
+          className="px-3 hover-link"
+          title={user.name}
+          id="basic-nav-dropdown"
+        >
+          <NavDropdown.Item className="hover-link">Profile</NavDropdown.Item>
+          <NavDropdown.Item
+            onClick={() => {
+              this.setState({ showBody: false });
+              navigate("/history");
+            }}
+            className="hover-link"
+          >
+            Shopping history
+          </NavDropdown.Item>
+          <NavDropdown.Item className="hover-link">
+            Your payment
+          </NavDropdown.Item>
+          <NavDropdown.Item className=" hover-link">Setting</NavDropdown.Item>
           <NavDropdown.Divider />
           <NavDropdown.Item
             onClick={() => {
@@ -52,6 +69,7 @@ class Home extends Component {
               this.props.clearStateCart();
               navigate("/login");
             }}
+            className="hover-link"
           >
             Logout
           </NavDropdown.Item>
@@ -70,6 +88,7 @@ class Home extends Component {
             this.props.clearStateCart();
             navigate("/login");
           }}
+          className="px-3 hover-link"
         >
           Login
         </Nav.Link>
@@ -77,74 +96,103 @@ class Home extends Component {
     }
     return;
   };
+  toggleShowBody = (newValue) => {
+    this.setState({ showBody: newValue });
+  };
   render() {
     let { navigate } = this.props.router;
     let { user } = this.props;
     return (
-      <div style={{ width: "100vw" }}>
-        <Navbar expand="lg" className="bg-body-tertiary px-5">
+      <div>
+        <Navbar expand="lg" className="nav-home-top" fixed="top">
           <Container>
             <Navbar.Brand
               onClick={() => {
+                this.setState({ showBody: true });
                 navigate("/");
               }}
               style={{ cursor: "pointer" }}
             >
-              Logo
+              <img
+                src="../../../logo.png.webp"
+                alt="logo"
+                className="logo-custom"
+              />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
                 <Nav.Link
                   onClick={() => {
+                    this.setState({ showBody: true });
                     navigate("/");
                   }}
+                  className="px-3 hover-link"
+                  active={location.pathname === "/"}
                 >
                   Home
                 </Nav.Link>
                 <Nav.Link
                   onClick={() => {
+                    this.setState({ showBody: false });
                     navigate("/product");
                   }}
+                  className="px-3 hover-link"
+                  active={location.pathname === "/product"}
                 >
                   Product
                 </Nav.Link>
                 <Nav.Link
                   onClick={() => {
+                    this.setState({ showBody: false });
                     navigate("/about");
                   }}
+                  className="px-3 hover-link"
+                  active={location.pathname === "/about"}
                 >
                   About
                 </Nav.Link>
                 <Nav.Link
                   onClick={() => {
+                    this.setState({ showBody: false });
                     navigate("/contact");
                   }}
+                  className="px-3 hover-link"
+                  active={location.pathname === "/contact"}
                 >
                   Contact
                 </Nav.Link>
               </Nav>
               <Nav>
                 {this.renderProfile()}
-                <Nav.Link
-                  onClick={() => {
-                    if (Object.keys(user).length === 0) {
-                      navigate("/login");
-                    } else {
-                      navigate("/cart");
-                    }
-                  }}
-                >
-                  Cart <BsFillCartCheckFill></BsFillCartCheckFill>
-                  <span>{this.props.count}</span>
-                </Nav.Link>
                 {this.renderLoginPage()}
               </Nav>
             </Navbar.Collapse>
+            <Nav.Link
+              onClick={() => {
+                if (Object.keys(user).length === 0) {
+                  navigate("/login");
+                } else {
+                  this.setState({ showBody: false });
+                  navigate("/cart");
+                }
+              }}
+              className="px-3 hover-link cart"
+              active={location.pathname === "/cart"}
+            >
+              <img src="../../../card.svg" alt="cart" />
+              <span className="count-cart">{this.props.count}</span>
+            </Nav.Link>
           </Container>
         </Navbar>
-        <div className="content-outlet">
+        <div className="content-outlet" style={{ marginTop: "95px" }}>
           <Outlet></Outlet>
+          {this.state.showBody ? (
+            <HomeBody toggleShowBody={this.toggleShowBody}></HomeBody>
+          ) : (
+            <></>
+          )}
+          <Footer></Footer>
         </div>
       </div>
     );

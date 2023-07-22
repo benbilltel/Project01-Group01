@@ -1,1 +1,42 @@
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+body{
+    font-family: 'Open Sans', sans-serif;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+.gradient-button {
+  background-image: linear-gradient(to right, #ff416c, #ff4b2b);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.gradient-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background-color: #fff;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.gradient-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.gradient-button:hover::before {
+  transform: translate(-50%, -50%) scale(50);
+  opacity: 1;
+}
