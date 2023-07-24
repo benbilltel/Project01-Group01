@@ -3,7 +3,7 @@ services:
   backend:
     build: ./ecommerce/
     ports:
-      - "192.168.2.10:8080:8080"
+      - "10.7.148.183:8080:8080"
     depends_on:
       - "db"
     links:
@@ -24,9 +24,9 @@ services:
   frontend:
     build: ./ecommerce-UI/react-app/
     environment:
-      VITE_API_URL: http://192.168.2.10:8080
+      VITE_API_URL: http://10.7.148.183:8080
     ports:
-      - "192.168.2.10:5173:5173"
+      - "10.7.148.183:5173:5173"
     depends_on:
       - "backend"
     links:
@@ -47,3 +47,50 @@ services:
       retries: 10
 volumes:
   db-data:
+
+
+
+# version: "2.19.1"
+# services:
+#   backend:
+#     build: ./ecommerce/
+#     environment:
+#       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ecommerce
+#       SPRING_DATASOURCE_USERNAME: root
+#       SPRING_DATASOURCE_PASSWORD: 145236987Ben!
+#     healthcheck:
+#       test:
+#         [
+#           "CMD-SHELL",
+#           "curl --fail http://localhost:8080/actuator/health || exit 1",
+#         ]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 5
+#   frontend:
+#     build: ./ecommerce-UI/react-app/
+#     environment:
+#       VITE_API_URL: http://backend:8080
+#   db:
+#     image: mysql:8.0.33
+#     environment:
+#       MYSQL_ROOT_PASSWORD: 145236987Ben!
+#       MYSQL_ROOT_USER: root
+#       MYSQL_DATABASE: ecommerce
+#     volumes:
+#       - db-data:/var/lib/mysql
+#     healthcheck:
+#       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+#       timeout: 5s
+#       retries: 10
+#   nginx:
+#     image: nginx
+#     ports:
+#       - "80:80"
+#     volumes:
+#       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#     depends_on:
+#       - frontend
+#       - backend
+# volumes:
+#   db-data:
