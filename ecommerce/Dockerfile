@@ -15,14 +15,47 @@
 
 # syntax=docker/dockerfile:1
 
+
+
+# FROM eclipse-temurin:17-jdk-jammy
+
+# WORKDIR /app
+
+# COPY .mvn/ .mvn
+# COPY mvnw pom.xml ./
+# RUN ./mvnw dependency:resolve
+
+# COPY src ./src
+
+# CMD ["./mvnw", "spring-boot:run"]
+
+
 FROM eclipse-temurin:17-jdk-jammy
 
+# Set the working directory to /app
 WORKDIR /app
 
+# Copy the Maven wrapper files
 COPY .mvn/ .mvn
+
+# Copy the pom.xml file and download all the project dependencies
 COPY mvnw pom.xml ./
 RUN ./mvnw dependency:resolve
 
+# Copy the application source code
 COPY src ./src
 
-CMD ["./mvnw", "spring-boot:run"]
+# Build the application using Maven
+RUN ./mvnw clean package -DskipTests
+
+# Verify that the JAR file was created
+RUN ls -l target/*.jar
+
+# Copy the compiled JAR file to the container
+COPY target/*.jar app.jar
+
+# Expose port 8080 for the container
+EXPOSE 8080
+
+# Start the application
+CMD ["java", "-jar", "app.jar"]

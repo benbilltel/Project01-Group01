@@ -27,26 +27,6 @@ body{
     transform: scale(1);
   }
 }
-/* .custom-button {
-  border: 1px solid #fd8f5f ;
-  color: #fd8f5f;
-  padding: 15px 35px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 15px;
-  cursor: pointer;
-  position: relative;
-  background-color: white;
-}
-
-.custom-button:hover {
-  animation-name: bounce;
-  animation-duration: 0.5s;
-  animation-timing-function: ease-out;
-  animation-iteration-count: 1;
-} */
 .custom-button {
   position: relative;
   display: inline-block;

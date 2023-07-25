@@ -229,7 +229,7 @@ class HomeBody extends Component {
                   this.props.toggleShowBody(false);
                   const { navigate } = this.props.router;
                   navigate("/product");
-                }} style={{cursor:"pointer"}}><i class="fa-brands fa-instagram"></i></a>
+                }} style={{cursor:"pointer"}}><i className="fa-brands fa-instagram"></i></a>
                   </div>
                 </div>
                 <div className="instagram_banner col-md-6 col-12">
@@ -244,7 +244,7 @@ class HomeBody extends Component {
                   this.props.toggleShowBody(false);
                   const { navigate } = this.props.router;
                   navigate("/product");
-                }} style={{cursor:"pointer"}}><i class="fa-brands fa-instagram"></i></a>
+                }} style={{cursor:"pointer"}}><i className="fa-brands fa-instagram"></i></a>
                   </div>
                 </div>
               </div>
