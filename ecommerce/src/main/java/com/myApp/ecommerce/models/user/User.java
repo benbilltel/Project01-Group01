@@ -30,4 +30,7 @@ public class User {
     private String email;
     @Column(name = "phoneNumber", nullable = false, length = 10)
     private String phoneNumber;
+    @Enumerated
+    @Column(name= "type",nullable = false)
+    private UserType type;
 }

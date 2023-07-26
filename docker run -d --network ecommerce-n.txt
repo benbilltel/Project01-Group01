@@ -1,5 +1,5 @@
-docker run -d --network ecommerce-network --network-alias mysql -v ecommerce-mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=145236987Ben! -e MYSQL_DATABASE=ecommerce -e MYSQL_ROOT_USER=root mysql:8.0.33
+docker run -d --name ecommerce-db --network ecommerce-network --network-alias mysql -v ecommerce-mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=145236987Ben! -e MYSQL_DATABASE=ecommerce -e MYSQL_ROOT_USER=root mysql:8.0.33
 
-docker run -d -it --network ecommerce-network nicolaka/netshoot
+docker run -d --name ecommerce-dns  -it --network ecommerce-network nicolaka/netshoot
 
 docker run -dp 8080:8080 -e SPRING_DATASOURCE_URL='jdbc:mysql://mysql:3306/ecommerce' -e SPRING_DATASOURCE_USERNAME='root' -e SPRING_DATASOURCE_PASSWORD='145236987Ben!' --network ecommerce-network be-testing

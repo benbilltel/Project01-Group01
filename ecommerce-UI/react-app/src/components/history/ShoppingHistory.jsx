@@ -9,7 +9,7 @@ import {
   clearPaymentState,
   setStatus,
 } from "../../redux/actions/paymentAction";
-import { Button, Dropdown, Table } from "react-bootstrap";
+import { Button, Dropdown, Nav, Table } from "react-bootstrap";
 import ModalShowProduct from "../../helpers/ModalShowProduct";
 class ShoppingHistory extends Component {
   constructor(props) {
@@ -17,6 +17,7 @@ class ShoppingHistory extends Component {
     this.state = {
       showProductModal: false,
       cartsPay: [],
+      selectedStatus: "InProgress",
     };
   }
   renderErrorMessage = () => {
@@ -61,7 +62,7 @@ class ShoppingHistory extends Component {
   componentWillUnmount = async () => {
     await this.props.clearPaymentState();
   };
-  setStatus = async (orderInfo,status) => {
+  setStatus = async (orderInfo, status) => {
     try {
       let orderInfoPass = {
         id: orderInfo.id,
@@ -77,84 +78,142 @@ class ShoppingHistory extends Component {
       console.log(error);
     }
   };
+
+  handleStatusChange = (status) => {
+    this.setState({ selectedStatus: status });
+  };
   render() {
-    const { orderInfos } = this.props;
-    const { cartsPay, showProductModal } = this.state;
+    const { orderInfos, user } = this.props;
+    const { cartsPay, showProductModal, selectedStatus } = this.state;
+
+    // filter orderInfos by selected status
+    const filteredOrderInfos = orderInfos.filter(
+      (orderInfo) => orderInfo.status === selectedStatus
+    );
     return (
       <div>
         {this.renderErrorMessage()}
         {this.renderMessage()}
         <div>
-          <Table striped bordered>
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Phone contact</th>
-                <th>Total($)</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {orderInfos.map((orderInfo, index) => (
-                <tr key={orderInfo.id}>
-                  <td>{orderInfo.id}</td>
-                  <td>{orderInfo.userDto.name}</td>
-                  <td>{orderInfo.address}</td>
-                  <td>{orderInfo.phoneContact}</td>
-                  <td>{orderInfo.total}</td>
-                  <td>{orderInfo.status}</td>
-                  <td>
-                    <Dropdown>
-                      <Dropdown.Toggle variant="success" id="dropdown-basic">
-                        Action
-                      </Dropdown.Toggle>
-
-                      <Dropdown.Menu>
-                        <Dropdown.Item
-                          onClick={() => {
-                            this.viewDetail(orderInfo.id);
-                          }}
-                        >
-                          View detail
-                        </Dropdown.Item>
-                        {orderInfo.status === "InProgress" ? (<Dropdown.Item
-                          onClick={() => {
-                            this.setStatus(orderInfo,"Reject");
-                          }}
-                        >
-                          Reject
-                        </Dropdown.Item>):(<></>)}
-                        {orderInfo.status === "InProgress" ? (<Dropdown.Item
-                          onClick={() => {
-                            this.setStatus(orderInfo,"Completed");
-                          }}
-                        >
-                          Completed
-                        </Dropdown.Item>):(<></>)}
-                        {orderInfo.status === "Delivering" ? (<Dropdown.Item
-                          onClick={() => {
-                            this.setStatus(orderInfo,"Completed");
-                          }}
-                        >
-                          Completed
-                        </Dropdown.Item>):(<></>)}
-                        {orderInfo.status === "Completed" ? (<Dropdown.Item
-                          onClick={() => {
-                            this.setStatus(orderInfo,"Refund");
-                          }}
-                        >
-                          Refund
-                        </Dropdown.Item>):(<></>)}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
+          <Nav variant="tabs" activeKey={selectedStatus}>
+            <Nav.Item>
+              <Nav.Link
+                eventKey="InProgress"
+                onClick={() => {
+                  this.handleStatusChange("InProgress");
+                }}
+              >
+                In Progress
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                eventKey="Completed"
+                onClick={() => {
+                  this.handleStatusChange("Completed");
+                }}
+              >
+                Completed
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                eventKey="Delivering"
+                onClick={() => {
+                  this.handleStatusChange("Delivering");
+                }}
+              >
+                Delivering
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+          {filteredOrderInfos.length > 0 && (
+            <Table striped bordered>
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Phone contact</th>
+                  <th>Total($)</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {filteredOrderInfos.map((orderInfo) => (
+                  <tr key={orderInfo.id}>
+                    <td>{orderInfo.id}</td>
+                    <td>{orderInfo.userDto.name}</td>
+                    <td>{orderInfo.address}</td>
+                    <td>{orderInfo.phoneContact}</td>
+                    <td>{orderInfo.total}</td>
+                    <td>
+                      <Dropdown>
+                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                          Action
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Item
+                            onClick={() => {
+                              this.viewDetail(orderInfo.id);
+                            }}
+                          >
+                            View detail
+                          </Dropdown.Item>
+                          {orderInfo.status === "InProgress" ? (
+                            <Dropdown.Item
+                              onClick={() => {
+                                this.setStatus(orderInfo, "Reject");
+                              }}
+                            >
+                              Reject
+                            </Dropdown.Item>
+                          ) : (
+                            <></>
+                          )}
+                          {orderInfo.status === "InProgress" ? (
+                            <Dropdown.Item
+                              onClick={() => {
+                                this.setStatus(orderInfo, "Completed");
+                              }}
+                            >
+                              Completed
+                            </Dropdown.Item>
+                          ) : (
+                            <></>
+                          )}
+                          {orderInfo.status === "Delivering" ? (
+                            <Dropdown.Item
+                              onClick={() => {
+                                this.setStatus(orderInfo, "Completed");
+                              }}
+                            >
+                              Completed
+                            </Dropdown.Item>
+                          ) : (
+                            <></>
+                          )}
+                          {orderInfo.status === "Completed" ? (
+                            <Dropdown.Item
+                              onClick={() => {
+                                this.setStatus(orderInfo, "Refund");
+                              }}
+                            >
+                              Refund
+                            </Dropdown.Item>
+                          ) : (
+                            <></>
+                          )}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+
           {showProductModal && (
             <ModalShowProduct
               heading="Products"

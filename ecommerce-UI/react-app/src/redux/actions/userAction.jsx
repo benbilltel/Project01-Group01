@@ -44,12 +44,12 @@ export const getUserByUserName = (user, navigate) => async (dispatch) => {
           payload: response.data,
         });
         navigate("/");
-        // if (response.data.type == "User") {
-        //   navigate("/");
-        // }
-        // if (response.data.type == "Admin") {
-        //   navigate("/admin");
-        // }
+        if (response.data.type == "User") {
+          navigate("/");
+        }
+        if (response.data.type == "Admin") {
+          navigate("/admin");
+        }
       } else {
         dispatch({
           type: COMMON_ERROR_SET,

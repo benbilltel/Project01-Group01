@@ -64,6 +64,7 @@ class Register extends Component {
       user.password = password;
       user.email = email;
       user.phoneNumber = phoneNumber;
+      user.type = "User";
       this.props.insertUser(user, navigate);
     }
   };
