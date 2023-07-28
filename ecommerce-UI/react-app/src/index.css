@@ -101,3 +101,23 @@ body{
     color: white;
   }
 }
+
+hr.my-hr {
+  border: none;
+  height: 2px;
+  background-color: #fd8f5f;
+  animation-name: slide-in;
+  animation-duration: 5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  
+}
+
+@keyframes slide-in {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}

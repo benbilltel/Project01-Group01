@@ -7,19 +7,22 @@ import {
   getAllCategories,
   clearStateCategory,
 } from "../../redux/actions/categoryAction";
-import {insertCart,getCartsByIdUser} from "../../redux/actions/cartAction"
+import { insertCart, getCartsByIdUser } from "../../redux/actions/cartAction";
 import {
   getAllProducts,
   clearStateProduct,
 } from "../../redux/actions/productAction";
 import { Button, Card } from "react-bootstrap";
+import "./Product.css";
 class Product extends Component {
   constructor() {
     super();
     this.state = {
+      searchQuery: "",
       idCategory: "All",
       showProduct: [], // store the content returned by showProductsByIdCategory
     };
+    this.searchInput = React.createRef();
   }
   renderMessage = () => {
     const { message } = this.props;
@@ -46,24 +49,31 @@ class Product extends Component {
     return <></>;
   };
   showCategories = () => {
-    const { categories } = this.props;
+    const { categories, products } = this.props;
     if (!categories) {
       return;
     }
+
     let showCategory = categories.map((category) => {
       if (category.status === "Visible") {
-        return (
-          <Button
-            key={category.id}
-            value={category.id}
-            className="col-12 mb-2"
-            variant="secondary"
-            onClick={() => this.showProductsByIdCategory(category.id)}
-          >
-            {category.name}
-          </Button>
+        let filteredProducts = products.filter(
+          (product) =>
+            product.status === "Active" && product.category.id === category.id
         );
+        if (filteredProducts.length > 0) {
+          return (
+            <button
+              key={category.id}
+              value={category.id}
+              className="col-lg-2 col-sm-3 m-2"
+              onClick={() => this.showProductsByIdCategory(category.id)}
+            >
+              {category.name}
+            </button>
+          );
+        }
       }
+      return <></>;
     });
     return showCategory;
   };
@@ -84,17 +94,17 @@ class Product extends Component {
     this.props.clearStateProduct();
   };
   addToCart = async (idProduct) => {
-    const {navigate} = this.props.router
-    const {user} = this.props
-    if(Object.keys(user).length === 0){
-      navigate("/login")
+    const { navigate } = this.props.router;
+    const { user } = this.props;
+    if (Object.keys(user).length === 0) {
+      navigate("/login");
       return;
     }
     let cart = {
-      "userId":user.id,
-      "productId":idProduct,
-      "quantity":1
-    }
+      userId: user.id,
+      productId: idProduct,
+      quantity: 1,
+    };
     try {
       await this.props.insertCart(cart);
       await this.props.getCartsByIdUser(user.id);
@@ -120,23 +130,28 @@ class Product extends Component {
         );
       }
       let showProduct = filteredProducts.map((product) => (
-        <Card  key={product.id} className="col-4 mb-3">
-          <Card.Img
-            variant="top"
-            src={`data:image/jpeg;base64,${product.image}`}
-          />
-          <Card.Body>
-            <Card.Title>{product.name}</Card.Title>
-            <Card.Text>{product.description}</Card.Text>
-            <Card.Text>{product.price}$</Card.Text>
-            <Button
-              variant="primary"
-              onClick={() => this.addToCart(product.id)}
-            >
-              Add To Cart
-            </Button>
-          </Card.Body>
-        </Card>
+        <div className="col-md-6 col-xl-4 p-3">
+          <Card
+            key={product.id}
+            style={{ maxHeight: "450px", minHeight: "450px" }}
+          >
+            <Card.Img
+              variant="top"
+              src={`data:image/jpeg;base64,${product.image}`}
+            />
+            <Card.Body>
+              <Card.Title>{product.name}</Card.Title>
+              <Card.Text>{product.description}</Card.Text>
+              <Card.Text>{product.price}$</Card.Text>
+              <button
+                className="add-to-cart "
+                onClick={() => this.addToCart(product.id)}
+              >
+                Add To Cart
+              </button>
+            </Card.Body>
+          </Card>
+        </div>
       ));
       this.setState({ idCategory: id, showProduct: showProduct });
     } else {
@@ -151,7 +166,50 @@ class Product extends Component {
         );
       }
       let showProduct = filteredProducts.map((product) => (
-        <Card  key={product.id} className="col-4 mb-3" >
+        <div className="col-md-6 col-xl-4 p-3">
+          <Card
+            key={product.id}
+            style={{ maxHeight: "450px", minHeight: "450px" }}
+          >
+            <Card.Img
+              variant="top"
+              src={`data:image/jpeg;base64,${product.image}`}
+            />
+            <Card.Body>
+              <Card.Title>{product.name}</Card.Title>
+              <Card.Text>{product.description}</Card.Text>
+              <Card.Text className="price">{product.price}$</Card.Text>
+              <button
+                className="add-to-cart "
+                onClick={() => this.addToCart(product.id)}
+              >
+                Add To Cart
+              </button>
+            </Card.Body>
+          </Card>
+        </div>
+      ));
+      this.setState({ showProduct: showProduct });
+    }
+  };
+  componentDidUpdate(prevProps, prevState) {
+    // If the search query has changed, focus on the input element
+    if (this.state.searchQuery !== prevState.searchQuery) {
+      this.searchInput.current.focus();
+    }
+  }
+  handleSearch = (event) => {
+    const searchQuery = event.target.value;
+    const { products } = this.props;
+    const filteredProducts = products.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    const showProduct = filteredProducts.map((product) => (
+      <div className="col-md-6 col-xl-4 p-3 product-show">
+        <Card
+          key={product.id}
+          style={{ maxHeight: "450px", minHeight: "450px" }}
+        >
           <Card.Img
             variant="top"
             src={`data:image/jpeg;base64,${product.image}`}
@@ -159,50 +217,62 @@ class Product extends Component {
           <Card.Body>
             <Card.Title>{product.name}</Card.Title>
             <Card.Text>{product.description}</Card.Text>
-            <Card.Text>{product.price}$</Card.Text>
-            <Button
-              variant="primary"
+            <Card.Text className="price">{product.price}$</Card.Text>
+            <button
+              className="add-to-cart "
               onClick={() => this.addToCart(product.id)}
             >
               Add To Cart
-            </Button>
+            </button>
           </Card.Body>
         </Card>
-      ));
-      this.setState({ showProduct: showProduct });
-    }
+      </div>
+    ));
+    this.setState({ showProduct, searchQuery });
   };
+
   render() {
-    const { showProduct } = this.state;
+    const { showProduct, searchQuery } = this.state;
     return (
-      <div className="container">
+      <div
+        className="container"
+        style={{
+          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+          margin: "80px",
+        }}
+      >
         {this.renderErrorMessage()}
         {this.renderMessage()}
         <div
           className="row p-3 "
           style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
         >
-          <div className="col-2">
-            <div
-              className="row p-5 "
-              style={{
-                boxShadow:
-                  "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px ",
-              }}
-            >
-              <Button
-                key="AllCategories"
+          <div className="col-12 category-pick container">
+            <div className="row p-5 " key={searchQuery+"###"}>
+              <input
+                key={searchQuery+"@"}
+                type="text"
+                value={searchQuery}
+                onChange={this.handleSearch}
+                placeholder="Search products by name"
+                ref={this.searchInput}
+                className="col-12 find-product "
+              />
+
+              <button
+                key="All"
                 value="All"
-                className="col-12 mb-2"
-                variant="secondary"
+                className="col-md-2 col-sm-3 m-2"
+                autoFocus
                 onClick={() => this.showProductsByIdCategory("All")}
               >
                 All
-              </Button>
+              </button>
               {this.showCategories()}
             </div>
           </div>
-          <div className="col-10 px-5 ">
+          <hr className="my-hr" />
+          <div className="col-12 px-5 products" style={{ marginTop: "2rem" }}>
             <div className="row ">{showProduct}</div>
           </div>
         </div>
@@ -216,14 +286,15 @@ const mapStateToProps = (state) => ({
   error: state.commonReducer.error,
   message: state.commonReducer.message,
   products: state.productReducer.products,
-  user:state.userReducer.user,
+  user: state.userReducer.user,
 });
 const mapDispatchToProps = {
   getAllCategories,
   clearStateCategory,
   getAllProducts,
   clearStateProduct,
-  insertCart,getCartsByIdUser
+  insertCart,
+  getCartsByIdUser,
 };
 
 export default withRouter(
