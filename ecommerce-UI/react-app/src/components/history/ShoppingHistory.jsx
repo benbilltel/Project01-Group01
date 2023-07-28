@@ -9,6 +9,7 @@ import {
   clearPaymentState,
   setStatus,
 } from "../../redux/actions/paymentAction";
+import { setUser } from "../../redux/actions/userAction";
 import { Button, Dropdown, Nav, Table } from "react-bootstrap";
 import ModalShowProduct from "../../helpers/ModalShowProduct";
 class ShoppingHistory extends Component {
@@ -52,9 +53,9 @@ class ShoppingHistory extends Component {
     } catch (error) {}
   };
   componentDidMount = async () => {
+    const userLocal = JSON.parse(localStorage.getItem("user"));
     try {
-      const { user } = this.props;
-      await this.props.getAllOrderInfoByIdUser(user.id);
+      await Promise.all([this.props.getAllOrderInfoByIdUser(userLocal.id)]);
     } catch (error) {
       console.log(error);
     }
@@ -239,6 +240,7 @@ const mapDispatchToProps = {
   getAllOrderInfoByIdUser,
   clearPaymentState,
   setStatus,
+  setUser,
 };
 
 export default withRouter(
