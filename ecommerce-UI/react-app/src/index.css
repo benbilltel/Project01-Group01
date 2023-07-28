@@ -112,7 +112,10 @@ hr.my-hr {
   animation-iteration-count: infinite;
   
 }
-
+.carousel-control-prev,
+ .carousel-control-next {
+    display: none;
+   }
 @keyframes slide-in {
   from {
     width: 0;

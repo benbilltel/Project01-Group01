@@ -6,6 +6,9 @@ import {
   COMMON_MESSAGE_SET,
   USER_CLEAR_STATE,
 } from "./actionType";
+export const setUser = (user) => async (dispatch) => {
+  dispatch({ type: USER_GET_BY_USERNAME, payload: user });
+};
 export const insertUser = (user, navigate) => async (dispatch) => {
   const userService = new UserService();
   try {
@@ -61,7 +64,7 @@ export const getUserByUserName = (user, navigate) => async (dispatch) => {
     dispatch({
       type: COMMON_ERROR_SET,
       // payload: error.response.data.message,
-      payload:"Wrong username!"
+      payload: "Wrong username!",
     });
   }
 };

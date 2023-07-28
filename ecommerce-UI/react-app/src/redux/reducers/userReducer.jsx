@@ -10,18 +10,23 @@ const initialState = {
 const userReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case USER_GET_BY_USERNAME:
-      return { ...state, user: payload };
+      const newState = { ...state, user: payload };
+      localStorage.setItem("user",JSON.stringify(newState.user));
+      return newState;
     case USER_CLEAR_STATE:
-      return {
+      const newState1 =  {
         ...state,
         user: {},
       };
+      localStorage.setItem("user",JSON.stringify(newState1.user));
+      return newState1;
     case USER_INSERT:
-      return {
+      const newState2 = {
         ...state,
         user: {},
       };
-
+      localStorage.setItem("user",JSON.stringify(newState2.user));
+      return newState2;
     default:
       return state;
   }

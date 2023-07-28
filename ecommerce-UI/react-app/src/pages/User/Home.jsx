@@ -6,7 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import { Outlet } from "react-router-dom";
 import { connect } from "react-redux";
-import { clearStateUser } from "../../redux/actions/userAction";
+import { clearStateUser,setUser } from "../../redux/actions/userAction";
 import { NavDropdown } from "react-bootstrap";
 import {
   getCartsByIdUser,
@@ -21,8 +21,18 @@ class Home extends Component {
     this.state = {
       showBody: true,
     };
+    
   }
+
   async componentDidMount() {
+    const userLocal = JSON.parse(localStorage.getItem("user")); // retrieve user state from localStorage
+    if (userLocal !== null && userLocal !== undefined) {
+      const { user } = this.props;
+      if (Object.keys(user).length === 0) {
+        this.props.setUser(userLocal); // update Redux store with saved user state
+      }
+    }
+  
     const { carts } = this.props;
     const { user } = this.props;
     if (Object.keys(user).length === 0) {
@@ -186,11 +196,10 @@ class Home extends Component {
           </Container>
         </Navbar>
         <div className="content-outlet" style={{ marginTop: "95px" }}>
-          <Outlet></Outlet>
-          {this.state.showBody ? (
+          {this.state.showBody && location.pathname === "/" ? (
             <HomeBody toggleShowBody={this.toggleShowBody}></HomeBody>
           ) : (
-            <></>
+            <Outlet></Outlet>
           )}
           <Footer></Footer>
         </div>
@@ -209,6 +218,7 @@ const mapDispatchToProps = {
   clearStateUser,
   getCartsByIdUser,
   clearStateCart,
+  setUser
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
