@@ -1,8 +1,8 @@
-.modal-dialog {
+.modal-dialog.modal-product {
   max-width: 1200px !important;
 }
 
-.modal-content {
+.modal-product .modal-content {
   width: 100% !important;
   max-width: 1200px !important;
 }

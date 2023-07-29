@@ -9,7 +9,7 @@ import { getUserByUserName } from "../../redux/actions/userAction";
 import { setError, setMessage } from "../../redux/actions/commonAction";
 import ModalShowError from "../../helpers/ModalShowError";
 import ModalShowMessage from "../../helpers/ModalShowMessage";
-
+import "./Login.css";
 class Login extends Component {
   constructor() {
     super();
@@ -67,10 +67,14 @@ class Login extends Component {
     const { message } = this.props;
     const { navigate } = this.props.router;
     return (
-      <div style={{ width: "100vw" }}>
+      <div style={{ width: "100vw" }} className="login-page">
         {this.renderErrorMessage()}
         {this.renderMessage()}
-        <Form className="px-3" onSubmit={this.signUp}>
+        <img className="back-to-home logo-custom" src="../../../logo.png.webp" alt="logo" onClick={()=>{
+          navigate("/")
+        }} />
+        <Form className="px-3 form-login" onSubmit={this.signUp}>
+          <h2>Group 01</h2>
           <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
             <Form.Label column sm={2}>
               Username
@@ -99,27 +103,24 @@ class Login extends Component {
               />
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="mb-3">
-            <Col sm={{ span: 10, offset: 2 }}>
-              <Button type="submit" style={{ marginRight: "20px" }}>
-                Sign in
-              </Button>
-              <Button
-                onClick={() => {
-                  navigate("/register");
-                }}
-                style={{ marginRight: "20px" }}
-              >
-                Sign Up
-              </Button>
-              <Button
-                onClick={() => {
-                  navigate("/");
-                }}
-              >
-                Home
-              </Button>
-            </Col>
+          <Form.Group className="mb-3 d-flex justify-content-end">
+            <div>
+            <p
+              className="sign-up"
+              onClick={() => {
+                navigate("/register");
+              }}
+            >
+              Create an account
+            </p>
+            <button
+              className="sign-in"
+              type="submit"
+              style={{ marginRight: "20px" }}
+            >
+              Sign in
+            </button>
+            </div>
           </Form.Group>
         </Form>
       </div>

@@ -210,6 +210,7 @@ class HomeBody extends Component {
                   const { navigate } = this.props.router;
                   navigate("/product");
                 }}
+                style={{maxWidth:"250px"}}
               >
                 Discover more
               </button>
@@ -217,7 +218,7 @@ class HomeBody extends Component {
             </div>
             <div className="instagram_banners col-lg-9 col-12 my-2" style={{padding:"80px 0 80px"}}>
               <div className="row">
-                <div className="instagram_banner col-md-6 col-12">
+                <div className="instagram_banner col-md-6 col-12 p-0">
                   <div className="instagram_img w-100">
                     <img
                       src="../../../instra1.png.webp"
@@ -232,7 +233,7 @@ class HomeBody extends Component {
                 }} style={{cursor:"pointer"}}><i className="fa-brands fa-instagram"></i></a>
                   </div>
                 </div>
-                <div className="instagram_banner col-md-6 col-12">
+                <div className="instagram_banner col-md-6 col-12 p-0">
                   <div className="instagram_img w-100">
                     <img
                       src="../../../instra2.png.webp"

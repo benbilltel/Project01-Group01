@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { setError, setMessage } from "../../redux/actions/commonAction";
 import { insertUser } from "../../redux/actions/userAction";
 import ModalShowError from "../../helpers/ModalShowError";
+import "./Register.css";
 class Register extends Component {
   constructor() {
     super();
@@ -84,8 +85,17 @@ class Register extends Component {
   render() {
     let { navigate } = this.props.router;
     return (
-      <div style={{ width: "100vw" }}>
-        <Form onSubmit={this.registNewUser} className="px-3">
+      <div style={{ width: "100vw" }} className="login-page register-page">
+        <img
+          className="back-to-home logo-custom"
+          src="../../../logo.png.webp"
+          alt="logo"
+          onClick={() => {
+            navigate("/");
+          }}
+        />
+        <Form onSubmit={this.registNewUser} className="px-3 form-login">
+          <h1>Sign Up</h1>
           {this.renderErrorMessage()}
           <Form.Group className="mb-3">
             <Form.Label>Name</Form.Label>
@@ -127,19 +137,20 @@ class Register extends Component {
               name="phoneNumber"
             />
           </Form.Group>
-          <Form.Group as={Row} className="mb-3">
-            <Col sm={{ span: 10, offset: 2 }}>
-              <Button type="submit" style={{ marginRight: "20px" }}>
-                Register
-              </Button>
-              <Button
+          <Form.Group className="mb-3 d-flex justify-content-end">
+            <div>
+              <p
+                className="sign-up"
                 onClick={() => {
                   navigate("/login");
                 }}
               >
-                Sign in
-              </Button>
-            </Col>
+                Already have account
+              </p>
+              <button type="submit" style={{ marginRight: "20px" }}>
+                Sign Up
+              </button>
+            </div>
           </Form.Group>
         </Form>
       </div>

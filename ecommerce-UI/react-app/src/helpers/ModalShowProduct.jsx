@@ -17,7 +17,7 @@ function ModalShowProduct(props) {
   const { cartsPay, heading,handleClose } = props;
   return (
     <>
-      <Modal show={show} onHide={handleCloseModal}>
+      <Modal show={show} onHide={handleCloseModal} className="modal-product">
         <Modal.Header closeButton>
           <Modal.Title style={{ color: "green" }}>{heading}</Modal.Title>
         </Modal.Header>
