@@ -12,6 +12,7 @@ import {
 import { setUser } from "../../redux/actions/userAction";
 import { Button, Dropdown, Nav, Table } from "react-bootstrap";
 import ModalShowProduct from "../../helpers/ModalShowProduct";
+import "./ShoppingHistory.css"
 class ShoppingHistory extends Component {
   constructor(props) {
     super(props);
@@ -95,8 +96,8 @@ class ShoppingHistory extends Component {
       <div>
         {this.renderErrorMessage()}
         {this.renderMessage()}
-        <div>
-          <Nav variant="tabs" activeKey={selectedStatus}>
+        <div className="invoice" style={{marginTop:"130px",marginBottom:"30px"}}>
+          <Nav activeKey={selectedStatus} className="invoice-navs">
             <Nav.Item>
               <Nav.Link
                 eventKey="InProgress"
@@ -105,6 +106,16 @@ class ShoppingHistory extends Component {
                 }}
               >
                 In Progress
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                eventKey="Delivering"
+                onClick={() => {
+                  this.handleStatusChange("Delivering");
+                }}
+              >
+                Delivering
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
@@ -119,24 +130,35 @@ class ShoppingHistory extends Component {
             </Nav.Item>
             <Nav.Item>
               <Nav.Link
-                eventKey="Delivering"
+                eventKey="Refund"
                 onClick={() => {
-                  this.handleStatusChange("Delivering");
+                  this.handleStatusChange("Refund");
                 }}
               >
-                Delivering
+                Refund
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                eventKey="Reject"
+                onClick={() => {
+                  this.handleStatusChange("Reject");
+                }}
+              >
+                Rejected
               </Nav.Link>
             </Nav.Item>
           </Nav>
           {filteredOrderInfos.length > 0 && (
-            <Table striped bordered>
+            <Table striped bordered className="carts my-3">
               <thead>
                 <tr>
-                  <th>Id</th>
+                  <th>ID Invoice</th>
+                  <th>Date purchased</th>
                   <th>Name</th>
                   <th>Address</th>
                   <th>Phone contact</th>
-                  <th>Total($)</th>
+                  <th>Total</th>
                   <th></th>
                 </tr>
               </thead>
@@ -144,13 +166,14 @@ class ShoppingHistory extends Component {
                 {filteredOrderInfos.map((orderInfo) => (
                   <tr key={orderInfo.id}>
                     <td>{orderInfo.id}</td>
+                    <td>{orderInfo.date}</td>
                     <td>{orderInfo.userDto.name}</td>
                     <td>{orderInfo.address}</td>
                     <td>{orderInfo.phoneContact}</td>
-                    <td>{orderInfo.total}</td>
+                    <td style={{ color: "#670000", fontWeight: "700" }}>{orderInfo.total}$</td>
                     <td>
-                      <Dropdown>
-                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                      <Dropdown className="action-invoice">
+                        <Dropdown.Toggle  id="dropdown-basic">
                           Action
                         </Dropdown.Toggle>
 

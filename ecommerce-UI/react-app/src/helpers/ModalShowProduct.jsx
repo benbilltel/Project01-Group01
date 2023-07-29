@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { clearCartsPay } from "../redux/actions/paymentAction";
 import { Table } from "react-bootstrap";
+import "./ModalShowProduct.css"
 function ModalShowProduct(props) {
   const [show, setShow] = useState(true);
   const handleCloseModal = () => {
@@ -21,15 +22,15 @@ function ModalShowProduct(props) {
           <Modal.Title style={{ color: "green" }}>{heading}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div style={{ height: "200px", overflow: "auto" }}>
-            <Table striped bordered>
+          <div style={{ height: "400px", overflow: "auto" }}>
+            <Table striped bordered className="carts">
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Image</th>
-                  <th>Price($)</th>
+                  <th>Price</th>
                   <th>Quantity</th>
-                  <th>Total($)</th>
+                  <th>Total</th>
                 </tr>
               </thead>
               <tbody>
@@ -43,9 +44,9 @@ function ModalShowProduct(props) {
                         width="100"
                       />
                     </td>
-                    <td>{cart.productDto.price}</td>
+                    <td style={{ color: "#670000", fontWeight: "700" }}>{cart.productDto.price}$</td>
                     <td>{cart.quantity}</td>
-                    <td>{cart.productDto.price * cart.quantity}</td>
+                    <td style={{ color: "#670000", fontWeight: "700" }}>{cart.productDto.price * cart.quantity}$</td>
                   </tr>
                 ))}
               </tbody>

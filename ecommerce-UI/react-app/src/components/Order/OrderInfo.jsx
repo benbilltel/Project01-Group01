@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import withRouter from "../../helpers/withRouter";
 import ModalShowError from "../../helpers/ModalShowError";
 import ModalShowMessage from "../../helpers/ModalShowMessage";
-import { setError ,setMessage} from "../../redux/actions/commonAction";
+import { setError, setMessage } from "../../redux/actions/commonAction";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
 import {
   insertOrder,
@@ -11,6 +11,7 @@ import {
 } from "../../redux/actions/paymentAction";
 import { LocalDate, DateTimeFormatter } from "js-joda";
 import { deleteByUserId } from "../../redux/actions/cartAction";
+import "./OrderInfo.css";
 class OrderInfo extends Component {
   renderErrorMessage = () => {
     const { error } = this.props;
@@ -61,17 +62,32 @@ class OrderInfo extends Component {
         date: localDate,
       };
       await this.props.insertOrderInfo(orderInfoPass);
-      // await new Promise((resolve) => setTimeout(resolve, 100)); 
+      // await new Promise((resolve) => setTimeout(resolve, 100));
       await this.props.insertOrder(idsCart);
       await this.props.deleteByUserId(user.id);
       this.props.setMessage("Purchase completed!");
-      const {navigate} = this.props.router
-      navigate("/history")
-      
+      const { navigate } = this.props.router;
+      navigate("/history");
     } catch (error) {}
   };
-  render() {
-    const { navigate } = this.props.router;
+  constructor() {
+    super();
+    this.state = {
+      total: 0,
+    };
+  }
+
+  componentDidMount() {
+    this.updateTotal();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.carts !== this.props.carts) {
+      this.updateTotal();
+    }
+  }
+
+  updateTotal = () => {
     const { carts } = this.props;
     let total = 0;
     if (carts) {
@@ -79,13 +95,22 @@ class OrderInfo extends Component {
         total += element.productDto.price * element.quantity;
       });
     }
+    this.setState({ total });
+  };
+  render() {
+    const { navigate } = this.props.router;
+    const { carts } = this.props;
+    const { total } = this.state;
 
     return (
-      <div>
+      <div
+        className="order-layout"
+        style={{ marginTop: "130px", marginBottom: "20px" }}
+      >
         {this.renderErrorMessage()}
         {this.renderMessage()}
         <div>
-          <Form onSubmit={this.purchase} className="px-3">
+          <Form onSubmit={this.purchase} className="px-3 orderinfo-form">
             <Form.Group className="mb-3">
               <Form.Label>Address</Form.Label>
               <Form.Control type="text" placeholder="Address" name="address" />
@@ -99,27 +124,53 @@ class OrderInfo extends Component {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Total</Form.Label>
+              <Form.Label>Total($)</Form.Label>
               <Form.Control
                 type="number"
                 placeholder=""
                 name="total"
                 readOnly
-                defaultValue={total}
+                value={total}
               />
             </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Payment Method</Form.Label>
+              <div>
+                <Form.Check
+                  type="radio"
+                  id="cod"
+                  label="COD"
+                  name="paymentMethod"
+                  checked
+                />
+                <Form.Check
+                  type="radio"
+                  id="paypal"
+                  label="PayPal"
+                  name="paymentMethod"
+                  disabled
+                />
+                <Form.Check
+                  type="radio"
+                  id="credit-card"
+                  label="Credit Card"
+                  name="paymentMethod"
+                  disabled
+                />
+              </div>
+            </Form.Group>
             <Form.Group>
-              <div style={{ height: "200px", overflow: "auto" }}>
-                <Table striped bordered>
+              <div style={{ maxHeight: "400px", overflow: "auto" }}>
+                <Table striped bordered className="carts">
                   <thead>
                     <tr>
                       <th hidden>#</th>
                       <th hidden>id product</th>
                       <th>Name</th>
-                      <th>Price($)</th>
+                      <th>Price</th>
                       <th>Image</th>
                       <th>Quantity</th>
-                      <th>Total($)</th>
+                      <th>Total</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -128,7 +179,9 @@ class OrderInfo extends Component {
                         <td hidden>{cart.id}</td>
                         <td hidden>{cart.productDto.id}</td>
                         <td>{cart.productDto.name}</td>
-                        <td>{cart.productDto.price}</td>
+                        <td style={{ color: "#670000", fontWeight: "700" }}>
+                          {cart.productDto.price}$
+                        </td>
                         <td>
                           <img
                             src={`data:image/jpeg;base64,${cart.productDto.image}`}
@@ -137,7 +190,9 @@ class OrderInfo extends Component {
                           />
                         </td>
                         <td>{cart.quantity}</td>
-                        <td>{cart.productDto.price * cart.quantity}</td>
+                        <td style={{ color: "#670000", fontWeight: "700" }}>
+                          {cart.productDto.price * cart.quantity}$
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -145,18 +200,11 @@ class OrderInfo extends Component {
               </div>
             </Form.Group>
             <Form.Group as={Row} className="mb-3">
-              <Col sm={{ span: 10, offset: 2 }}>
-                <Button type="submit" style={{ marginRight: "20px" }}>
+              <div className="d-flex justify-content-lg-end">
+                <button type="submit" className="check-out">
                   Purchase
-                </Button>
-                <Button
-                  onClick={() => {
-                    navigate(-1);
-                  }}
-                >
-                  Back
-                </Button>
-              </Col>
+                </button>
+              </div>
             </Form.Group>
           </Form>
         </div>
@@ -176,7 +224,7 @@ const mapDispatchToProps = {
   insertOrder,
   insertOrderInfo,
   deleteByUserId,
-  setMessage
+  setMessage,
 };
 
 export default withRouter(

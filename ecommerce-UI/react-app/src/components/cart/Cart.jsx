@@ -10,8 +10,12 @@ import {
 } from "../../redux/actions/cartAction";
 import ModalShowMessage from "../../helpers/ModalShowMessage";
 import ModalShowError from "../../helpers/ModalShowError";
+import "./Cart.css";
 class Cart extends Component {
-  decProduct = async (idProduct) => {
+  decProduct = async (idProduct, quantity) => {
+    if (quantity <= 1) {
+      return;
+    }
     const { user } = this.props;
     let cart = {
       userId: user.id,
@@ -89,91 +93,125 @@ class Cart extends Component {
     if (carts.length > 0) {
       return (
         <>
-          <Table striped bordered>
-            <thead>
-              <tr>
-                <th></th>
-                <th hidden>#</th>
-                <th hidden>id product</th>
-                <th>Name</th>
-                <th>Price($)</th>
-                <th>Image</th>
-                <th>Quantity</th>
-                <th>Total($)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {carts.map((cart, index) => (
-                <tr key={cart.id}>
-                  <td>
-                    <Button
-                      variant="danger"
-                      onClick={() => {
-                        this.removeProduct(cart.id);
-                      }}
-                    >
-                      X
-                    </Button>
-                  </td>
-                  <td hidden>{cart.id}</td>
-                  <td hidden>{cart.productDto.id}</td>
-                  <td>{cart.productDto.name}</td>
-                  <td>{cart.productDto.price}</td>
-                  <td>
-                    <img
-                      src={`data:image/jpeg;base64,${cart.productDto.image}`}
-                      alt={cart.productDto.name}
-                      width="100"
-                    />
-                  </td>
-                  <td>
-                    <Button
-                      variant="danger"
-                      onClick={() => {
-                        this.decProduct(cart.productDto.id);
-                      }}
-                    >
-                      -
-                    </Button>{" "}
-                    {cart.quantity}
-                    <Button
-                      variant="primary"
-                      onClick={() => {
-                        this.incProduct(cart.productDto.id);
-                      }}
-                    >
-                      +
-                    </Button>
-                  </td>
-                  <td>{cart.productDto.price*cart.quantity}</td>
+          <div style={{ maxHeight: "60vh", overflow: "auto" }}>
+            <Table striped bordered className="carts">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th hidden>#</th>
+                  <th hidden>id product</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Image</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Button variant="primary" onClick={()=>{
-            const {navigate} = this.props.router
-            navigate("/orderInfo")
-          }}>Check out</Button>
-          <Button
-            variant="danger"
-            onClick={() => {
-              this.clearAll();
-            }}
+              </thead>
+              <tbody>
+                {carts.map((cart, index) => (
+                  <tr key={cart.id}>
+                    <td>
+                      <button
+                        className="rm-product"
+                        onClick={() => {
+                          this.removeProduct(cart.id);
+                        }}
+                      >
+                        x
+                      </button>
+                    </td>
+                    <td hidden>{cart.id}</td>
+                    <td hidden>{cart.productDto.id}</td>
+                    <td>{cart.productDto.name}</td>
+                    <td style={{ color: "#670000", fontWeight: "700" }}>
+                      {cart.productDto.price}$
+                    </td>
+                    <td>
+                      <img
+                        src={`data:image/jpeg;base64,${cart.productDto.image}`}
+                        alt={cart.productDto.name}
+                        width="100"
+                      />
+                    </td>
+                    <td>
+                      <button
+                        className="dcr-mount"
+                        onClick={() => {
+                          this.decProduct(cart.productDto.id, cart.quantity);
+                        }}
+                        style={{
+                          color: "red",
+                          fontWeight: "700",
+                          fontSize: "20px",
+                          backgroundColor: "transparent",
+                          border: "none",
+                          transition: ".5s",
+                        }}
+                      >
+                        -
+                      </button>{" "}
+                      {cart.quantity}
+                      <button
+                        className="inc-mount"
+                        onClick={() => {
+                          this.incProduct(cart.productDto.id);
+                        }}
+                        style={{
+                          color: "green",
+                          fontWeight: "700",
+                          fontSize: "20px",
+                          backgroundColor: "transparent",
+                          border: "none",
+                          transition: ".5s",
+                        }}
+                      >
+                        +
+                      </button>
+                    </td>
+                    <td style={{ color: "#670000", fontWeight: "700" }}>
+                      {cart.productDto.price * cart.quantity}$
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+          <div
+            className="d-flex justify-content-lg-end"
+           
           >
-            Clear All
-          </Button>
+            <button
+              className="clear-carts"
+              onClick={() => {
+                this.clearAll();
+              }}
+            >
+              Clear All
+            </button>
+            <button
+              className="check-out"
+              onClick={() => {
+                const { navigate } = this.props.router;
+                navigate("/orderInfo");
+              }}
+            >
+              Check out
+            </button>
+          </div>
         </>
       );
     }
-    return <div>Add some product!</div>;
+    return <div className="notification">Add some product!</div>;
   };
   render() {
     const { carts } = this.props;
     return (
-      <div className="container">
-        {this.renderErrorMessage()}
-        {this.renderMessage()}
-        {this.renderCart(carts)}
+      <div className="container p-3">
+        <div className="carts-layout">
+          {this.renderErrorMessage()}
+          {this.renderMessage()}
+          {this.renderCart(carts)}
+        </div>
       </div>
     );
   }

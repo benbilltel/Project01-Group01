@@ -142,7 +142,7 @@ class Product extends Component {
             <Card.Body>
               <Card.Title>{product.name}</Card.Title>
               <Card.Text>{product.description}</Card.Text>
-              <Card.Text>{product.price}$</Card.Text>
+              <Card.Text className="price">{product.price}$</Card.Text>
               <button
                 className="add-to-cart "
                 onClick={() => this.addToCart(product.id)}
@@ -235,11 +235,11 @@ class Product extends Component {
     const { showProduct, searchQuery } = this.state;
     return (
       <div
-        className="container"
-        style={{
-          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-          margin: "80px",
-        }}
+        className="container products-container p-3"
+        // style={{
+        //   boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+          
+        // }}
       >
         {this.renderErrorMessage()}
         {this.renderMessage()}
@@ -273,7 +273,7 @@ class Product extends Component {
           </div>
           <hr className="my-hr" />
           <div className="col-12 px-5 products" style={{ marginTop: "2rem" }}>
-            <div className="row ">{showProduct}</div>
+            <div className="row" style={{maxHeight:"700px",overflow:"auto"}}>{showProduct}</div>
           </div>
         </div>
       </div>

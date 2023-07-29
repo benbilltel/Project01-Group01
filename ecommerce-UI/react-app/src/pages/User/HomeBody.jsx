@@ -6,8 +6,8 @@ import "./HomeBody.css";
 class HomeBody extends Component {
   render() {
     return (
-      <div style={{ width: "100%" }}>
-        <Carousel>
+      <div style={{ width: "100%" }} >
+        <Carousel className="carousel">
           <Carousel.Item style={{ position: "relative" }}>
             <div className="carousel_caption">
               <span className="pulse">70% sale off</span>
@@ -56,7 +56,7 @@ class HomeBody extends Component {
             <img
               className="d-block"
               style={{ minHeight: "250px" }}
-              src="../../../slider.png.webp"
+              src="../../../product13.jpg"
               alt="Second slide"
             />
           </Carousel.Item>
@@ -82,7 +82,7 @@ class HomeBody extends Component {
             <img
               className="d-block"
               style={{ minHeight: "250px" }}
-              src="../../../slider.png.webp"
+              src="../../../product13.jpg"
               alt="Third slide"
             />
           </Carousel.Item>
@@ -197,7 +197,7 @@ class HomeBody extends Component {
                   <img src="../../../insta.png.webp" alt="instagramLogo" />
                 </div>
                 <div className="heading_custom2">
-                  <h2>GET INSPIRED WITH INSTAGRAm</h2>
+                  <h2 style={{textTransform:"uppercase"}}>GET INSPIRED WITH INSTAGRAm</h2>
                   <p>
                     Suspendisse varius enim in eros elementum tristique. Duis
                     cursus, mi quis viverra ornare, eros dolor interdum nulla.
