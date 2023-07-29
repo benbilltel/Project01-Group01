@@ -1,6 +1,6 @@
 FROM node
 
-WORKDIR /ecommerce-react-app
+WORKDIR /app
 
 COPY package*.json ./
 

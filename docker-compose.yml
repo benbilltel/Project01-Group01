@@ -60,8 +60,6 @@ services:
     depends_on:
       - backend
       - frontend
-    
-
   backend:
     build: ./ecommerce/
     ports:
@@ -86,7 +84,7 @@ services:
     environment:
       VITE_API_URL: http://localhost
     ports:
-      - "5174:5173"
+      - "5173:5173"
     expose:
       - 5173
   db:

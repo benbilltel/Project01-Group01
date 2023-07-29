@@ -53,7 +53,7 @@ class About extends Component {
                 <img
                   className="d-block"
                   style={{ minHeight: "250px" ,width:"100%"}}
-                  src="../../../product14.jpg"
+                  src="../../../product13.jpg"
                   alt="Second slide"
                 />
               </Carousel.Item>
@@ -61,7 +61,7 @@ class About extends Component {
                 <img
                   className="d-block"
                   style={{ minHeight: "250px" ,width:"100%"}}
-                  src="../../../product15.jpg"
+                  src="../../../product13.jpg"
                   alt="Third slide"
                 />
               </Carousel.Item>
@@ -85,7 +85,7 @@ class About extends Component {
                 <img
                   className="d-block"
                   style={{ minHeight: "250px" ,width:"100%"}}
-                  src="../../../product15.jpg"
+                  src="../../../product13.jpg"
                   alt="First slide"
                 />
               </Carousel.Item>
@@ -101,7 +101,7 @@ class About extends Component {
                 <img
                   className="d-block"
                   style={{ minHeight: "250px" ,width:"100%"}}
-                  src="../../../product14.jpg"
+                  src="../../../product13.jpg"
                   alt="Third slide"
                 />
               </Carousel.Item>
