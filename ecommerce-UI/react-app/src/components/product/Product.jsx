@@ -73,7 +73,7 @@ class Product extends Component {
           );
         }
       }
-      return <></>;
+      
     });
     return showCategory;
   };
@@ -130,9 +130,9 @@ class Product extends Component {
         );
       }
       let showProduct = filteredProducts.map((product) => (
-        <div className="col-md-6 col-xl-4 p-3">
+        <div className="col-md-6 col-xl-4 p-3" key={product.id+"@"}>
           <Card
-            key={product.id}
+           
             style={{ maxHeight: "450px", minHeight: "450px" }}
           >
             <Card.Img
@@ -166,9 +166,9 @@ class Product extends Component {
         );
       }
       let showProduct = filteredProducts.map((product) => (
-        <div className="col-md-6 col-xl-4 p-3">
+        <div className="col-md-6 col-xl-4 p-3" key={product.id+"@"}>
           <Card
-            key={product.id}
+          
             style={{ maxHeight: "450px", minHeight: "450px" }}
           >
             <Card.Img
@@ -205,9 +205,9 @@ class Product extends Component {
       product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
     const showProduct = filteredProducts.map((product) => (
-      <div className="col-md-6 col-xl-4 p-3 product-show">
+      <div className="col-md-6 col-xl-4 p-3 product-show" key={product.id+"@"}>
         <Card
-          key={product.id}
+       
           style={{ maxHeight: "450px", minHeight: "450px" }}
         >
           <Card.Img
@@ -236,10 +236,6 @@ class Product extends Component {
     return (
       <div
         className="container products-container p-3"
-        // style={{
-        //   boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-          
-        // }}
       >
         {this.renderErrorMessage()}
         {this.renderMessage()}
@@ -247,10 +243,10 @@ class Product extends Component {
           className="row p-3 "
           style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
         >
-          <div className="col-12 category-pick container">
-            <div className="row p-5 " key={searchQuery+"###"}>
+          <div className="col-12 category-pick container" >
+            <div className="row p-5">
               <input
-                key={searchQuery+"@"}
+                key="search-input"
                 type="text"
                 value={searchQuery}
                 onChange={this.handleSearch}
