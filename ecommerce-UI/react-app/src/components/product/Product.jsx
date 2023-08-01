@@ -73,7 +73,6 @@ class Product extends Component {
           );
         }
       }
-      
     });
     return showCategory;
   };
@@ -130,11 +129,12 @@ class Product extends Component {
         );
       }
       let showProduct = filteredProducts.map((product) => (
-        <div className="col-md-6 col-xl-4 p-3" key={product.id+"@"}>
-          <Card
-           
-            style={{ maxHeight: "450px", minHeight: "450px" }}
-          >
+        <div
+          className="col-md-6 col-xl-4 p-3"
+          key={product.id + "@"}
+          style={{ cursor: "pointer" }}
+        >
+          <Card style={{ maxHeight: "450px", minHeight: "450px" }}>
             <Card.Img
               variant="top"
               src={`data:image/jpeg;base64,${product.image}`}
@@ -166,11 +166,12 @@ class Product extends Component {
         );
       }
       let showProduct = filteredProducts.map((product) => (
-        <div className="col-md-6 col-xl-4 p-3" key={product.id+"@"}>
-          <Card
-          
-            style={{ maxHeight: "450px", minHeight: "450px" }}
-          >
+        <div
+          className="col-md-6 col-xl-4 p-3"
+          key={product.id + "@"}
+          style={{ cursor: "pointer" }}
+        >
+          <Card style={{ maxHeight: "450px", minHeight: "450px" }}>
             <Card.Img
               variant="top"
               src={`data:image/jpeg;base64,${product.image}`}
@@ -205,11 +206,12 @@ class Product extends Component {
       product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
     const showProduct = filteredProducts.map((product) => (
-      <div className="col-md-6 col-xl-4 p-3 product-show" key={product.id+"@"}>
-        <Card
-       
-          style={{ maxHeight: "450px", minHeight: "450px" }}
-        >
+      <div
+        className="col-md-6 col-xl-4 p-3 product-show"
+        key={product.id + "@"}
+        style={{ cursor: "pointer" }}
+      >
+        <Card style={{ maxHeight: "450px", minHeight: "450px" }}>
           <Card.Img
             variant="top"
             src={`data:image/jpeg;base64,${product.image}`}
@@ -234,16 +236,14 @@ class Product extends Component {
   render() {
     const { showProduct, searchQuery } = this.state;
     return (
-      <div
-        className="container products-container p-3"
-      >
+      <div className="container products-container p-3">
         {this.renderErrorMessage()}
         {this.renderMessage()}
         <div
           className="row p-3 "
           style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
         >
-          <div className="col-12 category-pick container" >
+          <div className="col-12 category-pick container">
             <div className="row p-5">
               <input
                 key="search-input"
@@ -269,7 +269,12 @@ class Product extends Component {
           </div>
           <hr className="my-hr" />
           <div className="col-12 px-5 products" style={{ marginTop: "2rem" }}>
-            <div className="row" style={{maxHeight:"700px",overflow:"auto"}}>{showProduct}</div>
+            <div
+              className="row"
+              style={{ maxHeight: "700px", overflow: "auto" }}
+            >
+              {showProduct}
+            </div>
           </div>
         </div>
       </div>

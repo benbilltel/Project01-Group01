@@ -10,7 +10,7 @@ import {
 import {
   insertProduct,
   clearStateProduct,
-  updateProduct
+  updateProduct,
 } from "../../redux/actions/productAction";
 import ModalShowMessage from "../../helpers/ModalShowMessage";
 import ModalShowError from "../../helpers/ModalShowError";
@@ -41,7 +41,6 @@ class AddOrEditProduct extends Component {
   };
   componentDidMount = () => {
     this.props.getAllCategories();
-    
   };
   componentWillUnmount = () => {
     this.props.clearStateCategory();
@@ -49,38 +48,37 @@ class AddOrEditProduct extends Component {
   };
   handleSubmit = (event) => {
     event.preventDefault();
-    const {id} = this.props.router.params
+    const { id } = this.props.router.params;
     const formData = new FormData(event.target);
-    if(formData.get("name")===""){
+    if (formData.get("name") === "") {
       this.props.setError("Name is required!");
       return;
     }
-    if(formData.get("price")===""){
+    if (formData.get("price") === "") {
       this.props.setError("Price is required!");
       return;
     }
-    if(formData.get("description")===""){
+    if (formData.get("description") === "") {
       this.props.setError("Description is required!");
       return;
     }
-    if(formData.get("status")===""){
+    if (formData.get("status") === "") {
       this.props.setError("Status is required!");
       return;
     }
-    if(formData.get("categoryId")===""){
+    if (formData.get("categoryId") === "") {
       this.props.setError("Category is required!");
       return;
     }
     const { navigate } = this.props.router;
-    if(!id){
+    if (!id) {
       this.props.insertProduct(formData, navigate);
       return;
     }
-    if(id){
-      this.props.updateProduct(id,formData,navigate)
+    if (id) {
+      this.props.updateProduct(id, formData, navigate);
       return;
     }
-    
   };
   renderCategories = () => {
     let { categories } = this.props;
@@ -103,8 +101,13 @@ class AddOrEditProduct extends Component {
         {this.renderMessage()}
         <Form
           onSubmit={this.handleSubmit}
+          className="orderinfo-form"
           encType="multipart/form-data"
           key={product.id + "$"}
+          style={{
+            maxHeight: "60vh",
+            overflowY: "auto",
+          }}
         >
           <Form.Group className="mb-3" hidden={id ? false : true}>
             <Form.Label>ID</Form.Label>
@@ -121,7 +124,7 @@ class AddOrEditProduct extends Component {
               type="text"
               placeholder="Enter product name"
               name="name"
-              defaultValue={product? product.name : ""}
+              defaultValue={product ? product.name : ""}
             />
           </Form.Group>
 
@@ -131,7 +134,7 @@ class AddOrEditProduct extends Component {
               type="number"
               placeholder="Enter product price"
               name="price"
-              defaultValue={product? product.price : ""}
+              defaultValue={product ? product.price : ""}
               max="false"
               min="0"
             />
@@ -142,7 +145,7 @@ class AddOrEditProduct extends Component {
               type="number"
               placeholder="Enter quantity are available"
               name="quantity"
-              defaultValue={product? product.quantity : ""}
+              defaultValue={product ? product.quantity : ""}
               max="false"
               min="0"
             />
@@ -154,16 +157,13 @@ class AddOrEditProduct extends Component {
               as="textarea"
               placeholder="Enter product description"
               name="description"
-              defaultValue={product? product.description : ""}
+              defaultValue={product ? product.description : ""}
             />
           </Form.Group>
 
           <Form.Group controlId="formCategoryId">
             <Form.Label>Category</Form.Label>
-            <Form.Control
-              as="select"
-              name="categoryId"
-            >
+            <Form.Control as="select" name="categoryId">
               {this.renderCategories()}
             </Form.Control>
           </Form.Group>
@@ -173,7 +173,7 @@ class AddOrEditProduct extends Component {
             <Form.Control
               as="select"
               name="status"
-              defaultValue={product? product.status: "Active"}
+              defaultValue={product ? product.status : "Active"}
             >
               <option>Active</option>
               <option>Inactive</option>
@@ -186,13 +186,16 @@ class AddOrEditProduct extends Component {
               type="file"
               accept="image/jpeg"
               name="image"
-              multiple={false}  
+              multiple={false}
             />
           </Form.Group>
-
-          <Button variant="primary" type="submit">
-          {id ? "Update" : "Save"}
-          </Button>
+          <Form.Group  className="mb-3">
+            <div className="d-flex justify-content-lg-end">
+              <button variant="primary" type="submit" className="check-out">
+                {id ? "Update" : "Save"}
+              </button>
+            </div>
+          </Form.Group>
         </Form>
       </div>
     );
@@ -211,7 +214,7 @@ const mapDispatchToProps = {
   clearStateCategory,
   insertProduct,
   clearStateProduct,
-  updateProduct
+  updateProduct,
 };
 
 export default withRouter(

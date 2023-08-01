@@ -150,7 +150,7 @@ class Home extends Component {
                     navigate("/product");
                   }}
                   className="px-3 hover-link"
-                  active={location.pathname === "/product"}
+                  active={location.pathname.startsWith("/product")}
                 >
                   Product
                 </Nav.Link>
@@ -160,7 +160,7 @@ class Home extends Component {
                     navigate("/about");
                   }}
                   className="px-3 hover-link"
-                  active={location.pathname === "/about"}
+                  active={location.pathname.startsWith("/about")}
                 >
                   About
                 </Nav.Link>
@@ -170,7 +170,7 @@ class Home extends Component {
                     navigate("/contact");
                   }}
                   className="px-3 hover-link"
-                  active={location.pathname === "/contact"}
+                  active={location.pathname.startsWith("/contact")}
                 >
                   Contact
                 </Nav.Link>

@@ -27,7 +27,11 @@ export default class CategoryService {
   };
   getAllCategories = async () => {
     try {
-      return await axios.get(API_CATEGORY);
+      return await axios.get(API_CATEGORY, {
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      });
     } catch (error) {
       if (error.response && error.response.status === 500) {
         console.log("category not found");

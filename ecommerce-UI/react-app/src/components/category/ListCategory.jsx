@@ -63,10 +63,10 @@ class ListCategory extends Component {
   render() {
     const { categories } = this.props;
     return (
-      <div>
+      <div style={{ maxHeight:"60vh",overflowY:"auto" }}>
         {this.renderErrorMessage()}
         {this.renderMessage()}
-        <Table striped bordered>
+        <Table striped bordered className="carts">
           <thead>
             <tr>
               <th>ID</th>
@@ -82,40 +82,44 @@ class ListCategory extends Component {
                 <td>{category.name}</td>
                 <td>
                   {category.status === "Visible" ? (
-                    <div
+                    <button
                       style={{
                         border: "1px solid green",
                         borderRadius: "3px",
                         color: "green",
                         maxWidth: "120px",
                         textAlign: "center",
+                        padding: "0 15px 0",
                       }}
                     >
                       Visible
-                    </div>
+                    </button>
                   ) : (
-                    <div
+                    <button
                       style={{
                         border: "1px solid red",
                         borderRadius: "3px",
                         color: "red",
                         maxWidth: "120px",
                         textAlign: "center",
+                        padding: "0 15px 0",
                       }}
                     >
                       Invisible
-                    </div>
+                    </button>
                   )}
                 </td>
                 <td>
                   <Button
                     variant="primary"
+                    style={{padding:"0px 20px 0"}}
                     onClick={() => this.handleEditClick(category.id)}
                   >
                     Edit
                   </Button>{" "}
                   <Button
                     variant="danger"
+                    style={{padding:"0px 10px 0"}}
                     onClick={() => this.handleDeleteClick(category.id)}
                   >
                     Delete

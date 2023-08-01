@@ -51,7 +51,7 @@ export const getUserByUserName = (user, navigate) => async (dispatch) => {
           navigate("/");
         }
         if (response.data.type == "Admin") {
-          navigate("/admin");
+          navigate("/admin/categoryAdmin/add");
         }
       } else {
         dispatch({

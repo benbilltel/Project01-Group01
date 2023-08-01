@@ -14,7 +14,6 @@ class ProductAdmin extends Component {
           style={{
             marginTop: "20px",
             padding: "30px",
-            minHeight: "500px",
             width: "90%",
             boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
           }}
@@ -23,12 +22,33 @@ class ProductAdmin extends Component {
             <Nav.Item>
               <Nav.Link onClick={()=>{
                 navigate("/admin/productAdmin/add")
-              }}>Add new product</Nav.Link>
+              }}
+              className="hover-link"
+              style={{
+                cursor: "pointer",
+                marginBottom: "20px",
+                color: "black",
+              }}
+              active={
+                location.pathname.startsWith("/admin/productAdmin/add") ||
+                location.pathname.startsWith("/admin/productAdmin/update")
+              }
+               >Add new product</Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link onClick={()=>{
                 navigate("/admin/productAdmin/list")
-              }}>List products</Nav.Link>
+              }}
+              className="hover-link"
+              style={{
+                cursor: "pointer",
+                marginBottom: "20px",
+                color: "black",
+              }}
+              active={
+                location.pathname.startsWith("/admin/productAdmin/list") 
+              }
+              >List products</Nav.Link>
             </Nav.Item>
           </Nav>
           

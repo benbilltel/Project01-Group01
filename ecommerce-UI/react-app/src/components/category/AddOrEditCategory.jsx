@@ -96,10 +96,15 @@ class AddOrEditCategory extends Component {
   render() {
     const { id } = this.props.router.params;
     const { category } = this.props;
-    const defaultStatusValue = category?.status === "Invisible" ? "Invisible" : "Visible";
+    const defaultStatusValue =
+      category?.status === "Invisible" ? "Invisible" : "Visible";
     return (
       <div>
-        <Form onSubmit={this.saveCategory} className="px-3" key={category.name+"$"}>
+        <Form
+          onSubmit={this.saveCategory}
+          className="px-3 orderinfo-form"
+          key={category.name + "$"}
+        >
           {this.renderErrorMessage()}
           <Form.Group className="mb-3" hidden={id ? false : true}>
             <Form.Label>ID</Form.Label>
@@ -121,17 +126,17 @@ class AddOrEditCategory extends Component {
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Status</Form.Label>
-            <Form.Select name="status" defaultValue={defaultStatusValue}>
+            <Form.Select name="status" defaultValue={defaultStatusValue} style={{cursor:"pointer"}}>
               <option value="Visible">Visible</option>
               <option value="Invisible">Invisible</option>
             </Form.Select>
           </Form.Group>
           <Form.Group as={Row} className="mb-3">
-            <Col sm={{ span: 10, offset: 2 }}>
-              <Button type="submit" style={{ marginRight: "20px" }}>
+            <div className="d-flex justify-content-lg-end">
+              <button type="submit" style={{ marginRight: "20px" }} className="check-out">
                 {id ? "Update" : "Save"}
-              </Button>
-            </Col>
+              </button>
+            </div>
           </Form.Group>
         </Form>
       </div>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import withRouter from "../../helpers/withRouter";
-import { Button, Table } from "react-bootstrap";
+import { Button, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 import ModalShowError from "../../helpers/ModalShowError";
 import ModalShowMessage from "../../helpers/ModalShowMessage";
 import { setError } from "../../redux/actions/commonAction";
@@ -8,18 +8,18 @@ import {
   getAllProducts,
   clearStateProduct,
   setProductState,
-  deleteProductById
+  deleteProductById,
 } from "../../redux/actions/productAction";
 import { connect } from "react-redux";
 class ListProductAdmin extends Component {
   handleEditClick = (id) => {
-    if(id){
-      const {navigate} = this.props.router
-    this.props.setProductState(id);
-    navigate("/admin/productAdmin/update/"+id);
-    return;
+    if (id) {
+      const { navigate } = this.props.router;
+      this.props.setProductState(id);
+      navigate("/admin/productAdmin/update/" + id);
+      return;
     }
-    return  this.props.setError("Something was wrong!");
+    return this.props.setError("Something was wrong!");
   };
   handleDeleteClick = (id) => {
     if (id) {
@@ -61,10 +61,10 @@ class ListProductAdmin extends Component {
   render() {
     const { products } = this.props;
     return (
-      <div>
+      <div style={{ maxHeight: "60vh", overflowY: "auto" }}>
         {this.renderErrorMessage()}
         {this.renderMessage()}
-        <Table striped bordered>
+        <Table striped bordered className="carts">
           <thead>
             <tr>
               <th>#</th>
@@ -84,7 +84,16 @@ class ListProductAdmin extends Component {
                 <td>{product.id}</td>
                 <td>{product.name}</td>
                 <td>{product.price}</td>
-                <td>{product.description}</td>
+                <td>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>{product.description}</Tooltip>}
+                >
+                  <div className="desc-wrap">
+                    {product.description}
+                  </div>
+                </OverlayTrigger>
+                </td>
                 <td>{product.category.name}</td>
                 <td>{product.quantity}</td>
                 <td>
@@ -124,12 +133,14 @@ class ListProductAdmin extends Component {
                 <td>
                   <Button
                     variant="primary"
+                    style={{padding:"0px 20px 0"}}
                     onClick={() => this.handleEditClick(product.id)}
                   >
                     Edit
                   </Button>{" "}
                   <Button
                     variant="danger"
+                    style={{padding:"0px 10px 0"}}
                     onClick={() => this.handleDeleteClick(product.id)}
                   >
                     Delete
@@ -154,7 +165,7 @@ const mapDispatchToProps = {
   getAllProducts,
   clearStateProduct,
   setProductState,
-  deleteProductById
+  deleteProductById,
 };
 
 export default withRouter(

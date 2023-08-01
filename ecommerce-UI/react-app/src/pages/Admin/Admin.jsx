@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { clearStateUser } from "../../redux/actions/userAction";
 import { Outlet } from "react-router-dom";
 import { NavDropdown } from "react-bootstrap";
+import {setUser} from "../../redux/actions/userAction"
 class Admin extends Component {
   renderProfile = () => {
     const { navigate } = this.props.router;
@@ -16,15 +17,16 @@ class Admin extends Component {
     }
     if (user) {
       return (
-        <NavDropdown title={user.name} id="basic-nav-dropdown">
-          <NavDropdown.Item>Profile</NavDropdown.Item>
-          <NavDropdown.Item>Setting</NavDropdown.Item>
+        <NavDropdown title={user.name} id="basic-nav-dropdown" className="hover-link">
+          <NavDropdown.Item className="hover-link">Profile</NavDropdown.Item>
+          <NavDropdown.Item className="hover-link">Setting</NavDropdown.Item>
           <NavDropdown.Divider />
           <NavDropdown.Item
             onClick={() => {
               this.props.clearStateUser();
               navigate("/login");
             }}
+            className="hover-link"
           >
             Logout
           </NavDropdown.Item>
@@ -32,7 +34,19 @@ class Admin extends Component {
       );
     }
   };
-  componentDidMount = () => {};
+  async componentDidMount() {
+    const userLocal = JSON.parse(localStorage.getItem("user")); // retrieve user state from localStorage
+    if (userLocal !== null && userLocal !== undefined) {
+      const { user } = this.props;
+      if (Object.keys(user).length === 0) {
+        try {
+          await Promise.all([this.props.setUser(userLocal)]);
+        } catch (error) {
+          console.log(error);
+        } // update Redux store with saved user state
+      }
+    }
+  };
   renderLoginPage = () => {
     const { user } = this.props;
     const { navigate } = this.props.router;
@@ -43,6 +57,7 @@ class Admin extends Component {
             this.props.clearStateUser();
             navigate("/login");
           }}
+          className="hover-link"
         >
           Login
         </Nav.Link>
@@ -53,8 +68,8 @@ class Admin extends Component {
   render() {
     const { navigate } = this.props.router;
     return (
-      <div style={{ width: "100vw" }}>
-        <Navbar expand="lg" className="bg-body-tertiary px-5">
+      <div >
+        <Navbar expand="lg" className=" nav-home-top" fixed="top">
           <Container >
             <Navbar.Brand
               onClick={() => {
@@ -62,7 +77,11 @@ class Admin extends Component {
               }}
               style={{ cursor: "pointer" }}
             >
-              Logo
+              <img
+                src="../../../logo.png.webp"
+                alt="logo"
+                className="logo-custom"
+              />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -71,6 +90,8 @@ class Admin extends Component {
                   onClick={() => {
                     navigate("/admin/categoryAdmin/add");
                   }}
+                  className="hover-link"
+                  active={location.pathname.startsWith("/admin/categoryAdmin/")}
                 >
                   Category
                 </Nav.Link>
@@ -78,6 +99,8 @@ class Admin extends Component {
                   onClick={() => {
                     navigate("/admin/productAdmin/add");
                   }}
+                  className="hover-link"
+                  active={location.pathname.startsWith("/admin/productAdmin/")}
                 >
                   Product
                 </Nav.Link>
@@ -85,6 +108,8 @@ class Admin extends Component {
                   onClick={() => {
                     navigate("/admin/invoice");
                   }}
+                  className="hover-link"
+                  active={location.pathname.startsWith("/admin/invoice")}
                 >
                   Invoice
                 </Nav.Link>
@@ -92,6 +117,7 @@ class Admin extends Component {
                   onClick={() => {
                     navigate("/admin");
                   }}
+                  className="hover-link"
                 >
                   Account
                 </Nav.Link>
@@ -103,7 +129,7 @@ class Admin extends Component {
             </Navbar.Collapse>
           </Container>
         </Navbar>
-        <div className="content-outlet">
+        <div className="container" style={{marginTop:"100px"}}>
           <Outlet></Outlet>
         </div>
       </div>
@@ -115,7 +141,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  clearStateUser,
+  clearStateUser,setUser
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Admin));
