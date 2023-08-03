@@ -19,6 +19,9 @@ import ListProductAdmin from "./components/product/ListProductAdmin";
 import ShoppingHistory from "./components/history/ShoppingHistory";
 import { Provider } from "react-redux";
 import Register from "./pages/register/Register";
+import RegisterAdmin from "./pages/register/RegisterAdmin";
+import ProfileUser from "./components/Profile/ProfileUser"
+import ChangePassword from "./components/Profile/ChangePassword"
 class App extends Component {
   render() {
     return (
@@ -33,6 +36,8 @@ class App extends Component {
               <Route path="/cart" element={<Cart />}></Route>
               <Route path="/orderInfo" element={<OrderInfo />}></Route>
               <Route path="/history" element={<ShoppingHistory />}></Route>
+              <Route path="/profileUser" element={<ProfileUser />}></Route>
+              <Route path="/changePassword" element={<ChangePassword />}></Route>
             </Route>
             <Route path="/login" element={<Login />}></Route>
 
@@ -66,6 +71,7 @@ class App extends Component {
                 ></Route>
               </Route>
               <Route path="/admin/invoice" element={<Invoice />}></Route>
+              <Route path="/admin/registerAdmin" element={<RegisterAdmin />}></Route>
             </Route>
             <Route path="/register" element={<Register />}></Route>
           </Routes>

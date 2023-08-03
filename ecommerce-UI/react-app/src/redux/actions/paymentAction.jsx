@@ -80,6 +80,29 @@ export const insertOrder = (idsCart) => async (dispatch) => {
       });
     }
   };
+  export const getAllOrderInfo = () => async (dispatch) => {
+    const paymentService = new PaymentService();
+    try {
+      const response = await paymentService.getAllOrderInfo();
+  
+      if (response.status === 200) {
+        dispatch({
+          type: PAYMENT_GET_ORDER_INFO_USER,
+          payload: response.data,
+        });
+      } else {
+        dispatch({
+          type: COMMON_ERROR_SET,
+          payload: response.data.message,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: "Something was wrong!",
+      });
+    }
+  };
   export const getAllCartsByOrderInfo = (id) => async (dispatch) => {
     const paymentService = new PaymentService();
     try {

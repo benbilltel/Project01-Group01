@@ -60,7 +60,10 @@ class Home extends Component {
           title={user.name}
           id="basic-nav-dropdown"
         >
-          <NavDropdown.Item className="hover-link">Profile</NavDropdown.Item>
+          <NavDropdown.Item className="hover-link"  onClick={() => {
+              this.setState({ showBody: false });
+              navigate("/profileUser");
+            }}>Profile</NavDropdown.Item>
           <NavDropdown.Item
             onClick={() => {
               this.setState({ showBody: false });
@@ -74,6 +77,9 @@ class Home extends Component {
             Your payment
           </NavDropdown.Item>
           <NavDropdown.Item className=" hover-link">Setting</NavDropdown.Item>
+          <NavDropdown.Item className=" hover-link" disabled={user.type==="User" ? true : false} onClick={()=>{
+            navigate("/admin/categoryAdmin/add")
+          }}>Dashboard</NavDropdown.Item>
           <NavDropdown.Divider />
           <NavDropdown.Item
             onClick={() => {

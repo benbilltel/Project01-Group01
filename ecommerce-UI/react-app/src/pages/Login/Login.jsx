@@ -25,12 +25,13 @@ class Login extends Component {
     event.preventDefault();
     const userName = event.target.elements.userName.value;
     const password = event.target.elements.password.value;
-    if (userName === "") {
-      this.props.setError("Username is required!");
+    if (userName.length < 6 || userName.length > 18) {
+      this.props.setError("Username must be between 6 and 18 characters!");
       return;
     }
-    if (password === "") {
-      this.props.setError("Password is required!");
+  
+    if (password.length < 6 || password.length > 18) {
+      this.props.setError("Password must be between 6 and 18 characters!");
       return;
     }
     let { user } = this.state;

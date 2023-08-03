@@ -54,10 +54,17 @@ class AddOrEditProduct extends Component {
       this.props.setError("Name is required!");
       return;
     }
-    if (formData.get("price") === "") {
-      this.props.setError("Price is required!");
+    const price = Number(formData.get("price"));
+    if (isNaN(price) || price <= 0) {
+      this.props.setError("Price must be a positive number!");
       return;
     }
+    const quantity = Number(formData.get("quantity"));
+    if (isNaN(quantity) || quantity <= 0) {
+      this.props.setError("Quantity must be a positive number!");
+      return;
+    }
+  
     if (formData.get("description") === "") {
       this.props.setError("Description is required!");
       return;
@@ -131,7 +138,7 @@ class AddOrEditProduct extends Component {
           <Form.Group controlId="formPrice">
             <Form.Label>Price</Form.Label>
             <Form.Control
-              type="number"
+              type="text"
               placeholder="Enter product price"
               name="price"
               defaultValue={product ? product.price : ""}
@@ -163,7 +170,7 @@ class AddOrEditProduct extends Component {
 
           <Form.Group controlId="formCategoryId">
             <Form.Label>Category</Form.Label>
-            <Form.Control as="select" name="categoryId">
+            <Form.Control style={{cursor:"pointer"}} as="select" name="categoryId">
               {this.renderCategories()}
             </Form.Control>
           </Form.Group>
@@ -171,6 +178,7 @@ class AddOrEditProduct extends Component {
           <Form.Group controlId="formStatus">
             <Form.Label>Status</Form.Label>
             <Form.Control
+             style={{cursor:"pointer"}}
               as="select"
               name="status"
               defaultValue={product ? product.status : "Active"}

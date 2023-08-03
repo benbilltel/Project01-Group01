@@ -5,4 +5,16 @@ docker run -d --name ecommerce-dns  -it --network ecommerce-network nicolaka/net
 docker run -dp 8080:8080 -e SPRING_DATASOURCE_URL='jdbc:mysql://mysql:3306/ecommerce' -e SPRING_DATASOURCE_USERNAME='root' -e SPRING_DATASOURCE_PASSWORD='145236987Ben!' --network ecommerce-network be-testing
 
 
+  # wait for be completed
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD-SHELL",
+    #       "curl --fail http://localhost:8080/actuator/health || exit 1",
+    #     ]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+
+
 docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=145236987Ben!" -p 1433:1433 --name sql1 --hostname sql1 -d mcr.microsoft.com/mssql/server:2022-latest

@@ -12,6 +12,14 @@ import {
 } from "../../redux/actions/productAction";
 import { connect } from "react-redux";
 class ListProductAdmin extends Component {
+  constructor() {
+    super();
+    this.state = {
+      searchQuery: "",
+      showProduct: [], // store the content returned by showProductsByIdCategory
+    };
+    this.searchInput = React.createRef();
+  }
   handleEditClick = (id) => {
     if (id) {
       const { navigate } = this.props.router;
@@ -40,9 +48,87 @@ class ListProductAdmin extends Component {
     }
     return <></>;
   };
-  componentDidMount = () => {
-    this.props.getAllProducts();
-  };
+  async componentDidMount() {
+    try {
+      await Promise.all([this.props.getAllProducts()]);
+
+      const { searchQuery } = this.state;
+      const { products } = this.props;
+      if (searchQuery === "") {
+        const showProduct = products.map((product, index) => (
+          <tr key={index}>
+            <td>{product.id}</td>
+            <td>{product.name}</td>
+            <td>{product.price}</td>
+            <td>
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>{product.description}</Tooltip>}
+              >
+                <div className="desc-wrap">{product.description}</div>
+              </OverlayTrigger>
+            </td>
+            <td>{product.category.name}</td>
+            <td>{product.quantity}</td>
+            <td>
+              {product.status === "Active" ? (
+                <div
+                  style={{
+                    border: "1px solid green",
+                    borderRadius: "3px",
+                    color: "green",
+                    maxWidth: "120px",
+                    textAlign: "center",
+                  }}
+                >
+                  Active
+                </div>
+              ) : (
+                <div
+                  style={{
+                    border: "1px solid red",
+                    borderRadius: "3px",
+                    color: "red",
+                    maxWidth: "120px",
+                    textAlign: "center",
+                  }}
+                >
+                  Inactive
+                </div>
+              )}
+            </td>
+            <td>
+              <img
+                src={`data:image/jpeg;base64,${product.image}`}
+                alt={product.name}
+                width="100"
+              />
+            </td>
+            <td>
+              <Button
+                variant="primary"
+                style={{ padding: "0px 20px 0" }}
+                onClick={() => this.handleEditClick(product.id)}
+              >
+                Edit
+              </Button>{" "}
+              <Button
+                variant="danger"
+                style={{ padding: "0px 10px 0" }}
+                onClick={() => this.handleDeleteClick(product.id)}
+              >
+                Delete
+              </Button>
+            </td>
+          </tr>
+        ));
+        this.setState({ showProduct, searchQuery });
+      }
+    } catch (error) {
+      console.log(error);
+      // display error message to user
+    }
+  }
   componentWillUnmount = () => {
     this.props.clearStateProduct();
   };
@@ -58,12 +144,106 @@ class ListProductAdmin extends Component {
     }
     return <></>;
   };
+  componentDidUpdate(prevProps, prevState) {
+    // If the search query has changed, focus on the input element
+    if (this.state.searchQuery !== prevState.searchQuery) {
+      this.searchInput.current.focus();
+    }
+  }
+  handleSearch = (event) => {
+    const searchQuery = event.target.value;
+    const { products } = this.props;
+    const filteredProducts = products.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    const showProduct = filteredProducts.map((product, index) => (
+      <tr key={index}>
+        <td>{product.id}</td>
+        <td>{product.name}</td>
+        <td>{product.price}</td>
+        <td>
+          <OverlayTrigger
+            placement="top"
+            overlay={<Tooltip>{product.description}</Tooltip>}
+          >
+            <div className="desc-wrap">{product.description}</div>
+          </OverlayTrigger>
+        </td>
+        <td>{product.category.name}</td>
+        <td>{product.quantity}</td>
+        <td>
+          {product.status === "Active" ? (
+            <div
+              style={{
+                border: "1px solid green",
+                borderRadius: "3px",
+                color: "green",
+                maxWidth: "120px",
+                textAlign: "center",
+              }}
+            >
+              Active
+            </div>
+          ) : (
+            <div
+              style={{
+                border: "1px solid red",
+                borderRadius: "3px",
+                color: "red",
+                maxWidth: "120px",
+                textAlign: "center",
+              }}
+            >
+              Inactive
+            </div>
+          )}
+        </td>
+        <td>
+          <img
+            src={`data:image/jpeg;base64,${product.image}`}
+            alt={product.name}
+            width="100"
+          />
+        </td>
+        <td>
+          <Button
+            variant="primary"
+            style={{ padding: "0px 20px 0" }}
+            onClick={() => this.handleEditClick(product.id)}
+          >
+            Edit
+          </Button>{" "}
+          <Button
+            variant="danger"
+            style={{ padding: "0px 10px 0" }}
+            onClick={() => this.handleDeleteClick(product.id)}
+          >
+            Delete
+          </Button>
+        </td>
+      </tr>
+    ));
+    this.setState({ showProduct, searchQuery });
+  };
   render() {
     const { products } = this.props;
+    const { searchQuery, showProduct } = this.state;
     return (
-      <div style={{ maxHeight: "60vh", overflowY: "auto" }}>
+      <>
+      <input
+          key="search-input"
+          type="text"
+          value={searchQuery}
+          onChange={this.handleSearch}
+          placeholder="Search products by name"
+          ref={this.searchInput}
+          className="col-6 find-product"
+        />
+    
+      <div style={{ maxHeight: "54vh", overflowY: "auto" }}>
         {this.renderErrorMessage()}
         {this.renderMessage()}
+        
         <Table striped bordered className="carts">
           <thead>
             <tr>
@@ -78,79 +258,10 @@ class ListProductAdmin extends Component {
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
-            {products.map((product, index) => (
-              <tr key={index}>
-                <td>{product.id}</td>
-                <td>{product.name}</td>
-                <td>{product.price}</td>
-                <td>
-                <OverlayTrigger
-                  placement="top"
-                  overlay={<Tooltip>{product.description}</Tooltip>}
-                >
-                  <div className="desc-wrap">
-                    {product.description}
-                  </div>
-                </OverlayTrigger>
-                </td>
-                <td>{product.category.name}</td>
-                <td>{product.quantity}</td>
-                <td>
-                  {product.status === "Active" ? (
-                    <div
-                      style={{
-                        border: "1px solid green",
-                        borderRadius: "3px",
-                        color: "green",
-                        maxWidth: "120px",
-                        textAlign: "center",
-                      }}
-                    >
-                      Active
-                    </div>
-                  ) : (
-                    <div
-                      style={{
-                        border: "1px solid red",
-                        borderRadius: "3px",
-                        color: "red",
-                        maxWidth: "120px",
-                        textAlign: "center",
-                      }}
-                    >
-                      Inactive
-                    </div>
-                  )}
-                </td>
-                <td>
-                  <img
-                    src={`data:image/jpeg;base64,${product.image}`}
-                    alt={product.name}
-                    width="100"
-                  />
-                </td>
-                <td>
-                  <Button
-                    variant="primary"
-                    style={{padding:"0px 20px 0"}}
-                    onClick={() => this.handleEditClick(product.id)}
-                  >
-                    Edit
-                  </Button>{" "}
-                  <Button
-                    variant="danger"
-                    style={{padding:"0px 10px 0"}}
-                    onClick={() => this.handleDeleteClick(product.id)}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          <tbody>{showProduct}</tbody>
         </Table>
       </div>
+      </>
     );
   }
 }

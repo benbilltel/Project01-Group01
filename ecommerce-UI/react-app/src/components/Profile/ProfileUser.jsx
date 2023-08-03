@@ -6,10 +6,12 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { connect } from "react-redux";
 import { setError, setMessage } from "../../redux/actions/commonAction";
-import { insertUser } from "../../redux/actions/userAction";
+import { updateUser, setUser } from "../../redux/actions/userAction";
+import { getCartsByIdUser } from "../../redux/actions/cartAction";
 import ModalShowError from "../../helpers/ModalShowError";
-import "./Register.css";
-class Register extends Component {
+import ModalShowMessage from "../../helpers/ModalShowMessage";
+// import "./Register.css";
+class ProfileUser extends Component {
   constructor() {
     super();
     this.state = {
@@ -22,29 +24,15 @@ class Register extends Component {
       },
     };
   }
+
   registNewUser = (event) => {
     event.preventDefault();
-    const userName = event.target.elements.userName.value;
-    const password = event.target.elements.password.value;
-    const passwordAgain = event.target.elements.passwordAgain.value;
     const name = event.target.elements.name.value;
     const email = event.target.elements.email.value;
     const phoneNumber = event.target.elements.phoneNumber.value;
-    //validate
+
     if (name === "") {
       this.props.setError("Name is required!");
-      return;
-    }
-    if (userName.length < 6 || userName.length > 18) {
-      this.props.setError("Username must be between 6 and 18 characters!");
-      return;
-    }
-    if (password.length < 6 || password.length > 18) {
-      this.props.setError("password must be between 6 and 18 characters!");
-      return;
-    }
-    if (passwordAgain.length < 6 || passwordAgain.length > 18) {
-      this.props.setError("password must be between 6 and 18 characters!");
       return;
     }
 
@@ -52,10 +40,7 @@ class Register extends Component {
       this.props.setError("Phone number is invalid!");
       return;
     }
-    if (password !== passwordAgain) {
-      this.props.setError("Password does not match!");
-      return;
-    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (email === "") {
       this.props.setError("Email is required!");
@@ -65,18 +50,18 @@ class Register extends Component {
       this.props.setError("Invalid email address!");
       return;
     }
+
     const { error } = this.props;
 
     if (error === "") {
-      const { navigate } = this.props.router;
       const { user } = this.state;
       user.name = name;
-      user.userName = userName;
-      user.password = password;
+      user.password = this.props.user.password;
       user.email = email;
       user.phoneNumber = phoneNumber;
-      user.type = "User";
-      this.props.insertUser(user, navigate);
+      user.type = this.props.user.type;
+      user.userName = this.props.user.userName;
+      this.props.updateUser(this.props.user.id, user);
     }
   };
   renderErrorMessage = () => {
@@ -91,60 +76,52 @@ class Register extends Component {
     }
     return <></>;
   };
-
+  renderMessage = () => {
+    const { message } = this.props;
+    if (message) {
+      return (
+        <ModalShowMessage
+          content={message}
+          heading="Successfull!"
+        ></ModalShowMessage>
+      );
+    }
+    return <></>;
+  };
   render() {
-    let { navigate } = this.props.router;
+    let { user } = this.props;
+    const { navigate } = this.props.router;
     return (
-      <div style={{ width: "100vw" }} className="login-page register-page">
-        <img
-          className="back-to-home logo-custom"
-          src="../../../logo.png.webp"
-          alt="logo"
-          onClick={() => {
-            navigate("/");
-          }}
-        />
+      <div className="login-page register-page">
         <Form onSubmit={this.registNewUser} className="px-3 form-login">
-          <h1>Sign Up</h1>
+          <h1>Profile</h1>
           {this.renderErrorMessage()}
+          {this.renderMessage()}
           <Form.Group className="mb-3">
             <Form.Label>Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter name" name="name" />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Username</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter username"
-              name="userName"
+              placeholder="Enter name"
+              name="name"
+              defaultValue={user.name}
             />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" name="email" />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Password</Form.Label>
             <Form.Control
-              type="password"
-              placeholder="Password"
-              name="password"
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Password again</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password again"
-              name="passwordAgain"
+              type="email"
+              placeholder="Enter email"
+              name="email"
+              defaultValue={user.email}
             />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Phone contact</Form.Label>
             <Form.Control
               type="number"
-              placeholder="xxxx-xxx-xxx"
+              placeholder="Phone contact"
               name="phoneNumber"
+              defaultValue={user.phoneNumber}
             />
           </Form.Group>
           <Form.Group className="mb-3 d-flex justify-content-end">
@@ -152,13 +129,13 @@ class Register extends Component {
               <p
                 className="sign-up"
                 onClick={() => {
-                  navigate("/login");
+                  navigate("/changePassword");
                 }}
               >
-                Already have account
+                Change password
               </p>
               <button type="submit" style={{ marginRight: "20px" }}>
-                Sign Up
+                Update
               </button>
             </div>
           </Form.Group>
@@ -169,14 +146,17 @@ class Register extends Component {
 }
 const mapStateToProps = (state) => ({
   error: state.commonReducer.error,
+  user: state.userReducer.user,
+
+  message: state.commonReducer.message,
 });
 
 const mapDispatchToProps = {
   setError,
-  insertUser,
+  updateUser,
   setMessage,
 };
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Register)
+  connect(mapStateToProps, mapDispatchToProps)(ProfileUser)
 );

@@ -3,10 +3,6 @@
     padding: 50px 35px 50px;
     margin: auto;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    overflow-x: scroll;
-    height: 500px;
-    overflow: auto;
-    
 }
 .invoice-navs {
     display: flex;

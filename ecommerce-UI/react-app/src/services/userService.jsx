@@ -25,4 +25,16 @@ export default class UserService {
       throw error;
     }
   };
+  updateUser = async (id, user) => {
+    try {
+      return await axios.put(API_USER + id, user);
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        // console.log("User not found");
+      } else {
+        // console.log("Error while fetching user:", error);
+      }
+      throw error;
+    }
+  };
 }

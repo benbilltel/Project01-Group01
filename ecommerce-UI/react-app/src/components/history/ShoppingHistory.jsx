@@ -93,11 +93,10 @@ class ShoppingHistory extends Component {
       (orderInfo) => orderInfo.status === selectedStatus
     );
     return (
-      <div>
+      <div className="invoice" style={{marginTop:"130px",marginBottom:"30px"}}>
         {this.renderErrorMessage()}
         {this.renderMessage()}
-        <div className="invoice" style={{marginTop:"130px",marginBottom:"30px"}}>
-          <Nav activeKey={selectedStatus} className="invoice-navs">
+        <Nav activeKey={selectedStatus} className="invoice-navs">
             <Nav.Item>
               <Nav.Link
                 eventKey="InProgress"
@@ -149,6 +148,7 @@ class ShoppingHistory extends Component {
               </Nav.Link>
             </Nav.Item>
           </Nav>
+        <div style={{ maxHeight: "54vh", overflowY: "auto" ,minHeight:"54vh"}}>
           {filteredOrderInfos.length > 0 && (
             <Table striped bordered className="carts my-3">
               <thead>
@@ -196,7 +196,7 @@ class ShoppingHistory extends Component {
                           ) : (
                             <></>
                           )}
-                          {orderInfo.status === "InProgress" ? (
+                          {/* {orderInfo.status === "InProgress" ? (
                             <Dropdown.Item
                               onClick={() => {
                                 this.setStatus(orderInfo, "Completed");
@@ -206,7 +206,7 @@ class ShoppingHistory extends Component {
                             </Dropdown.Item>
                           ) : (
                             <></>
-                          )}
+                          )} */}
                           {orderInfo.status === "Delivering" ? (
                             <Dropdown.Item
                               onClick={() => {

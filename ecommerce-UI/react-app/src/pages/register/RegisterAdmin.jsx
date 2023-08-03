@@ -8,8 +8,8 @@ import { connect } from "react-redux";
 import { setError, setMessage } from "../../redux/actions/commonAction";
 import { insertUser } from "../../redux/actions/userAction";
 import ModalShowError from "../../helpers/ModalShowError";
-import "./Register.css";
-class Register extends Component {
+
+class RegisterAdmin extends Component {
   constructor() {
     super();
     this.state = {
@@ -75,7 +75,7 @@ class Register extends Component {
       user.password = password;
       user.email = email;
       user.phoneNumber = phoneNumber;
-      user.type = "User";
+      user.type = "Admin";
       this.props.insertUser(user, navigate);
     }
   };
@@ -95,17 +95,10 @@ class Register extends Component {
   render() {
     let { navigate } = this.props.router;
     return (
-      <div style={{ width: "100vw" }} className="login-page register-page">
-        <img
-          className="back-to-home logo-custom"
-          src="../../../logo.png.webp"
-          alt="logo"
-          onClick={() => {
-            navigate("/");
-          }}
-        />
+      <div className="login-page register-page">
+        
         <Form onSubmit={this.registNewUser} className="px-3 form-login">
-          <h1>Sign Up</h1>
+          <h1>Sign Up Admin</h1>
           {this.renderErrorMessage()}
           <Form.Group className="mb-3">
             <Form.Label>Name</Form.Label>
@@ -143,20 +136,13 @@ class Register extends Component {
             <Form.Label>Phone contact</Form.Label>
             <Form.Control
               type="number"
-              placeholder="xxxx-xxx-xxx"
+              placeholder="Phone contact"
               name="phoneNumber"
             />
           </Form.Group>
           <Form.Group className="mb-3 d-flex justify-content-end">
             <div>
-              <p
-                className="sign-up"
-                onClick={() => {
-                  navigate("/login");
-                }}
-              >
-                Already have account
-              </p>
+              
               <button type="submit" style={{ marginRight: "20px" }}>
                 Sign Up
               </button>
@@ -178,5 +164,5 @@ const mapDispatchToProps = {
 };
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Register)
+  connect(mapStateToProps, mapDispatchToProps)(RegisterAdmin)
 );

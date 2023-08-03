@@ -14,16 +14,22 @@ import {
 } from "../../redux/actions/productAction";
 import { Button, Card } from "react-bootstrap";
 import "./Product.css";
+import ModalShowDetailProduct from "../../helpers/ModalShowDetailProduct";
 class Product extends Component {
   constructor() {
     super();
     this.state = {
       searchQuery: "",
       idCategory: "All",
+      showDetail: false,
+      detailProduct: {},
       showProduct: [], // store the content returned by showProductsByIdCategory
     };
     this.searchInput = React.createRef();
   }
+  viewDetail = async (product) => {
+    this.setState({ detailProduct: product, showDetail: true });
+  };
   renderMessage = () => {
     const { message } = this.props;
     if (message) {
@@ -92,7 +98,8 @@ class Product extends Component {
     this.props.clearStateCategory();
     this.props.clearStateProduct();
   };
-  addToCart = async (idProduct) => {
+  addToCart = async (idProduct,quantity) => {
+    console.log(idProduct,quantity)
     const { navigate } = this.props.router;
     const { user } = this.props;
     if (Object.keys(user).length === 0) {
@@ -102,7 +109,7 @@ class Product extends Component {
     let cart = {
       userId: user.id,
       productId: idProduct,
-      quantity: 1,
+      quantity: quantity,
     };
     try {
       await this.props.insertCart(cart);
@@ -138,6 +145,10 @@ class Product extends Component {
             <Card.Img
               variant="top"
               src={`data:image/jpeg;base64,${product.image}`}
+              onClick={()=>{
+                this.viewDetail(product)
+              }}
+              style={{cursor:"pointer"}}
             />
             <Card.Body>
               <Card.Title>{product.name}</Card.Title>
@@ -145,7 +156,7 @@ class Product extends Component {
               <Card.Text className="price">{product.price}$</Card.Text>
               <button
                 className="add-to-cart "
-                onClick={() => this.addToCart(product.id)}
+                onClick={() => this.addToCart(product.id,1)}
               >
                 Add To Cart
               </button>
@@ -175,6 +186,10 @@ class Product extends Component {
             <Card.Img
               variant="top"
               src={`data:image/jpeg;base64,${product.image}`}
+              onClick={()=>{
+                this.viewDetail(product)
+              }}
+              style={{cursor:"pointer"}}
             />
             <Card.Body>
               <Card.Title>{product.name}</Card.Title>
@@ -182,7 +197,7 @@ class Product extends Component {
               <Card.Text className="price">{product.price}$</Card.Text>
               <button
                 className="add-to-cart "
-                onClick={() => this.addToCart(product.id)}
+                onClick={() => this.addToCart(product.id,1)}
               >
                 Add To Cart
               </button>
@@ -215,6 +230,10 @@ class Product extends Component {
           <Card.Img
             variant="top"
             src={`data:image/jpeg;base64,${product.image}`}
+            onClick={()=>{
+              this.viewDetail(product)
+            }}
+            style={{cursor:"pointer"}}
           />
           <Card.Body>
             <Card.Title>{product.name}</Card.Title>
@@ -222,7 +241,7 @@ class Product extends Component {
             <Card.Text className="price">{product.price}$</Card.Text>
             <button
               className="add-to-cart "
-              onClick={() => this.addToCart(product.id)}
+              onClick={() => this.addToCart(product.id,1)}
             >
               Add To Cart
             </button>
@@ -234,7 +253,7 @@ class Product extends Component {
   };
 
   render() {
-    const { showProduct, searchQuery } = this.state;
+    const { showProduct, searchQuery ,showDetail,detailProduct} = this.state;
     return (
       <div className="container products-container p-3">
         {this.renderErrorMessage()}
@@ -277,6 +296,14 @@ class Product extends Component {
             </div>
           </div>
         </div>
+        {showDetail && (
+          <ModalShowDetailProduct
+            heading="Detail"
+            product={detailProduct}
+            addToCart={this.addToCart}
+            handleClose={() => this.setState({ showDetail: false })}
+          />
+        )}
       </div>
     );
   }
