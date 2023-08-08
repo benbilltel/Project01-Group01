@@ -83,6 +83,28 @@ export const setProductState = (id) => async (dispatch) => {
     });
   }
 };
+export const updateProductV2 = (id, formData, navigate) => async (dispatch) => {
+  const productService = new ProductService();
+  try {
+    const response = await productService.updateProductV2(id, formData);
+    if (response.status === 200) {
+      dispatch({
+        type: PRODUCT_UPDATE,
+        payload: response.data,
+      });
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: "Product was updated!",
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: "Name was existed!",
+    });
+  }
+  navigate("/admin/productAdmin/list");
+};
 export const updateProduct = (id, formData, navigate) => async (dispatch) => {
   const productService = new ProductService();
   try {

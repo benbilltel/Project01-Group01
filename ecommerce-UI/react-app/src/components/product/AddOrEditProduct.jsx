@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import withRouter from "../../helpers/withRouter";
 import { setError } from "../../redux/actions/commonAction";
-import { Button, Form } from "react-bootstrap";
+import { Button, Card, Form } from "react-bootstrap";
 import { connect } from "react-redux";
 import {
   getAllCategories,
@@ -11,10 +11,17 @@ import {
   insertProduct,
   clearStateProduct,
   updateProduct,
+  updateProductV2,
 } from "../../redux/actions/productAction";
 import ModalShowMessage from "../../helpers/ModalShowMessage";
 import ModalShowError from "../../helpers/ModalShowError";
 class AddOrEditProduct extends Component {
+  constructor() {
+    super();
+    this.state = {
+      showImage: false,
+    };
+  }
   renderErrorMessage = () => {
     const { error } = this.props;
     if (error) {
@@ -39,8 +46,75 @@ class AddOrEditProduct extends Component {
     }
     return <></>;
   };
-  componentDidMount = () => {
-    this.props.getAllCategories();
+  async componentDidMount() {
+    await this.props.getAllCategories();
+    const { product } = this.props;
+    if (
+      product &&
+      product.image &&
+      location.pathname.startsWith("/admin/productAdmin/update")
+    ) {
+      this.setState({ showImage: true });
+    }
+  }
+  showUpdateImage = () => {
+    const { showImage } = this.state;
+    const { product } = this.props;
+    if (
+      showImage &&
+      product &&
+      product.image &&
+      location.pathname.startsWith("/admin/productAdmin/update")
+    ) {
+      return (
+        <>
+          <Form.Label>Image</Form.Label>
+          <Card
+            style={{
+              height: "200px",
+              width: "200px",
+              position: "relative",
+              margin: "10px 0",
+            }}
+          >
+            <Card.Img
+              variant="top"
+              src={`data:image/jpeg;base64,${product.image}`}
+              style={{ width: "100%", height: "100%" }}
+            />
+
+            <button
+              className="btn-hv-danger"
+              onClick={() => {
+                this.setState({ showImage: false });
+              }}
+              style={{
+                fontSize: "14px",
+                position: "absolute",
+                top: "0px",
+                right: "0px",
+                border: "none",
+                backgroundColor: "transparent",
+              }}
+            >
+              X
+            </button>
+          </Card>
+        </>
+      );
+    } else {
+      return (
+        <Form.Group controlId="formImage">
+          <Form.Label>Image</Form.Label>
+          <Form.Control
+            type="file"
+            accept="image/jpeg"
+            name="image"
+            multiple={false}
+          />
+        </Form.Group>
+      );
+    }
   };
   componentWillUnmount = () => {
     this.props.clearStateCategory();
@@ -64,7 +138,7 @@ class AddOrEditProduct extends Component {
       this.props.setError("Quantity must be a positive number!");
       return;
     }
-  
+
     if (formData.get("description") === "") {
       this.props.setError("Description is required!");
       return;
@@ -83,6 +157,10 @@ class AddOrEditProduct extends Component {
       return;
     }
     if (id) {
+      if (this.state.showImage) {
+        this.props.updateProductV2(id, formData, navigate);
+        return;
+      }
       this.props.updateProduct(id, formData, navigate);
       return;
     }
@@ -170,7 +248,11 @@ class AddOrEditProduct extends Component {
 
           <Form.Group controlId="formCategoryId">
             <Form.Label>Category</Form.Label>
-            <Form.Control style={{cursor:"pointer"}} as="select" name="categoryId">
+            <Form.Control
+              style={{ cursor: "pointer" }}
+              as="select"
+              name="categoryId"
+            >
               {this.renderCategories()}
             </Form.Control>
           </Form.Group>
@@ -178,7 +260,7 @@ class AddOrEditProduct extends Component {
           <Form.Group controlId="formStatus">
             <Form.Label>Status</Form.Label>
             <Form.Control
-             style={{cursor:"pointer"}}
+              style={{ cursor: "pointer" }}
               as="select"
               name="status"
               defaultValue={product ? product.status : "Active"}
@@ -187,17 +269,8 @@ class AddOrEditProduct extends Component {
               <option>Inactive</option>
             </Form.Control>
           </Form.Group>
-
-          <Form.Group controlId="formImage">
-            <Form.Label>Image</Form.Label>
-            <Form.Control
-              type="file"
-              accept="image/jpeg"
-              name="image"
-              multiple={false}
-            />
-          </Form.Group>
-          <Form.Group  className="mb-3">
+          {this.showUpdateImage()}
+          <Form.Group className="mb-3">
             <div className="d-flex justify-content-lg-end">
               <button variant="primary" type="submit" className="check-out">
                 {id ? "Update" : "Save"}
@@ -223,6 +296,7 @@ const mapDispatchToProps = {
   insertProduct,
   clearStateProduct,
   updateProduct,
+  updateProductV2,
 };
 
 export default withRouter(

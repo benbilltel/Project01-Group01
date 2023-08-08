@@ -164,6 +164,21 @@
     margin-bottom: 15px;
   }
 }
+
+/* CSS animation for showProduct */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  
+  to {
+    opacity: 1;
+  }
+}
+
+.carts tr{
+  animation: fadeIn 1s ease-in-out;
+}
 @media (max-width: 576px) {
   .category-pick button {
     font-size: 12px;

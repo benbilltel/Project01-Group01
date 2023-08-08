@@ -12,7 +12,7 @@ import {
   getAllProducts,
   clearStateProduct,
 } from "../../redux/actions/productAction";
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Pagination } from "react-bootstrap";
 import "./Product.css";
 import ModalShowDetailProduct from "../../helpers/ModalShowDetailProduct";
 class Product extends Component {
@@ -23,10 +23,91 @@ class Product extends Component {
       idCategory: "All",
       showDetail: false,
       detailProduct: {},
-      showProduct: [], // store the content returned by showProductsByIdCategory
+      showProduct: [],
+      currentPage: 1,
+      recordsPerPage: 3,
+      filteredProducts:[],
     };
     this.searchInput = React.createRef();
   }
+  showPagination = (data) => {
+    let items = [];
+    
+    const { recordsPerPage ,currentPage} = this.state;
+    let active = currentPage;
+
+    if (data) {
+      const npage = Math.ceil(data.length / recordsPerPage);
+      for (let number = 1; number <= npage; number++) {
+        items.push(
+          <Pagination.Item
+            key={number}
+            active={number === active}
+            onClick={() => {
+              this.setState({ currentPage: number });
+              
+            }}
+          >
+            {number}
+          </Pagination.Item>
+        );
+      }
+      return (
+        <div key={npage}>
+          <Pagination >{items}</Pagination>
+          <br />
+        </div>
+      );
+    } else {
+      return <></>;
+    }
+  };
+  showProductByPage = (data) => {
+    const { currentPage, recordsPerPage } = this.state;
+    // const { products } = this.props;
+  
+  if (!data || !Array.isArray(data)) {
+    return null;
+  }
+    const lastIndex = currentPage * recordsPerPage;
+    if(Math.ceil(data.length / recordsPerPage)< currentPage){
+      const lastIndex = 1 * recordsPerPage;
+    }
+    
+    const firstIndex = lastIndex - recordsPerPage;
+    const showProductByPage = data.slice(firstIndex, lastIndex);
+    const showProduct = showProductByPage.map((product, index) => (
+      <div
+          className="col-md-6 col-xl-4 p-3"
+          key={product.id + "@"}
+          style={{ cursor: "pointer" }}
+        >
+          <Card style={{ maxHeight: "450px", minHeight: "450px" }}>
+            <Card.Img
+              variant="top"
+              src={`data:image/jpeg;base64,${product.image}`}
+              onClick={()=>{
+                this.viewDetail(product)
+              }}
+              style={{cursor:"pointer"}}
+            />
+            <Card.Body>
+              <Card.Title>{product.name}</Card.Title>
+              <Card.Text>{product.description}</Card.Text>
+              <Card.Text className="price">{product.price}$</Card.Text>
+              <button
+                className="add-to-cart "
+                onClick={() => this.addToCart(product.id,1)}
+              >
+                Add To Cart
+              </button>
+            </Card.Body>
+          </Card>
+        </div>
+    ));
+    showProduct.push(this.showPagination(data))
+    return showProduct;
+  };
   viewDetail = async (product) => {
     this.setState({ detailProduct: product, showDetail: true });
   };
@@ -135,36 +216,8 @@ class Product extends Component {
           (product) => product.status === "Active"
         );
       }
-      let showProduct = filteredProducts.map((product) => (
-        <div
-          className="col-md-6 col-xl-4 p-3"
-          key={product.id + "@"}
-          style={{ cursor: "pointer" }}
-        >
-          <Card style={{ maxHeight: "450px", minHeight: "450px" }}>
-            <Card.Img
-              variant="top"
-              src={`data:image/jpeg;base64,${product.image}`}
-              onClick={()=>{
-                this.viewDetail(product)
-              }}
-              style={{cursor:"pointer"}}
-            />
-            <Card.Body>
-              <Card.Title>{product.name}</Card.Title>
-              <Card.Text>{product.description}</Card.Text>
-              <Card.Text className="price">{product.price}$</Card.Text>
-              <button
-                className="add-to-cart "
-                onClick={() => this.addToCart(product.id,1)}
-              >
-                Add To Cart
-              </button>
-            </Card.Body>
-          </Card>
-        </div>
-      ));
-      this.setState({ idCategory: id, showProduct: showProduct });
+      let showProduct = this.showProductByPage(filteredProducts)
+      this.setState({ idCategory: id, showProduct: showProduct ,filteredProducts});
     } else {
       let filteredProducts;
       if (id !== "All") {
@@ -176,36 +229,8 @@ class Product extends Component {
           (product) => product.status === "Active"
         );
       }
-      let showProduct = filteredProducts.map((product) => (
-        <div
-          className="col-md-6 col-xl-4 p-3"
-          key={product.id + "@"}
-          style={{ cursor: "pointer" }}
-        >
-          <Card style={{ maxHeight: "450px", minHeight: "450px" }}>
-            <Card.Img
-              variant="top"
-              src={`data:image/jpeg;base64,${product.image}`}
-              onClick={()=>{
-                this.viewDetail(product)
-              }}
-              style={{cursor:"pointer"}}
-            />
-            <Card.Body>
-              <Card.Title>{product.name}</Card.Title>
-              <Card.Text>{product.description}</Card.Text>
-              <Card.Text className="price">{product.price}$</Card.Text>
-              <button
-                className="add-to-cart "
-                onClick={() => this.addToCart(product.id,1)}
-              >
-                Add To Cart
-              </button>
-            </Card.Body>
-          </Card>
-        </div>
-      ));
-      this.setState({ showProduct: showProduct });
+      let showProduct = this.showProductByPage(filteredProducts)
+      this.setState({  showProduct: showProduct ,filteredProducts});
     }
   };
   componentDidUpdate(prevProps, prevState) {
@@ -213,10 +238,16 @@ class Product extends Component {
     if (this.state.searchQuery !== prevState.searchQuery) {
       this.searchInput.current.focus();
     }
+    if (this.state.currentPage !== prevState.currentPage) {
+      const showProduct = this.showProductByPage(this.state.filteredProducts);
+      this.setState({ showProduct });
+    }
   }
   handleSearch = (event) => {
     const searchQuery = event.target.value;
     const { products } = this.props;
+    
+  
     const filteredProducts = products.filter((product) =>
       product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -250,6 +281,13 @@ class Product extends Component {
       </div>
     ));
     this.setState({ showProduct, searchQuery });
+    if (searchQuery === "") {
+      // Reset current page to 1
+      this.setState({ currentPage: 1 });
+      // Show all products
+      this.showProductsByIdCategory(this.state.idCategory);
+      
+    }
   };
 
   render() {

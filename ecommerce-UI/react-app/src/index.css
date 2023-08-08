@@ -42,7 +42,9 @@ body{
   cursor: pointer;
   overflow: hidden;
 }
-
+.btn-hv-danger:hover{
+color: red;
+}
 /* .custom-button::before {
   content: "";
   position: absolute;
@@ -123,4 +125,40 @@ hr.my-hr {
   to {
     width: 100%;
   }
+}
+.pagination {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination .page-link {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 0 5px;
+  color: #333;
+  background-color: #e5e5e5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: #d2d2d2;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #fd8f5f;
+  color: #fff;
+}
+
+.pagination .page-link.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination .page-link.disabled:hover {
+  background-color: #e5e5e5;
 }

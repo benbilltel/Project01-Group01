@@ -40,6 +40,16 @@ class OrderInfo extends Component {
   purchase = async (event) => {
     event.preventDefault();
     try {
+      const address = event.target.elements.address.value;
+      const phoneContact = event.target.elements.phoneContact.value;
+      if(address === ""){
+        this.props.setError("Address is required!")
+        return;
+      }
+      if (phoneContact.length !== 10 || phoneContact < 0 || isNaN(phoneContact)) {
+        this.props.setError("Phone number is invalid!");
+        return;
+      }
       const { user, carts } = this.props;
       let date = new Date();
       let jsonDate = JSON.stringify(date.toISOString().substring(0, 10));
@@ -49,8 +59,7 @@ class OrderInfo extends Component {
       carts.forEach((element) => {
         idsCart.push(element.id);
       });
-      const address = event.target.elements.address.value;
-      const phoneContact = event.target.elements.phoneContact.value;
+      
       const total = event.target.elements.total.value;
 
       let orderInfoPass = {

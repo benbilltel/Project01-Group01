@@ -94,6 +94,29 @@ public class ProductController {
         ProductDto savedProductDto = modelMapper.map(savedProduct, ProductDto.class);
         return ResponseEntity.ok(savedProductDto);
     }
+    @PutMapping("/v2/{id}")
+    public ResponseEntity<ProductDto> updateProductV2(@RequestParam("name") String name,
+                                                    @RequestParam("price") BigDecimal price,
+                                                    @RequestParam("description") String description,
+                                                    @RequestParam("categoryId") Long idCategory,
+                                                    @RequestParam("status") ProductStatus status,
+                                                    @RequestParam("quantity") Long quantity,
+                                                     @PathVariable Long id)  {
+        Product product = productService.getProductById(id);
+        if (product == null) {
+            throw new ResourceNotFoundException("Product", "id", id);
+        }
+        product.setName(name);
+        product.setStatus(status);
+        product.setDescription(description);
+        product.setPrice(price);
+        product.setQuantity(quantity);
+        Category category = categoryService.getCategoryById(idCategory);
+        product.setCategory(category);
+        Product savedProduct = productService.saveProduct(product);
+        ProductDto savedProductDto = modelMapper.map(savedProduct, ProductDto.class);
+        return ResponseEntity.ok(savedProductDto);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id){
         Product product = productService.getProductById(id);

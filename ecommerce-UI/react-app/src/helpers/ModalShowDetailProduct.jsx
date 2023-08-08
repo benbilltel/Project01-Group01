@@ -13,11 +13,16 @@ function ModalShowDetailProduct(props) {
     addToCart(product.id, quantity)
     handleClose();
   };
+  const handleCloseModal1 = () => {
+    setShow(false);
+    
+    handleClose();
+  };
   //   const dispatch = useDispatch();
   const { product, heading, handleClose, addToCart } = props;
   return (
     <>
-      <Modal show={show} onHide={handleCloseModal} className="modal-product-1">
+      <Modal show={show} onHide={handleCloseModal1} className="modal-product-1">
         <Modal.Header closeButton>
           <Modal.Title style={{ color: "green" }}>{heading}</Modal.Title>
         </Modal.Header>

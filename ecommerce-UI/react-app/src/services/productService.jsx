@@ -37,6 +37,18 @@ export default class ProductService {
       throw error;
     }
   };
+  updateProductV2 = async (id,formData) => {
+    try {
+      return await axios.put(API_PRODUCT+"v2/"+id, formData);
+    } catch (error) {
+      if (error.response && error.response.status === 500) {
+        console.log("product not found");
+      } else {
+        console.log("Error while fetching product:", error);
+      }
+      throw error;
+    }
+  };
   getProductById = async (id)=>{
     try {
       return await axios.get(API_PRODUCT+id);
