@@ -8,6 +8,8 @@ import {
   PRODUCT_INSERT,
   PRODUCT_SET,
   PRODUCT_UPDATE,
+  PRODUCTS_GET_ALL_ACTIVE,
+  PRODUCTS_GET_ALL_INACTIVE,
 } from "./actionType";
 
 export const insertProduct = (formData, navigate) => async (dispatch) => {
@@ -30,7 +32,12 @@ export const insertProduct = (formData, navigate) => async (dispatch) => {
         payload: response.data.message,
       });
     }
-    navigate("/admin/productAdmin/list");
+    if(response.data.status === "Active"){
+      navigate("/admin/productAdmin/list");
+    }else{
+      navigate("/admin/productAdmin/recycleBin");
+    }
+    
   } catch (error) {
     dispatch({
       type: COMMON_ERROR_SET,
@@ -46,6 +53,42 @@ export const getAllProducts = () => async (dispatch) => {
     if (response.status === 200) {
       dispatch({
         type: PRODUCTS_GET_ALL,
+        payload: response.data,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: "Products does not available!",
+    });
+  }
+};
+export const getAllProductsActive = () => async (dispatch) => {
+  const productService = new ProductService();
+
+  try {
+    const response = await productService.getAllProducts();
+    if (response.status === 200) {
+      dispatch({
+        type: PRODUCTS_GET_ALL_ACTIVE,
+        payload: response.data,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: "Products does not available!",
+    });
+  }
+};
+export const getAllProductsInactive = () => async (dispatch) => {
+  const productService = new ProductService();
+
+  try {
+    const response = await productService.getAllProducts();
+    if (response.status === 200) {
+      dispatch({
+        type: PRODUCTS_GET_ALL_INACTIVE,
         payload: response.data,
       });
     }
@@ -97,13 +140,18 @@ export const updateProductV2 = (id, formData, navigate) => async (dispatch) => {
         payload: "Product was updated!",
       });
     }
+    if(response.data.status === "Active"){
+      navigate("/admin/productAdmin/list");
+    }else{
+      navigate("/admin/productAdmin/recycleBin");
+    }
   } catch (error) {
     dispatch({
       type: COMMON_ERROR_SET,
       payload: "Name was existed!",
     });
   }
-  navigate("/admin/productAdmin/list");
+  
 };
 export const updateProduct = (id, formData, navigate) => async (dispatch) => {
   const productService = new ProductService();
@@ -119,13 +167,45 @@ export const updateProduct = (id, formData, navigate) => async (dispatch) => {
         payload: "Product was updated!",
       });
     }
+    if(response.data.status === "Active"){
+      navigate("/admin/productAdmin/list");
+    }else{
+      navigate("/admin/productAdmin/recycleBin");
+    }
   } catch (error) {
     dispatch({
       type: COMMON_ERROR_SET,
       payload: "Name was existed!",
     });
   }
-  navigate("/admin/productAdmin/list");
+  
+};
+export const changeStatus = (id, status, navigate) => async (dispatch) => {
+  const productService = new ProductService();
+  try {
+    const response = await productService.changeStatus(status,id);
+    if (response.status === 200) {
+      dispatch({
+        type: PRODUCT_UPDATE,
+        payload: response.data,
+      });
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: "Product was updated!",
+      });
+    }
+    if(response.data.status === "Active"){
+      navigate("/admin/productAdmin/list");
+    }else{
+      navigate("/admin/productAdmin/recycleBin");
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: "Name was existed!",
+    });
+  }
+  
 };
 export const deleteProductById = (id)=>async (dispatch)=>{
   const productService = new ProductService();

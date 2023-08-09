@@ -124,11 +124,11 @@ class AddOrEditCategory extends Component {
               defaultValue={category ? category.name : ""}
             />
           </Form.Group>
-          <Form.Group className="mb-3">
+          <Form.Group className="mb-3" hidden>
             <Form.Label>Status</Form.Label>
-            <Form.Select name="status" defaultValue={defaultStatusValue} style={{cursor:"pointer"}}>
+            <Form.Select name="status" defaultValue="Visible" style={{cursor:"pointer"}}>
               <option value="Visible">Visible</option>
-              <option value="Invisible">Invisible</option>
+              
             </Form.Select>
           </Form.Group>
           <Form.Group as={Row} className="mb-3">

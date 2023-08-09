@@ -1,5 +1,7 @@
 import {
   PRODUCTS_GET_ALL,
+  PRODUCTS_GET_ALL_ACTIVE,
+  PRODUCTS_GET_ALL_INACTIVE,
   PRODUCT_CLEAR_STATE,
   PRODUCT_DELETE,
   PRODUCT_INSERT,
@@ -17,6 +19,10 @@ const productReducer = (state = initialState, { type, payload }) => {
       return { ...state, product: payload };
     case PRODUCTS_GET_ALL:
       return { ...state, products: payload };
+    case PRODUCTS_GET_ALL_ACTIVE:
+      return { ...state, products: payload.filter((item)=> item.status === "Active"&&item.category.status === "Visible") };
+      case PRODUCTS_GET_ALL_INACTIVE:
+        return { ...state, products: payload.filter((item)=> item.status === "Inactive"||item.category.status === "Invisible") };
     case PRODUCT_CLEAR_STATE:
       return { ...state, product: {}, products: [] };
     case PRODUCT_SET:

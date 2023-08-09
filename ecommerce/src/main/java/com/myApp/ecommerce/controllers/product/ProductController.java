@@ -43,7 +43,12 @@ public class ProductController {
         }
         return ResponseEntity.ok(productDtos);
     }
-
+    @PutMapping("/")
+    public ResponseEntity<ProductDto> changeStatus (@RequestParam("id")Long id, @RequestParam("status") ProductStatus status){
+        Product changedProduct = productService.changeStatus(status,id);
+        ProductDto  productDto = modelMapper.map(changedProduct,ProductDto.class);
+        return ResponseEntity.ok(productDto);
+    }
     @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProductDto> insertProduct(@RequestParam("name") String name,
                                                     @RequestParam("price") BigDecimal price,

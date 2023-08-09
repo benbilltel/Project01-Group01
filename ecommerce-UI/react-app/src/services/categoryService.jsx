@@ -25,6 +25,18 @@ export default class CategoryService {
       throw error;
     }
   };
+  changeStatus = async (status,id) => {
+    try {
+      return await axios.put(API_CATEGORY+`?status=${status}&id=${id}`);
+    } catch (error) {
+      if (error.response && error.response.status === 500) {
+        console.log("category not found");
+      } else {
+        console.log("Error while fetching category:", error);
+      }
+      throw error;
+    }
+  };
   getAllCategories = async () => {
     try {
       return await axios.get(API_CATEGORY, {

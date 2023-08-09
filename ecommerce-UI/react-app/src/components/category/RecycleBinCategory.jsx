@@ -4,21 +4,20 @@ import Table from "react-bootstrap/Table";
 import { Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import {
-  getAllCategoriesActive,
+  getAllCategoriesInactive,
   clearStateCategory,
   setCategoryState,
   deleteCategoryById,
-  changeStatus
+  changeStatus,
 } from "../../redux/actions/categoryAction";
 import { setError, setMessage } from "../../redux/actions/commonAction";
 import ModalShowError from "../../helpers/ModalShowError";
 import ModalShowMessage from "../../helpers/ModalShowMessage";
-class ListCategory extends Component {
+class RecycleBinCategory extends Component {
   handleEditClick = (id) => {
     if (id) {
       const { navigate } = this.props.router;
-      this.props.setCategoryState(id);
-      navigate("/admin/categoryAdmin/update/" + id);
+      this.props.changeStatus("Visible", id, navigate);
       return;
     }
     return this.props.setError("Something was wrong!");
@@ -27,13 +26,13 @@ class ListCategory extends Component {
   handleDeleteClick = (id) => {
     if (id) {
       const { navigate } = this.props.router;
-      this.props.changeStatus("Invisible", id, navigate);
+      this.props.deleteCategoryById(id);
       return;
     }
     return this.props.setError("Something was wrong!");
   };
   componentDidMount = () => {
-    this.props.getAllCategoriesActive();
+    this.props.getAllCategoriesInactive();
   };
   componentWillUnmount = () => {
     this.props.clearStateCategory();
@@ -65,7 +64,7 @@ class ListCategory extends Component {
   render() {
     const { categories } = this.props;
     return (
-      <div style={{ maxHeight:"60vh",overflowY:"auto" }}>
+      <div style={{ maxHeight: "60vh", overflowY: "auto" }}>
         {this.renderErrorMessage()}
         {this.renderMessage()}
         <Table striped bordered className="carts">
@@ -114,18 +113,11 @@ class ListCategory extends Component {
                 <td>
                   <Button
                     variant="primary"
-                    style={{padding:"0px 20px 0"}}
+                    style={{ padding: "0px 20px 0" }}
                     onClick={() => this.handleEditClick(category.id)}
                   >
-                    Edit
+                    Restore
                   </Button>{" "}
-                  <Button
-                    variant="danger"
-                    style={{padding:"0px 10px 0"}}
-                    onClick={() => this.handleDeleteClick(category.id)}
-                  >
-                    Remove
-                  </Button>
                 </td>
               </tr>
             ))}
@@ -144,14 +136,14 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   setError,
-  getAllCategoriesActive,
+  getAllCategoriesInactive,
   clearStateCategory,
   setCategoryState,
   setMessage,
   deleteCategoryById,
-  changeStatus
+  changeStatus,
 };
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(ListCategory)
+  connect(mapStateToProps, mapDispatchToProps)(RecycleBinCategory)
 );

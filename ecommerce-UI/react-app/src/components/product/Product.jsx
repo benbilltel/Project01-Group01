@@ -26,14 +26,14 @@ class Product extends Component {
       showProduct: [],
       currentPage: 1,
       recordsPerPage: 3,
-      filteredProducts:[],
+      filteredProducts: [],
     };
     this.searchInput = React.createRef();
   }
   showPagination = (data) => {
     let items = [];
-    
-    const { recordsPerPage ,currentPage} = this.state;
+
+    const { recordsPerPage, currentPage } = this.state;
     let active = currentPage;
 
     if (data) {
@@ -45,7 +45,6 @@ class Product extends Component {
             active={number === active}
             onClick={() => {
               this.setState({ currentPage: number });
-              
             }}
           >
             {number}
@@ -54,7 +53,7 @@ class Product extends Component {
       }
       return (
         <div key={npage}>
-          <Pagination >{items}</Pagination>
+          <Pagination>{items}</Pagination>
           <br />
         </div>
       );
@@ -65,47 +64,47 @@ class Product extends Component {
   showProductByPage = (data) => {
     const { currentPage, recordsPerPage } = this.state;
     // const { products } = this.props;
-  
-  if (!data || !Array.isArray(data)) {
-    return null;
-  }
+
+    if (!data || !Array.isArray(data)) {
+      return null;
+    }
     const lastIndex = currentPage * recordsPerPage;
-    if(Math.ceil(data.length / recordsPerPage)< currentPage){
+    if (Math.ceil(data.length / recordsPerPage) < currentPage) {
       const lastIndex = 1 * recordsPerPage;
     }
-    
+
     const firstIndex = lastIndex - recordsPerPage;
     const showProductByPage = data.slice(firstIndex, lastIndex);
     const showProduct = showProductByPage.map((product, index) => (
       <div
-          className="col-md-6 col-xl-4 p-3"
-          key={product.id + "@"}
-          style={{ cursor: "pointer" }}
-        >
-          <Card style={{ maxHeight: "450px", minHeight: "450px" }}>
-            <Card.Img
-              variant="top"
-              src={`data:image/jpeg;base64,${product.image}`}
-              onClick={()=>{
-                this.viewDetail(product)
-              }}
-              style={{cursor:"pointer"}}
-            />
-            <Card.Body>
-              <Card.Title>{product.name}</Card.Title>
-              <Card.Text>{product.description}</Card.Text>
-              <Card.Text className="price">{product.price}$</Card.Text>
-              <button
-                className="add-to-cart "
-                onClick={() => this.addToCart(product.id,1)}
-              >
-                Add To Cart
-              </button>
-            </Card.Body>
-          </Card>
-        </div>
+        className="col-md-6 col-xl-4 p-3"
+        key={product.id + "@"}
+        style={{ cursor: "pointer" }}
+      >
+        <Card style={{ maxHeight: "450px", minHeight: "450px" }}>
+          <Card.Img
+            variant="top"
+            src={`data:image/jpeg;base64,${product.image}`}
+            onClick={() => {
+              this.viewDetail(product);
+            }}
+            style={{ cursor: "pointer" }}
+          />
+          <Card.Body>
+            <Card.Title>{product.name}</Card.Title>
+            <Card.Text>{product.description}</Card.Text>
+            <Card.Text className="price">{product.price}$</Card.Text>
+            <button
+              className="add-to-cart "
+              onClick={() => this.addToCart(product.id, 1)}
+            >
+              Add To Cart
+            </button>
+          </Card.Body>
+        </Card>
+      </div>
     ));
-    showProduct.push(this.showPagination(data))
+    showProduct.push(this.showPagination(data));
     return showProduct;
   };
   viewDetail = async (product) => {
@@ -179,8 +178,8 @@ class Product extends Component {
     this.props.clearStateCategory();
     this.props.clearStateProduct();
   };
-  addToCart = async (idProduct,quantity) => {
-    console.log(idProduct,quantity)
+  addToCart = async (idProduct, quantity) => {
+    console.log(idProduct, quantity);
     const { navigate } = this.props.router;
     const { user } = this.props;
     if (Object.keys(user).length === 0) {
@@ -216,8 +215,12 @@ class Product extends Component {
           (product) => product.status === "Active"
         );
       }
-      let showProduct = this.showProductByPage(filteredProducts)
-      this.setState({ idCategory: id, showProduct: showProduct ,filteredProducts});
+      let showProduct = this.showProductByPage(filteredProducts);
+      this.setState({
+        idCategory: id,
+        showProduct: showProduct,
+        filteredProducts,
+      });
     } else {
       let filteredProducts;
       if (id !== "All") {
@@ -229,8 +232,8 @@ class Product extends Component {
           (product) => product.status === "Active"
         );
       }
-      let showProduct = this.showProductByPage(filteredProducts)
-      this.setState({  showProduct: showProduct ,filteredProducts});
+      let showProduct = this.showProductByPage(filteredProducts);
+      this.setState({idCategory: "All", showProduct: showProduct, filteredProducts });
     }
   };
   componentDidUpdate(prevProps, prevState) {
@@ -246,8 +249,7 @@ class Product extends Component {
   handleSearch = (event) => {
     const searchQuery = event.target.value;
     const { products } = this.props;
-    
-  
+
     const filteredProducts = products.filter((product) =>
       product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -261,10 +263,10 @@ class Product extends Component {
           <Card.Img
             variant="top"
             src={`data:image/jpeg;base64,${product.image}`}
-            onClick={()=>{
-              this.viewDetail(product)
+            onClick={() => {
+              this.viewDetail(product);
             }}
-            style={{cursor:"pointer"}}
+            style={{ cursor: "pointer" }}
           />
           <Card.Body>
             <Card.Title>{product.name}</Card.Title>
@@ -272,7 +274,7 @@ class Product extends Component {
             <Card.Text className="price">{product.price}$</Card.Text>
             <button
               className="add-to-cart "
-              onClick={() => this.addToCart(product.id,1)}
+              onClick={() => this.addToCart(product.id, 1)}
             >
               Add To Cart
             </button>
@@ -285,13 +287,12 @@ class Product extends Component {
       // Reset current page to 1
       this.setState({ currentPage: 1 });
       // Show all products
-      this.showProductsByIdCategory(this.state.idCategory);
-      
+      this.showProductsByIdCategory("All");
     }
   };
 
   render() {
-    const { showProduct, searchQuery ,showDetail,detailProduct} = this.state;
+    const { showProduct, searchQuery, showDetail, detailProduct } = this.state;
     return (
       <div className="container products-container p-3">
         {this.renderErrorMessage()}

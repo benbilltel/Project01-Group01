@@ -8,6 +8,7 @@ import Contact from "./components/Contact/Contact";
 import CategoryAdmin from "./components/category/CategoryAdmin";
 import AddOrEditCategory from "./components/category/AddOrEditCategory";
 import ListCategory from "./components/category/ListCategory";
+import RecycleBinCategory from "./components/category/RecycleBinCategory";
 import ProductAdmin from "./components/product/ProductAdmin";
 import Product from "./components/product/Product";
 import Cart from "./components/cart/Cart";
@@ -16,6 +17,7 @@ import OrderInfo from "./components/Order/OrderInfo";
 import store from "./redux/store";
 import AddOrEditProduct from "./components/product/AddOrEditProduct";
 import ListProductAdmin from "./components/product/ListProductAdmin";
+import RecycleBinProduct from "./components/product/RecycleBinProduct";
 import ShoppingHistory from "./components/history/ShoppingHistory";
 import { Provider } from "react-redux";
 import Register from "./pages/register/Register";
@@ -55,6 +57,10 @@ class App extends Component {
                   path="/admin/categoryAdmin/list"
                   element={<ListCategory />}
                 ></Route>
+                <Route
+                  path="/admin/categoryAdmin/recycleBin"
+                  element={<RecycleBinCategory />}
+                ></Route>
               </Route>
               <Route path="/admin/productAdmin" element={<ProductAdmin />}>
                 <Route
@@ -68,6 +74,10 @@ class App extends Component {
                 <Route
                   path="/admin/productAdmin/list"
                   element={<ListProductAdmin />}
+                ></Route>
+                <Route
+                  path="/admin/productAdmin/recycleBin"
+                  element={<RecycleBinProduct />}
                 ></Route>
               </Route>
               <Route path="/admin/invoice" element={<Invoice />}></Route>

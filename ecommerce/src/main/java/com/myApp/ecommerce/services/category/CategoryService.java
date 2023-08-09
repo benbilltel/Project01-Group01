@@ -2,6 +2,7 @@ package com.myApp.ecommerce.services.category;
 
 import com.myApp.ecommerce.exception.ResourceNotFoundException;
 import com.myApp.ecommerce.models.category.Category;
+import com.myApp.ecommerce.models.category.CategoryStatus;
 import com.myApp.ecommerce.models.product.Product;
 import com.myApp.ecommerce.repositorys.CategoryRepository;
 import com.myApp.ecommerce.repositorys.ProductRepository;
@@ -23,6 +24,11 @@ public class CategoryService {
         return categoryRepository.findById(id).orElseThrow(()->
             new ResourceNotFoundException("Category","id",id)
         );
+    }
+    public Category changeStatus (CategoryStatus status,Long id){
+        Category foundCategory = getCategoryById(id);
+        foundCategory.setStatus(status);
+        return saveCategory(foundCategory);
     }
     public Category saveCategory (Category category){
         return categoryRepository.save(category);

@@ -1,5 +1,7 @@
 import {
   CATEGORIES_GET_ALL,
+  CATEGORIES_GET_ALL_ACTIVE,
+  CATEGORIES_GET_ALL_INACTIVE,
   CATEGORY_CLEAR_STATE,
   CATEGORY_DELETE,
   CATEGORY_INSERT,
@@ -18,12 +20,22 @@ const categoryReducer = (state = initialState, { type, payload }) => {
       return { ...state, category: payload };
     case CATEGORIES_GET_ALL:
       return { ...state, categories: payload };
+    case CATEGORIES_GET_ALL_ACTIVE:
+      return {
+        ...state,
+        categories: payload.filter((item) => item.status === "Visible"),
+      };
+    case CATEGORIES_GET_ALL_INACTIVE:
+      return {
+        ...state,
+        categories: payload.filter((item) => item.status === "Invisible"),
+      };
     case CATEGORY_CLEAR_STATE:
       return { ...state, category: {}, categories: [] };
     case CATEGORY_SET:
       return { ...state, category: payload };
     case CATEGORY_UPDATE:
-      return { ...state,category: {}, categories: []  };
+      return { ...state, category: {}, categories: [] };
     case CATEGORY_DELETE:
       return {
         ...state,

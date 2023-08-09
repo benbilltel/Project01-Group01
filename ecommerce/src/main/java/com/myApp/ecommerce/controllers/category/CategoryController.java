@@ -3,6 +3,7 @@ package com.myApp.ecommerce.controllers.category;
 import com.myApp.ecommerce.dtos.category.CategoryDto;
 import com.myApp.ecommerce.exception.ResourceNotFoundException;
 import com.myApp.ecommerce.models.category.Category;
+import com.myApp.ecommerce.models.category.CategoryStatus;
 import com.myApp.ecommerce.services.category.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,12 @@ public class CategoryController {
         List<Category> categories = categoryService.getAllCategory();
         List<CategoryDto> categoryDtos = categories.stream().map(category -> modelMapper.map(category, CategoryDto.class)).collect(Collectors.toList());
         return ResponseEntity.ok(categoryDtos);
+    }
+    @PutMapping("/")
+    public ResponseEntity<CategoryDto> changeStatus(@RequestParam("status")CategoryStatus status, @RequestParam("id")Long id){
+        Category changedCategory = categoryService.changeStatus(status,id);
+        CategoryDto categoryDto = modelMapper.map(changedCategory,CategoryDto.class);
+        return ResponseEntity.ok(categoryDto);
     }
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDto> getCategoryById (@PathVariable Long id){

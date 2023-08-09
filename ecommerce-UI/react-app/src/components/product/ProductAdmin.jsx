@@ -50,6 +50,21 @@ class ProductAdmin extends Component {
               }
               >List products</Nav.Link>
             </Nav.Item>
+            <Nav.Item>
+              <Nav.Link onClick={()=>{
+                navigate("/admin/productAdmin/recycleBin")
+              }}
+              className="hover-link"
+              style={{
+                cursor: "pointer",
+                marginBottom: "20px",
+                color: "black",
+              }}
+              active={
+                location.pathname.startsWith("/admin/productAdmin/recycleBin") 
+              }
+              >Recycle Bin</Nav.Link>
+            </Nav.Item>
           </Nav>
           
           <Outlet></Outlet>

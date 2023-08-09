@@ -4,7 +4,7 @@ import { setError } from "../../redux/actions/commonAction";
 import { Button, Card, Form } from "react-bootstrap";
 import { connect } from "react-redux";
 import {
-  getAllCategories,
+  getAllCategoriesActive,
   clearStateCategory,
 } from "../../redux/actions/categoryAction";
 import {
@@ -47,7 +47,7 @@ class AddOrEditProduct extends Component {
     return <></>;
   };
   async componentDidMount() {
-    await this.props.getAllCategories();
+    await this.props.getAllCategoriesActive();
     const { product } = this.props;
     if (
       product &&
@@ -257,16 +257,16 @@ class AddOrEditProduct extends Component {
             </Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="formStatus">
+          <Form.Group controlId="formStatus" hidden>
             <Form.Label>Status</Form.Label>
             <Form.Control
               style={{ cursor: "pointer" }}
               as="select"
               name="status"
-              defaultValue={product ? product.status : "Active"}
+              defaultValue="Active"
             >
               <option>Active</option>
-              <option>Inactive</option>
+             
             </Form.Control>
           </Form.Group>
           {this.showUpdateImage()}
@@ -291,7 +291,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   setError,
-  getAllCategories,
+  getAllCategoriesActive,
   clearStateCategory,
   insertProduct,
   clearStateProduct,

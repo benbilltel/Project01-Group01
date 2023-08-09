@@ -9,6 +9,7 @@ services:
       - "80:80"
     depends_on:
       - backend
+      - frontend
   backend:
     build: ./ecommerce/
     ports:
@@ -19,6 +20,14 @@ services:
       SPRING_DATASOURCE_PASSWORD: 145236987Ben!
     expose:
       - 8080
+  frontend:
+    build: ./ecommerce-UI/react-app/
+    environment:
+      VITE_API_URL: http://localhost
+    ports:
+      - "5173:5173"
+    expose:
+      - 5173
   db:
     image: mysql:8.0.33
     environment:

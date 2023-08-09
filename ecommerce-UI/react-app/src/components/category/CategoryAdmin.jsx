@@ -58,6 +58,25 @@ class CategoryAdmin extends Component {
                 List categories
               </Nav.Link>
             </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                onClick={() => {
+                  navigate("/admin/categoryAdmin/recycleBin");
+                }}
+                className="hover-link"
+                style={{
+                  cursor: "pointer",
+                  marginBottom: "20px",
+                  color: "black",
+                }}
+                active={location.pathname.startsWith(
+                  "/admin/categoryAdmin/recycleBin"
+                )}
+              >
+                {" "}
+                Recycle Bin
+              </Nav.Link>
+            </Nav.Item>
           </Nav>
 
           <Outlet></Outlet>
