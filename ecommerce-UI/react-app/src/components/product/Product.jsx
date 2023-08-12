@@ -68,10 +68,11 @@ class Product extends Component {
     if (!data || !Array.isArray(data)) {
       return null;
     }
-    const lastIndex = currentPage * recordsPerPage;
     if (Math.ceil(data.length / recordsPerPage) < currentPage) {
-      const lastIndex = 1 * recordsPerPage;
+      this.setState({currentPage:1})
     }
+    const lastIndex = currentPage * recordsPerPage;
+    
 
     const firstIndex = lastIndex - recordsPerPage;
     const showProductByPage = data.slice(firstIndex, lastIndex);
@@ -204,6 +205,7 @@ class Product extends Component {
     if (!products) {
       return;
     }
+    this.setState({currentPage:1})
     if (id !== this.state.idCategory) {
       let filteredProducts;
       if (id !== "All") {
