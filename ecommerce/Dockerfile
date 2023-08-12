@@ -1,7 +1,12 @@
+FROM maven:3.8.4-openjdk-17-slim
 
-FROM eclipse-temurin:17-jdk-alpine
-COPY target/*.jar app.jar
-CMD ["java","-jar","/app.jar"]
+WORKDIR /app
+
+COPY . .
+
+RUN mvn dependency:resolve
+
+CMD ["mvn", "spring-boot:run"]
 
 
 
