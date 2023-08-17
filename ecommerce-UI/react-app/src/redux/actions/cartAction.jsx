@@ -8,6 +8,7 @@ import {
 } from "./actionType";
 import CartService from "../../services/cartService";
 export const insertCart = (cart) => async (dispatch) => {
+ 
   const cartService = new CartService();
   try {
     const response = await cartService.insertCart(cart);

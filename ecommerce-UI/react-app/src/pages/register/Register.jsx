@@ -67,8 +67,10 @@ class Register extends Component {
     }
     const { error } = this.props;
 
-    if (error === "") {
-      const { navigate } = this.props.router;
+    if (!error === "") {
+      return ;
+    }
+    const { navigate } = this.props.router;
       const { user } = this.state;
       user.name = name;
       user.userName = userName;
@@ -77,7 +79,6 @@ class Register extends Component {
       user.phoneNumber = phoneNumber;
       user.type = "User";
       this.props.insertUser(user, navigate);
-    }
   };
   renderErrorMessage = () => {
     const { error } = this.props;

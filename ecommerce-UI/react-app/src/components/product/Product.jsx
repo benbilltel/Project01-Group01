@@ -180,7 +180,6 @@ class Product extends Component {
     this.props.clearStateProduct();
   };
   addToCart = async (idProduct, quantity) => {
-    console.log(idProduct, quantity);
     const { navigate } = this.props.router;
     const { user } = this.props;
     if (Object.keys(user).length === 0) {

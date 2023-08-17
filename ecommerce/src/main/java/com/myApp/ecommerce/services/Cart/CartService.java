@@ -91,47 +91,52 @@ public class CartService {
         cartRepository.deleteByUserId(idUser);
     }
     public CartDto insertProduct(Cart cart) {
-        Optional<Cart> existedCart = cartRepository.findByProductId(cart.getProductId());
         Optional<User> user = userRepository.findById(cart.getUserId());
         if (user.isEmpty()) {
             throw new ResourceNotFoundException("User", "id", cart.getUserId());
         }
         User foundUser = user.get();
         UserDto userDto = modelMapper.map(foundUser, UserDto.class);
+
+        Optional<Cart> existedCart = cartRepository.findByProductIdAndUserId(cart.getProductId(), cart.getUserId());
         if (existedCart.isEmpty()) {
             Optional<Product> product = productRepository.findById(cart.getProductId());
             if (product.isEmpty()) {
                 throw new ResourceNotFoundException("Product", "id", cart.getProductId());
-
             }
             Product foundProduct = product.get();
-            ProductDto productDto = modelMapper.map(foundProduct,ProductDto.class);
-            Cart savedCart = cartRepository.save(cart);
+            ProductDto productDto = modelMapper.map(foundProduct, ProductDto.class);
+
+            Cart savedCart = new Cart();
+            savedCart.setProductId(cart.getProductId());
+            savedCart.setUserId(cart.getUserId());
+            savedCart.setQuantity(cart.getQuantity());
+
+            savedCart = cartRepository.save(savedCart);
+
             CartDto cartDto = new CartDto();
             cartDto.setId(savedCart.getId());
             cartDto.setQuantity(savedCart.getQuantity());
             cartDto.setProductDto(productDto);
             cartDto.setUserDto(userDto);
             return cartDto;
-        }else{
+        } else {
             Cart foundCart = existedCart.get();
-            foundCart.setQuantity(foundCart.getQuantity()+ cart.getQuantity());
-            Cart savedCart = cartRepository.save(foundCart);
-            Optional<Product> product = productRepository.findById(savedCart.getProductId());
-            if (product.isEmpty()) {
-                throw new ResourceNotFoundException("Product", "id", savedCart.getProductId());
+            foundCart.setQuantity(foundCart.getQuantity() + cart.getQuantity());
 
-            }
-            Product foundProduct = product.get();
-            ProductDto productDto = modelMapper.map(foundProduct,ProductDto.class);
+            foundCart = cartRepository.save(foundCart);
+
+            Product foundProduct = productRepository.findById(foundCart.getProductId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Product", "id", existedCart.get().getProductId()));
+            ProductDto productDto = modelMapper.map(foundProduct, ProductDto.class);
+
             CartDto cartDto = new CartDto();
-            cartDto.setId(savedCart.getId());
-            cartDto.setQuantity(savedCart.getQuantity());
+            cartDto.setId(foundCart.getId());
+            cartDto.setQuantity(foundCart.getQuantity());
             cartDto.setProductDto(productDto);
             cartDto.setUserDto(userDto);
             return cartDto;
         }
-
     }
 
 }
