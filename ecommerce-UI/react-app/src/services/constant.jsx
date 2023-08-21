@@ -10,4 +10,4 @@ export const API_PAYMENT = API_URL+"/api/v1/payment/"
 // export const API_CATEGORY = API_URL+"/api/v1/categories/"
 // export const API_PRODUCT = API_URL+"/api/v1/products/"
 // export const API_CART = API_URL+"/api/v1/carts/"
-// export const API_PAYMENT = API_URL+"/api/v1/payment/"
+
