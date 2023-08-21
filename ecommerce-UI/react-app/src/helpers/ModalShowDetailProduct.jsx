@@ -45,6 +45,7 @@ function ModalShowDetailProduct(props) {
             <div className="col-12">
               <h2>Description</h2>
               <p>{product.description}</p>
+              <p style={{fontWeight:"700",color:"green"}}>Available: {product.quantity}</p>
             </div>
             <div className="col-12 row">
               <div className="col-6 d-flex justify-content-end align-items-center">

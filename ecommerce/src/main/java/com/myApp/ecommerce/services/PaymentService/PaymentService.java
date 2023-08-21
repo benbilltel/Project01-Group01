@@ -96,6 +96,9 @@ public class PaymentService {
             myOrderDto.setOrderInfoId(idOrderInfo);
             myOrderDto.setQuantity(savedOrder.getQuantity());
             Product product = productService.getProductById(savedOrder.getProductId());
+            Long quantity = product.getQuantity();
+            product.setQuantity(quantity - cartDto.getQuantity());
+            productService.saveProduct(product);
             ProductDto productDto = modelMapper.map(product, ProductDto.class);
             myOrderDto.setProductDto(productDto);
             myOrderDtos.add(myOrderDto);

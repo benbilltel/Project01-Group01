@@ -30,7 +30,10 @@ class Cart extends Component {
       // display error message to user
     }
   };
-  incProduct = async (idProduct) => {
+  incProduct = async (idProduct,quantity,productQuantity) => {
+    if(quantity >= productQuantity){
+      return;
+    }
     const { user } = this.props;
     let cart = {
       userId: user.id,
@@ -154,7 +157,7 @@ class Cart extends Component {
                       <button
                         className="inc-mount"
                         onClick={() => {
-                          this.incProduct(cart.productDto.id);
+                          this.incProduct(cart.productDto.id,cart.quantity,cart.productDto.quantity);
                         }}
                         style={{
                           color: "green",

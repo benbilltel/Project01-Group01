@@ -15,6 +15,7 @@ import {
 import { Button, Card, Pagination } from "react-bootstrap";
 import "./Product.css";
 import ModalShowDetailProduct from "../../helpers/ModalShowDetailProduct";
+import { setError } from "../../redux/actions/commonAction";
 class Product extends Component {
   constructor() {
     super();
@@ -69,10 +70,9 @@ class Product extends Component {
       return null;
     }
     if (Math.ceil(data.length / recordsPerPage) < currentPage) {
-      this.setState({currentPage:1})
+      this.setState({ currentPage: 1 });
     }
     const lastIndex = currentPage * recordsPerPage;
-    
 
     const firstIndex = lastIndex - recordsPerPage;
     const showProductByPage = data.slice(firstIndex, lastIndex);
@@ -94,6 +94,9 @@ class Product extends Component {
           <Card.Body>
             <Card.Title>{product.name}</Card.Title>
             <Card.Text>{product.description}</Card.Text>
+            <Card.Text style={{ fontWeight: "700", color: "green" }}>
+              Available: {product.quantity}
+            </Card.Text>
             <Card.Text className="price">{product.price}$</Card.Text>
             <button
               className="add-to-cart "
@@ -180,6 +183,10 @@ class Product extends Component {
     this.props.clearStateProduct();
   };
   addToCart = async (idProduct, quantity) => {
+    if (quantity <= 0) {
+      this.props.setError("Quantity have to be positive!");
+      return;
+    }
     const { navigate } = this.props.router;
     const { user } = this.props;
     if (Object.keys(user).length === 0) {
@@ -204,16 +211,19 @@ class Product extends Component {
     if (!products) {
       return;
     }
-    this.setState({currentPage:1})
+    this.setState({ currentPage: 1 });
     if (id !== this.state.idCategory) {
       let filteredProducts;
       if (id !== "All") {
         filteredProducts = products.filter(
-          (product) => product.status === "Active" && product.category.id === id
+          (product) =>
+            product.status === "Active" &&
+            product.category.id === id &&
+            product.quantity > 0
         );
       } else {
         filteredProducts = products.filter(
-          (product) => product.status === "Active"
+          (product) => product.status === "Active" && product.quantity > 0
         );
       }
       let showProduct = this.showProductByPage(filteredProducts);
@@ -226,15 +236,22 @@ class Product extends Component {
       let filteredProducts;
       if (id !== "All") {
         filteredProducts = products.filter(
-          (product) => product.status === "Active" && product.category.id === id
+          (product) =>
+            product.status === "Active" &&
+            product.category.id === id &&
+            product.quantity > 0
         );
       } else {
         filteredProducts = products.filter(
-          (product) => product.status === "Active"
+          (product) => product.status === "Active" && product.quantity > 0
         );
       }
       let showProduct = this.showProductByPage(filteredProducts);
-      this.setState({idCategory: "All", showProduct: showProduct, filteredProducts });
+      this.setState({
+        idCategory: "All",
+        showProduct: showProduct,
+        filteredProducts,
+      });
     }
   };
   componentDidUpdate(prevProps, prevState) {
@@ -272,6 +289,9 @@ class Product extends Component {
           <Card.Body>
             <Card.Title>{product.name}</Card.Title>
             <Card.Text>{product.description}</Card.Text>
+            <Card.Text style={{ fontWeight: "700", color: "green" }}>
+              Available: {product.quantity}
+            </Card.Text>
             <Card.Text className="price">{product.price}$</Card.Text>
             <button
               className="add-to-cart "
@@ -327,7 +347,7 @@ class Product extends Component {
             </div>
           </div>
           <hr className="my-hr" />
-          <div className="col-12 px-5 products" style={{ marginTop: "2rem" }}>
+          <div className="col-12 px-md-5 products" style={{ marginTop: "2rem" }}>
             <div
               className="row"
               style={{ maxHeight: "700px", overflow: "auto" }}
@@ -363,6 +383,7 @@ const mapDispatchToProps = {
   clearStateProduct,
   insertCart,
   getCartsByIdUser,
+  setError,
 };
 
 export default withRouter(

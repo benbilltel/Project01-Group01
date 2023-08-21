@@ -6,6 +6,7 @@ import com.myApp.ecommerce.dtos.user.UserDto;
 import com.myApp.ecommerce.exception.ResourceNotFoundException;
 import com.myApp.ecommerce.models.Cart.Cart;
 import com.myApp.ecommerce.models.product.Product;
+import com.myApp.ecommerce.models.product.ProductStatus;
 import com.myApp.ecommerce.models.user.User;
 import com.myApp.ecommerce.repositorys.CartRepository;
 import com.myApp.ecommerce.repositorys.ProductRepository;
@@ -73,6 +74,14 @@ public class CartService {
             if (product.isEmpty()) {
                 continue;
             }
+            if (product.isPresent())  {
+                Product checkProduct = product.get();
+                if(checkProduct.getStatus() == ProductStatus.Inactive){
+                    cartRepository.deleteById(cart.getId());
+                    continue;
+                }
+
+            }
             Product foundProduct = product.get();
             ProductDto productDto = modelMapper.map(foundProduct, ProductDto.class);
             cartDto.setProductDto(productDto);
@@ -106,7 +115,9 @@ public class CartService {
             }
             Product foundProduct = product.get();
             ProductDto productDto = modelMapper.map(foundProduct, ProductDto.class);
-
+            if(cart.getQuantity() >= productDto.getQuantity()){
+                cart.setQuantity(productDto.getQuantity());
+            }
             Cart savedCart = new Cart();
             savedCart.setProductId(cart.getProductId());
             savedCart.setUserId(cart.getUserId());
@@ -122,13 +133,26 @@ public class CartService {
             return cartDto;
         } else {
             Cart foundCart = existedCart.get();
-            foundCart.setQuantity(foundCart.getQuantity() + cart.getQuantity());
-
-            foundCart = cartRepository.save(foundCart);
-
             Product foundProduct = productRepository.findById(foundCart.getProductId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product", "id", existedCart.get().getProductId()));
             ProductDto productDto = modelMapper.map(foundProduct, ProductDto.class);
+            if(cart.getQuantity()>0){
+
+                if((cart.getQuantity() + foundCart.getQuantity()) >= productDto.getQuantity() ){
+                    foundCart.setQuantity(productDto.getQuantity());
+                }else{
+                    foundCart.setQuantity(foundCart.getQuantity() + cart.getQuantity());
+                }
+
+
+            }else{
+
+                foundCart.setQuantity(foundCart.getQuantity() + cart.getQuantity());
+            }
+
+
+            foundCart = cartRepository.save(foundCart);
+
 
             CartDto cartDto = new CartDto();
             cartDto.setId(foundCart.getId());
